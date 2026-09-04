@@ -6,27 +6,48 @@ const { scoreContract } = require('../utils/riskEngine');
 // GET /api/contracts/meta — drives every filter dropdown in the frontend so
 // the UI is always in sync with the real 47-county / sector list, and never
 // hard-codes a partial list again.
+//
+// Each sub-query is isolated with its own try/catch: if the "year" column (or
+// any other) is temporarily missing on a not-yet-migrated database, that
+// single query degrades gracefully to an empty list instead of 500-ing the
+// whole endpoint and blanking out every dropdown in the UI at once.
 router.get('/meta', async (_req, res) => {
+  let years = [];
+  let countMap = {};
+
   try {
-    const { rows: yearRows } = await pool.query(
+    const { rows } = await pool.query(
       `SELECT DISTINCT year FROM contracts WHERE year IS NOT NULL ORDER BY year DESC`
     );
-    const { rows: countyCounts } = await pool.query(
+    years = rows.map(r => r.year);
+  } catch (e) {
+    console.warn('⚠️ /api/contracts/meta: years query failed:', e.message);
+  }
+
+  try {
+    const { rows } = await pool.query(
       `SELECT county, COUNT(*)::INT AS count FROM contracts WHERE county IS NOT NULL GROUP BY county`
     );
-    const countMap = Object.fromEntries(countyCounts.map(r => [r.county, r.count]));
-
-    res.json({
-      success: true,
-      data: {
-        counties: COUNTIES.map(c => ({ ...c, contracts: countMap[c.name] || 0 })),
-        sectors: SECTORS,
-        years: yearRows.map(r => r.year),
-      },
-    });
+    countMap = Object.fromEntries(rows.map(r => [r.county, r.count]));
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    console.warn('⚠️ /api/contracts/meta: county counts query failed:', e.message);
   }
+
+  // Always fall back to the last 6 calendar years so the Year dropdown is
+  // never empty even before any data has been synced/migrated in.
+  if (years.length === 0) {
+    const current = new Date().getFullYear();
+    years = [current, current - 1, current - 2, current - 3, current - 4, current - 5];
+  }
+
+  res.json({
+    success: true,
+    data: {
+      counties: COUNTIES.map(c => ({ ...c, contracts: countMap[c.name] || 0 })),
+      sectors: SECTORS,
+      years,
+    },
+  });
 });
 
 // GET /api/contracts — list with filters. Supports filtering & syncing views
