@@ -46,6 +46,7 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/sync', require('./routes/ocdsSync'));
 app.use('/api/stats', require('./routes/stats'));
+app.use('/api/admin', require('./routes/admin'));
 
 app.get('/health', (_req, res) => res.status(200).json({ status: 'ok', version: '3.5.0' }));
 
@@ -69,6 +70,8 @@ app.get('/', (_req, res) => {
       'POST /api/chatbot/message',
       'POST /api/sync/ocds',
       'GET  /api/sync/status',
+      'GET  /api/admin/stats',
+      'POST /api/admin/reseed (protected — requires x-admin-key header)',
       'GET  /admin',
     ],
   });

@@ -1,6 +1,29 @@
 const router = require('express').Router();
 const { pool } = require('../db/index');
 
+// GET /api/stats/by-county — per-county contract + risk breakdown, used by the
+// County Explorer on the landing page. Returns every county (even those with
+// zero contracts) so the map/heatmap is always complete across all 47.
+router.get('/by-county', async (_req, res) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT county,
+             COUNT(*)::INT AS contracts,
+             COUNT(*) FILTER (WHERE risk_level = 'HIGH')::INT AS high_risk,
+             COUNT(*) FILTER (WHERE risk_level = 'MEDIUM')::INT AS medium_risk,
+             COALESCE(SUM(value) FILTER (WHERE risk_level = 'HIGH'), 0)::BIGINT AS funds_at_risk
+      FROM contracts
+      WHERE county IS NOT NULL
+      GROUP BY county
+      ORDER BY high_risk DESC, contracts DESC
+    `);
+    res.json({ success: true, data: rows });
+  } catch (e) {
+    console.error('Stats by-county error:', e);
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // GET /api/stats — powers the Overview dashboard and the Admin panel.
 // This route did not exist in the previous version of the backend, which is
 // why the dashboard stat cards and the admin panel always showed "--" /

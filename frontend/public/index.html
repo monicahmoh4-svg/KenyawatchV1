@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="KenyaWatch AI — an independent civic-tech platform exposing corruption in Kenyan public procurement. AI-scored contracts across all 47 counties, satellite ghost-project verification, and anonymous citizen reporting.">
+<meta name="theme-color" content="#0b1220">
 <title>KenyaWatch AI — Procurement Intelligence Platform</title>
 
 <!--
@@ -18,27 +20,74 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config = { theme: { extend: { colors: {
-  navy: { 900:'#0b1220', 800:'#111a2e', 700:'#182541' },
-  brand: { 50:'#ecfdf5', 100:'#d1fae5', 500:'#059669', 600:'#047857', 700:'#065f46' }
+  navy: { 900:'#0b1220', 800:'#111a2e', 700:'#182541', 600:'#1f2f4d' },
+  brand: { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 500:'#059669', 600:'#047857', 700:'#065f46' }
 }}}}</script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
+  :root { --brand:#059669; --brand-dark:#047857; --navy:#0b1220; }
   body { font-family: 'Inter', sans-serif; background-color: #f6f7f9; color: #0f172a; }
-  .tab-content { display: none; animation: fadeIn .3s ease-out; }
+  .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; }
+
+  .tab-content { display: none; animation: fadeIn .35s ease-out; }
   .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
   .nav-link.active { background-color: rgba(5,150,105,.12); color: #047857; }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
   .flag-strip { background: linear-gradient(90deg,#000 0 25%,#fff 25% 27%,#BB0000 27% 52%,#fff 52% 54%,#006600 54% 100%); height: 4px; }
+
   .kw-badge-doc { color:#7c2d12; background:#ffedd5; border-color:#fed7aa; }
   .kw-badge-ref { color:#334155; background:#f1f5f9; border-color:#e2e8f0; }
   .kw-badge-live { color:#075985; background:#e0f2fe; border-color:#bae6fd; }
+
   .skeleton { background: linear-gradient(90deg,#eef1f4 25%,#e4e8ec 37%,#eef1f4 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
   @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0 50%} }
+
+  /* ---- Hero animations ---- */
+  .hero-bg { background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(5,150,105,.35), transparent 60%),
+    radial-gradient(1000px 500px at 90% 10%, rgba(6,95,70,.45), transparent 55%),
+    linear-gradient(135deg,#0b1220 0%,#111a2e 45%,#065f46 100%); }
+  .hero-grid { background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 44px 44px; }
+  .float-slow { animation: floaty 7s ease-in-out infinite; }
+  .float-slower { animation: floaty 10s ease-in-out infinite; }
+  @keyframes floaty { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-14px);} }
+  .pulse-ring { animation: pulseRing 2.6s ease-out infinite; }
+  @keyframes pulseRing { 0%{ box-shadow: 0 0 0 0 rgba(5,150,105,.5);} 70%{ box-shadow: 0 0 0 18px rgba(5,150,105,0);} 100%{ box-shadow: 0 0 0 0 rgba(5,150,105,0);} }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; } .reveal-delay-2 { transition-delay: .2s; } .reveal-delay-3 { transition-delay: .3s; }
+
+  .grad-text { background: linear-gradient(90deg,#34d399,#a7f3d0,#6ee7b7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .card-hover { transition: transform .3s ease, box-shadow .3s ease; }
+  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgba(2,44,34,.35); }
+
+  .county-chip { transition: all .2s ease; cursor: pointer; }
+  .county-chip:hover { transform: translateY(-2px); }
+  .heatmap-0{background:#eef2f7;color:#64748b} .heatmap-1{background:#d1fae5;color:#065f46}
+  .heatmap-2{background:#a7f3d0;color:#065f46} .heatmap-3{background:#6ee7b7;color:#064e3b}
+  .heatmap-4{background:#fde68a;color:#78350f} .heatmap-5{background:#fca5a5;color:#7f1d1d}
+
+  .marquee { display:flex; gap:2.5rem; animation: marquee 30s linear infinite; width:max-content; }
+  @keyframes marquee { from{ transform: translateX(0);} to{ transform: translateX(-50%);} }
+
+  .stat-card { position: relative; overflow: hidden; }
+  .stat-card::after { content:''; position:absolute; inset:0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.5) 50%, transparent 70%); transform: translateX(-120%); animation: sheen 5s ease-in-out infinite; }
+  @keyframes sheen { 0%,60%{ transform: translateX(-120%);} 100%{ transform: translateX(120%);} }
+
+  .modal-backdrop { background: rgba(11,18,32,.6); backdrop-filter: blur(6px); }
+  .toast { animation: toastIn .3s ease-out; }
+  @keyframes toastIn { from{ opacity:0; transform: translateY(12px);} to{ opacity:1; transform: translateY(0);} }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
+
 <div class="flag-strip"></div>
 
 <!-- Top Bar -->
@@ -46,11 +95,11 @@
   <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('v-overview')">
-        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow">
+        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow pulse-ring">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
         </div>
         <div>
-          <h1 class="text-lg font-black tracking-tight text-slate-900 leading-none">KenyaWatch <span class="text-brand-600">AI</span></h1>
+          <h1 class="text-lg font-black tracking-tight text-slate-900 leading-none font-display">KenyaWatch <span class="text-brand-600">AI</span></h1>
           <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold -mt-0.5">Procurement Intelligence · 47 Counties</p>
         </div>
       </div>
@@ -88,67 +137,223 @@
 
 <main class="flex-grow max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
-  <!-- OVERVIEW -->
-  <div id="v-overview" class="tab-content active space-y-8">
-    <div class="bg-gradient-to-br from-navy-900 via-navy-800 to-brand-700 rounded-2xl p-8 md:p-14 text-white shadow-xl relative overflow-hidden">
-      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1920&q=80')] bg-cover bg-center opacity-10"></div>
-      <div class="relative z-10 max-w-3xl">
-        <p class="text-emerald-200 font-bold mb-3 text-xs uppercase tracking-[0.2em]">🇰🇪 Real-Time Intelligence · All 47 Counties</p>
-        <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight leading-tight">Exposing Corruption.<br>Protecting Public Funds.</h2>
-        <p class="text-slate-200 text-lg mb-8 leading-relaxed max-w-xl">AI-scored analysis of government procurement, satellite verification of "ghost" projects, and anonymous citizen reporting — searchable by county and year.</p>
-        <div class="flex flex-col sm:flex-row gap-3">
-          <button onclick="showTab('v-procurement')" class="px-6 py-3 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-colors shadow-sm">🔍 Explore Contracts</button>
-          <button onclick="showTab('v-report')" class="px-6 py-3 bg-white/10 backdrop-blur text-white font-bold rounded-xl hover:bg-white/20 transition-colors border border-white/30">🚨 Report Fraud</button>
+  <!-- ===================== OVERVIEW / LANDING ===================== -->
+  <div id="v-overview" class="tab-content active space-y-14">
+
+    <!-- HERO -->
+    <section class="hero-bg relative overflow-hidden rounded-3xl text-white shadow-2xl">
+      <div class="hero-grid absolute inset-0 opacity-60"></div>
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl float-slow"></div>
+      <div class="absolute bottom-0 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl float-slower"></div>
+      <div class="relative z-10 px-6 py-14 md:px-14 md:py-20 lg:py-24">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 mb-6 backdrop-blur">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            🇰🇪 Real-Time Intelligence · All 47 Counties
+          </div>
+          <h2 class="font-display text-4xl md:text-6xl font-black mb-5 tracking-tight leading-[1.05]">
+            Exposing Corruption.<br><span class="grad-text">Protecting Public Funds.</span>
+          </h2>
+          <p class="text-slate-200 text-lg md:text-xl mb-8 leading-relaxed max-w-xl">
+            AI-scored analysis of government procurement, satellite verification of "ghost" projects, and anonymous citizen reporting — searchable by county and year.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button onclick="showTab('v-procurement')" class="px-7 py-3.5 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">🔍 Explore Contracts</button>
+            <button onclick="showTab('v-report')" class="px-7 py-3.5 bg-white/10 backdrop-blur text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 hover:-translate-y-0.5">🚨 Report Fraud</button>
+            <button onclick="scrollToCounty()" class="px-7 py-3.5 bg-transparent text-emerald-200 font-bold rounded-xl hover:bg-white/5 transition-all border border-emerald-400/40">🗺️ County Explorer</button>
+          </div>
         </div>
       </div>
-    </div>
+      <!-- floating stat chips -->
+      <div class="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2 flex-col gap-4 z-10">
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slow">
+          <div class="text-2xl font-black text-emerald-300" id="hero-flagged">--</div>
+          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slower">
+          <div class="text-2xl font-black text-red-300" id="hero-ghost">--</div>
+          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Ghost Projects</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slow">
+          <div class="text-2xl font-black text-amber-300" id="hero-funds">KES --</div>
+          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Funds at Risk</div>
+        </div>
+      </div>
+    </section>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <div class="text-3xl font-black text-red-600 mb-1" id="dash-flagged">--</div>
+    <!-- TRUST STRIP -->
+    <section class="reveal">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm py-5 overflow-hidden">
+        <div class="marquee text-sm font-semibold text-slate-500">
+          <span>🇰🇪 All 47 Counties</span><span class="text-emerald-600">●</span>
+          <span>🛰️ Satellite Ghost-Project Verification</span><span class="text-emerald-600">●</span>
+          <span>🤖 AI Risk Scoring Engine</span><span class="text-emerald-600">●</span>
+          <span>🔒 100% Anonymous Reporting</span><span class="text-emerald-600">●</span>
+          <span>📊 Open Contracting Data Standard (OCDS)</span><span class="text-emerald-600">●</span>
+          <span>🇰🇪 All 47 Counties</span><span class="text-emerald-600">●</span>
+          <span>🛰️ AI Ghost-Project Verification</span><span class="text-emerald-600">●</span>
+          <span>🤖 AI-Driven Risk Scoring</span><span class="text-emerald-600">●</span>
+          <span>🔒 Anonymous Reporting</span><span class="text-emerald-600">●</span>
+          <span>📊 OCDS Live Sync</span><span class="text-emerald-600">●</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAT CARDS -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal">
+        <div class="flex items-center justify-between mb-2"><span class="text-2xl">🚩</span><span class="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">HIGH RISK</span></div>
+        <div class="text-3xl md:text-4xl font-black text-red-600 mb-1" id="dash-flagged">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
       </div>
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <div class="text-3xl font-black text-purple-600 mb-1" id="dash-ghost">--</div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-1">
+        <div class="flex items-center justify-between mb-2"><span class="text-2xl">👻</span><span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">DETECTED</span></div>
+        <div class="text-3xl md:text-4xl font-black text-purple-600 mb-1" id="dash-ghost">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Ghost Projects</div>
       </div>
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <div class="text-3xl font-black text-blue-600 mb-1" id="dash-reports">--</div>
-        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Citizen Reports (30d)</div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-2">
+        <div class="flex items-center justify-between mb-2"><span class="text-2xl">📢</span><span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">30 DAYS</span></div>
+        <div class="text-3xl md:text-4xl font-black text-blue-600 mb-1" id="dash-reports">--</div>
+        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Citizen Reports</div>
       </div>
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <div class="text-3xl font-black text-emerald-600 mb-1" id="dash-funds">KES --</div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-3">
+        <div class="flex items-center justify-between mb-2"><span class="text-2xl">💰</span><span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">AT RISK</span></div>
+        <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-1" id="dash-funds">KES --</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Funds at Risk</div>
       </div>
-    </div>
+    </section>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <h3 class="font-bold text-slate-900 mb-1">Counties with contract data</h3>
-        <p class="text-sm text-slate-500 mb-3">Every county has baseline reference records; run a live sync in the "Sync Data" tab to pull in whatever the official portal currently publishes.</p>
-        <div class="text-2xl font-black text-navy-900" id="dash-counties">--</div>
-        <div class="text-xs text-slate-500">of 47 counties represented</div>
+    <!-- HOW IT WORKS -->
+    <section class="reveal">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-2">How It Works</p>
+        <h3 class="font-display text-3xl md:text-4xl font-black text-slate-900">From raw contracts to citizen power</h3>
+        <p class="text-slate-500 mt-3">A transparent, four-step pipeline turns public procurement data into actionable intelligence.</p>
       </div>
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <h3 class="font-bold text-slate-900 mb-1">Documented public-interest cases</h3>
-        <p class="text-sm text-slate-500 mb-3">Records sourced and cited from Auditor-General reports and mainstream reporting — see the "Sources" tab.</p>
-        <div class="text-2xl font-black text-navy-900" id="dash-documented">--</div>
-        <div class="text-xs text-slate-500">source-cited records</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl mb-4">📥</div>
+          <h4 class="font-bold text-slate-900 mb-1">1. Ingest</h4>
+          <p class="text-sm text-slate-500">Pull machine-readable records from the Open Contracting Data Standard (OCDS) feed, plus documented public-interest cases.</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl mb-4">🧠</div>
+          <h4 class="font-bold text-slate-900 mb-1">2. Score</h4>
+          <p class="text-sm text-slate-500">A transparent rules engine scores every contract for risk — bid type, value, supplier timing, and vague scope.</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl mb-4">🛰️</div>
+          <h4 class="font-bold text-slate-900 mb-1">3. Verify</h4>
+          <p class="text-sm text-slate-500">Cross-check claimed project completion against live satellite imagery to expose "ghost" projects.</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl mb-4">🔔</div>
+          <h4 class="font-bold text-slate-900 mb-1">4. Act</h4>
+          <p class="text-sm text-slate-500">Citizens report anonymously, AI triages credibility, and cases route to EACC, PPRA, or the DPP.</p>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- COUNTY EXPLORER -->
+    <section id="county-explorer" class="reveal">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-2">County Explorer</p>
+          <h3 class="font-display text-3xl md:text-4xl font-black text-slate-900">Risk across all 47 counties</h3>
+          <p class="text-slate-500 mt-2 text-sm">Click any county to jump straight into its contracts. Color intensity = high-risk contract count.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <span>Low</span>
+          <div class="flex gap-1">
+            <span class="w-4 h-4 rounded heatmap-0"></span><span class="w-4 h-4 rounded heatmap-1"></span><span class="w-4 h-4 rounded heatmap-2"></span><span class="w-4 h-4 rounded heatmap-3"></span><span class="w-4 h-4 rounded heatmap-4"></span><span class="w-4 h-4 rounded heatmap-5"></span>
+          </div>
+          <span>High</span>
+        </div>
+      </div>
+      <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+        <div class="col-span-full text-center py-10 text-slate-400 bg-white rounded-xl border border-slate-200">Loading counties...</div>
+      </div>
+    </section>
+
+    <!-- CHARTS + TOP FLAGGED -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal">
+        <h3 class="font-bold text-slate-900 mb-1">Risk Level Distribution</h3>
+        <p class="text-sm text-slate-500 mb-4">Share of contracts by AI risk score band.</p>
+        <div class="h-64"><canvas id="risk-chart"></canvas></div>
+      </div>
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal reveal-delay-1">
+        <h3 class="font-bold text-slate-900 mb-1">Top Flagged Contracts</h3>
+        <p class="text-sm text-slate-500 mb-4">Highest-risk contracts in the database.</p>
+        <div id="top-flagged" class="space-y-3">
+          <div class="animate-pulse text-slate-400 text-sm">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTOR CHART + GHOST PREVIEW -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal">
+        <h3 class="font-bold text-slate-900 mb-1">Contracts by Sector</h3>
+        <p class="text-sm text-slate-500 mb-4">Where procurement activity concentrates.</p>
+        <div class="h-64"><canvas id="sector-chart"></canvas></div>
+      </div>
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal reveal-delay-1">
+        <div class="flex items-center justify-between mb-4">
+          <div><h3 class="font-bold text-slate-900">Latest Ghost Projects</h3><p class="text-sm text-slate-500">Satellite-verified anomalies.</p></div>
+          <button onclick="showTab('v-ghost')" class="text-xs font-bold text-brand-600 hover:text-brand-700">View all →</button>
+        </div>
+        <div id="ghost-preview" class="space-y-3">
+          <div class="animate-pulse text-slate-400 text-sm">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORT CTA -->
+    <section class="reveal">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-700 via-red-600 to-rose-700 text-white p-8 md:p-14 shadow-2xl">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1920&q=80')] bg-cover bg-center opacity-15"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="max-w-xl">
+            <h3 class="font-display text-3xl md:text-4xl font-black mb-3">Seen something? Speak up.</h3>
+            <p class="text-red-100 text-lg">Your identity is fully protected. Reports are anonymous by default and AI-triage routes them to the right authority.</p>
+          </div>
+          <button onclick="showTab('v-report')" class="px-8 py-4 bg-white text-red-700 font-black rounded-xl hover:bg-red-50 transition-all shadow-lg hover:-translate-y-0.5 whitespace-nowrap">🚨 Submit a Report</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA HONESTY -->
+    <section class="reveal">
+      <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl flex-shrink-0">🛡️</div>
+          <div>
+            <h3 class="font-bold text-slate-900 mb-1">Data honesty, always</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Every contract carries a <b>data type</b> — <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span> (source-cited real cases), <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span> (official OCDS feed), or <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span> (representative sample). Kenya's PPIP is still working toward full OCDS compliance, so we're transparent about the gap — see the <button onclick="showTab('v-about')" class="text-brand-600 font-semibold hover:underline">Sources</button> tab.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- PROCUREMENT -->
+  <!-- ===================== PROCUREMENT ===================== -->
   <div id="v-procurement" class="tab-content space-y-6">
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900">Procurement Database</h2>
+        <h2 class="text-2xl font-bold text-slate-900 font-display">Procurement Database</h2>
         <p class="text-slate-500 text-sm">Browse, filter, and sync government contracts across all 47 counties.</p>
       </div>
-      <button onclick="openModal('scan-modal')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        Scan New Contract
-      </button>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="exportCSV()" class="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Export CSV
+        </button>
+        <button onclick="openModal('scan-modal')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Scan New Contract
+        </button>
+      </div>
     </div>
 
     <!-- Filters Bar -->
@@ -210,10 +415,10 @@
     </div>
   </div>
 
-  <!-- GHOST PROJECTS -->
+  <!-- ===================== GHOST PROJECTS ===================== -->
   <div id="v-ghost" class="tab-content space-y-6">
     <div class="text-center max-w-3xl mx-auto mb-2">
-      <h2 class="text-2xl font-bold text-slate-900 mb-2">🛰 Ghost Project Detector</h2>
+      <h2 class="text-2xl font-bold text-slate-900 font-display mb-2">🛰️ Ghost Project Detector</h2>
       <p class="text-slate-500">Satellite imagery verification vs. government-reported completion status.</p>
     </div>
     <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -221,12 +426,12 @@
     </div>
   </div>
 
-  <!-- REPORT -->
+  <!-- ===================== REPORT ===================== -->
   <div id="v-report" class="tab-content max-w-2xl mx-auto space-y-6">
     <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
       <div class="flex items-center gap-3 mb-6">
         <div class="p-3 bg-red-100 rounded-full"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-        <div><h2 class="text-2xl font-bold text-slate-900">Submit a Report</h2><p class="text-slate-500 text-sm">Anonymous by default · AI-assisted triage</p></div>
+        <div><h2 class="text-2xl font-bold text-slate-900 font-display">Submit a Report</h2><p class="text-slate-500 text-sm">Anonymous by default · AI-assisted triage</p></div>
       </div>
       <form id="report-form" onsubmit="submitReport(event)" class="space-y-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -245,9 +450,17 @@
             </select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Approximate amount involved (KES, optional)</label>
-          <input type="number" name="amount" min="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Sector (optional)</label>
+            <select name="sector" id="report-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
+              <option value="">— Select —</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Approximate amount (KES, optional)</label>
+            <input type="number" name="amount" min="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
+          </div>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Description *</label>
@@ -261,11 +474,12 @@
     </div>
   </div>
 
-  <!-- AI INVESTIGATOR -->
+  <!-- ===================== AI INVESTIGATOR ===================== -->
   <div id="v-ai" class="tab-content space-y-6 max-w-4xl mx-auto">
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
       <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
         <h3 class="font-bold text-slate-900 flex items-center gap-2">🤖 AI Investigator <span class="text-xs font-normal text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">Gemini 2.5 Flash</span></h3>
+        <button onclick="clearChat()" class="text-xs font-semibold text-slate-400 hover:text-slate-700">Clear</button>
       </div>
       <div id="chat-history" class="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
         <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>
@@ -279,10 +493,10 @@
     </div>
   </div>
 
-  <!-- SYNC DATA -->
+  <!-- ===================== SYNC DATA ===================== -->
   <div id="v-sync" class="tab-content space-y-6 max-w-3xl mx-auto">
     <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-      <h2 class="text-2xl font-bold mb-2 text-slate-900">📥 Live Data Sync (OCDS)</h2>
+      <h2 class="text-2xl font-bold mb-2 text-slate-900 font-display">📥 Live Data Sync (OCDS)</h2>
       <p class="text-slate-500 mb-6 text-sm">Pull the latest machine-readable procurement records from the Open Contracting Partnership's Kenya publication for a given year, optionally narrowed to one county.</p>
       <div class="flex flex-wrap gap-4 items-end">
         <div>
@@ -305,10 +519,10 @@
     </div>
   </div>
 
-  <!-- ABOUT / SOURCES -->
+  <!-- ===================== ABOUT / SOURCES ===================== -->
   <div id="v-about" class="tab-content max-w-3xl mx-auto space-y-6">
     <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-5">
-      <h2 class="text-2xl font-bold text-slate-900">Data & Methodology</h2>
+      <h2 class="text-2xl font-bold text-slate-900 font-display">Data & Methodology</h2>
       <p class="text-slate-600 text-sm leading-relaxed">Every contract in this platform carries a <b>data type</b> so you always know what you're looking at:</p>
       <div class="space-y-3">
         <div class="p-4 rounded-lg border border-orange-200 bg-orange-50">
@@ -332,23 +546,44 @@
 </main>
 
 <footer class="bg-navy-900 text-slate-300 mt-8">
-  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm flex flex-col md:flex-row justify-between gap-4">
-    <div>
-      <p class="font-bold text-white">KenyaWatch AI</p>
-      <p class="text-slate-400 mt-1 max-w-md">An independent civic-tech tool for procurement transparency. Not affiliated with the Government of Kenya, PPRA, or EACC.</p>
+  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 text-sm">
+    <div class="flex flex-col md:flex-row justify-between gap-8">
+      <div class="max-w-md">
+        <p class="font-bold text-white font-display text-lg">KenyaWatch <span class="text-emerald-400">AI</span></p>
+        <p class="text-slate-400 mt-2 text-sm leading-relaxed">An independent civic-tech tool for procurement transparency. Not affiliated with the Government of Kenya, PPRA, or EACC.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-8 text-sm">
+        <div>
+          <p class="font-bold text-white mb-3">Explore</p>
+          <ul class="space-y-2 text-slate-400">
+            <li><button onclick="showTab('v-procurement')" class="hover:text-emerald-400">Contracts</button></li>
+            <li><button onclick="showTab('v-ghost')" class="hover:text-emerald-400">Ghost Projects</button></li>
+            <li><button onclick="showTab('v-ai')" class="hover:text-emerald-400">AI Investigator</button></li>
+            <li><button onclick="showTab('v-sync')" class="hover:text-emerald-400">Sync Data</button></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-bold text-white mb-3">Get Help</p>
+          <ul class="space-y-2 text-slate-400">
+            <li>EACC Hotline: 0800 720 880</li>
+            <li>Free, 24/7</li>
+            <li><button onclick="showTab('v-report')" class="hover:text-emerald-400">Report anonymously</button></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="text-slate-400">
-      <p>EACC Hotline: 0800 720 880 (free, 24/7)</p>
-      <p>Report anonymously via the "Report" tab</p>
+    <div class="border-t border-slate-800 mt-8 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-slate-500">
+      <p>© 2026 KenyaWatch AI · Independent civic-tech initiative</p>
+      <p>Data sources: Auditor-General reports · EACC/DPP proceedings · Open Contracting Partnership (OCDS)</p>
     </div>
   </div>
 </footer>
 
 <!-- Scan Modal -->
-<div id="scan-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+<div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
   <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
-      <h3 class="text-xl font-bold text-slate-900">🔍 Scan Contract</h3>
+      <h3 class="text-xl font-bold text-slate-900 font-display">🔍 Scan Contract</h3>
       <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
     </div>
     <div class="p-6 space-y-4">
@@ -373,18 +608,21 @@
 </div>
 
 <!-- Contract Detail Modal -->
-<div id="detail-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+<div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
   <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
-      <h3 class="text-xl font-bold text-slate-900">Contract Detail</h3>
+      <h3 class="text-xl font-bold text-slate-900 font-display">Contract Detail</h3>
       <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
     </div>
     <div id="detail-body" class="p-6 space-y-3 text-sm text-slate-700"></div>
   </div>
 </div>
 
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-navy-900 text-white px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold toast"></div>
+
 <script>
-  // ── Backend URL resolution ───────────────────────────────────────────────
+  // ── Backend URL resolution ────────────────────────────────────────────────
   // Priority: ?api= query param override (handy for testing) > the <meta>
   // tag above > same-origin fallback.
   const API_BASE = (() => {
@@ -399,6 +637,7 @@
   let currentPage = 1;
   const PAGE_SIZE = 25;
   let lastTotal = 0;
+  let riskChart = null, sectorChart = null;
 
   function formatMoney(n) {
     if (!n) return '0';
@@ -437,6 +676,14 @@
 
   function showConnError(show) { document.getElementById('conn-banner').classList.toggle('hidden', !show); }
 
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.remove('hidden');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.add('hidden'), 3200);
+  }
+
   async function apiFetch(path, opts) {
     try {
       const res = await fetch(API_BASE + path, opts);
@@ -448,7 +695,7 @@
     }
   }
 
-  // ── Meta (populates all dropdowns from the real 47-county list) ─────────
+  // ── Meta (populates all dropdowns from the real 47-county list) ──────────
   async function loadMeta() {
     try {
       const res = await apiFetch('/api/contracts/meta');
@@ -463,29 +710,173 @@
       document.getElementById('scan-county').innerHTML = countyOptsPlain;
       document.getElementById('sync-county').innerHTML = '<option value="All">All Counties</option>' + countyOptsPlain;
 
-      document.getElementById('filter-sector').innerHTML = '<option value="All">All Sectors</option>' + META.sectors.map(s => `<option>${s}</option>`).join('');
-      document.getElementById('scan-sector').innerHTML = META.sectors.map(s => `<option>${s}</option>`).join('');
+      const sectorOpts = META.sectors.map(s => `<option>${s}</option>`).join('');
+      document.getElementById('filter-sector').innerHTML = '<option value="All">All Sectors</option>' + sectorOpts;
+      document.getElementById('scan-sector').innerHTML = sectorOpts;
+      document.getElementById('report-sector').innerHTML = '<option value="">— Select —</option>' + sectorOpts;
 
       const years = META.years.length ? META.years : [2026, 2025, 2024, 2023, 2022, 2021];
       document.getElementById('filter-year').innerHTML = '<option value="All">All Years</option>' + years.map(y => `<option>${y}</option>`).join('');
     } catch (e) { /* banner already shown by apiFetch */ }
   }
 
+  // ── Animated counter ─────────────────────────────────────────────────────
+  function animateCount(el, target, prefix = '', suffix = '') {
+    if (!el) return;
+    const dur = 1200, start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── Dashboard / landing data ─────────────────────────────────────────────
   async function loadDash() {
     try {
       const res = await apiFetch('/api/stats');
       const data = await res.json();
       if (data.success) {
-        document.getElementById('dash-flagged').textContent = data.data.contracts_flagged;
-        document.getElementById('dash-ghost').textContent = data.data.ghost_projects;
-        document.getElementById('dash-reports').textContent = data.data.reports_30d;
-        document.getElementById('dash-funds').textContent = 'KES ' + formatMoney(data.data.funds_at_risk);
-        document.getElementById('dash-counties').textContent = data.data.counties_covered + ' / 47';
-        document.getElementById('dash-documented').textContent = data.data.documented_cases;
+        const d = data.data;
+        animateCount(document.getElementById('dash-flagged'), d.contracts_flagged);
+        animateCount(document.getElementById('dash-ghost'), d.ghost_projects);
+        animateCount(document.getElementById('dash-reports'), d.reports_30d);
+        animateCount(document.getElementById('dash-funds'), d.funds_at_risk, 'KES ');
+        animateCount(document.getElementById('hero-flagged'), d.contracts_flagged);
+        animateCount(document.getElementById('hero-ghost'), d.ghost_projects);
+        animateCount(document.getElementById('hero-funds'), d.funds_at_risk, 'KES ');
+      }
+    } catch (e) { /* noop */ }
+    loadCountyExplorer();
+    loadCharts();
+    loadTopFlagged();
+    loadGhostPreview();
+  }
+
+  // ── County Explorer (heatmap) ────────────────────────────────────────────
+  async function loadCountyExplorer() {
+    const grid = document.getElementById('county-grid');
+    try {
+      const res = await apiFetch('/api/stats/by-county');
+      const data = await res.json();
+      const map = {};
+      (data.success ? data.data : []).forEach(c => { map[c.county] = c; });
+      const maxHigh = Math.max(1, ...Object.values(map).map(c => c.high_risk || 0));
+      const counties = META.counties.length ? META.counties : [];
+      if (!counties.length) {
+        // fallback: build from the by-county response if meta not ready
+        const names = Object.keys(map);
+        names.forEach(n => counties.push({ name: n }));
+      }
+      grid.innerHTML = '';
+      counties.forEach(c => {
+        const row = map[c.name] || { contracts: 0, high_risk: 0, funds_at_risk: 0 };
+        const heat = row.high_risk === 0 ? 0 : Math.min(5, 1 + Math.round((row.high_risk / maxHigh) * 4));
+        const el = document.createElement('button');
+        el.className = `county-chip heatmap-${heat} rounded-xl px-3 py-3 text-left border border-slate-200/60 shadow-sm`;
+        el.innerHTML = `
+          <div class="font-bold text-sm truncate">${c.name}</div>
+          <div class="text-[11px] opacity-80">${row.contracts} contracts · ${row.high_risk} high-risk</div>`;
+        el.onclick = () => { document.getElementById('filter-county').value = c.name; showTab('v-procurement'); loadC(); };
+        grid.appendChild(el);
+      });
+    } catch (e) {
+      grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-600">Failed to load counties.</div>';
+    }
+  }
+
+  // ── Charts ───────────────────────────────────────────────────────────────
+  async function loadCharts() {
+    try {
+      const res = await apiFetch('/api/contracts?limit=500');
+      const data = await res.json();
+      if (!data.success) return;
+      const rows = data.data;
+      const riskCounts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
+      const sectorCounts = {};
+      rows.forEach(c => { if (riskCounts[c.risk_level] !== undefined) riskCounts[c.risk_level]++; sectorCounts[c.sector || 'Other'] = (sectorCounts[c.sector || 'Other'] || 0) + 1; });
+
+      const riskCtx = document.getElementById('risk-chart');
+      if (riskCtx) {
+        if (riskChart) riskChart.destroy();
+        riskChart = new Chart(riskCtx, {
+          type: 'doughnut',
+          data: { labels: ['HIGH', 'MEDIUM', 'LOW'], datasets: [{ data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], backgroundColor: ['#dc2626', '#f59e0b', '#10b981'], borderWidth: 2, borderColor: '#fff' }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
+      const secCtx = document.getElementById('sector-chart');
+      if (secCtx) {
+        const sorted = Object.entries(sectorCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        if (sectorChart) sectorChart.destroy();
+        sectorChart = new Chart(secCtx, {
+          type: 'bar',
+          data: { labels: sorted.map(s => s[0]), datasets: [{ label: 'Contracts', data: sorted.map(s => s[1]), backgroundColor: '#059669', borderRadius: 6 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+        });
       }
     } catch (e) { /* noop */ }
   }
 
+  // ── Top flagged contracts ────────────────────────────────────────────────
+  async function loadTopFlagged() {
+    const box = document.getElementById('top-flagged');
+    try {
+      const res = await apiFetch('/api/contracts?risk_level=HIGH&limit=5');
+      const data = await res.json();
+      if (!data.success || !data.data.length) { box.innerHTML = '<p class="text-slate-400 text-sm">No high-risk contracts found.</p>'; return; }
+      box.innerHTML = data.data.map(c => `
+        <div class="flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors" onclick="showDetail('${c.contract_id}')">
+          <div class="min-w-0">
+            <div class="font-mono text-[11px] text-slate-400 truncate">${c.contract_id}</div>
+            <div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(c.description)}</div>
+            <div class="text-xs text-slate-500">${c.county || '—'} · ${c.sector || '—'}</div>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="text-sm font-black text-red-600">${c.risk_score}</div>
+            <div class="text-[10px] text-slate-400 uppercase">risk</div>
+          </div>
+        </div>`).join('');
+    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm">Failed to load.</div>'; }
+  }
+
+  // ── Ghost project preview ────────────────────────────────────────────────
+  async function loadGhostPreview() {
+    const box = document.getElementById('ghost-preview');
+    try {
+      const res = await apiFetch('/api/ghost-projects');
+      const data = await res.json();
+      if (!data.success || !data.data.length) { box.innerHTML = '<div class="text-slate-400 text-sm">No ghost projects detected.</div>'; return; }
+      box.innerHTML = data.data.slice(0, 4).map(g => `
+        <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
+          <div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200">
+            <img src="${g.satellite_image_url || 'https://placehold.co/100x100?text=Sat'}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(g.project_name)}</div>
+            <div class="text-xs text-slate-500">${g.county} · KES ${formatMoney(g.amount_at_risk)}</div>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700'}">${g.detection_status.toUpperCase()}</span>
+        </div>`).join('');
+    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm">Failed to load.</div>'; }
+  }
+
+  function scrollToCounty() {
+    const el = document.getElementById('county-explorer');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ── Reveal-on-scroll ─────────────────────────────────────────────────────
+  function initReveal() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+
+  // ── Contracts table ──────────────────────────────────────────────────────
   function resetFilters() {
     document.getElementById('search-contracts').value = '';
     document.getElementById('filter-county').value = 'All';
@@ -589,6 +980,20 @@
     } catch (e) { body.innerHTML = '<p class="text-red-600">Failed to load contract.</p>'; }
   }
 
+  // ── CSV export ───────────────────────────────────────────────────────────
+  function exportCSV() {
+    const search = document.getElementById('search-contracts').value;
+    const county = document.getElementById('filter-county').value;
+    const sector = document.getElementById('filter-sector').value;
+    const year = document.getElementById('filter-year').value;
+    const risk = document.getElementById('filter-risk').value;
+    const dataType = document.getElementById('filter-datatype').value;
+    const params = new URLSearchParams({ search, county, sector, year, risk_level: risk, data_type: dataType });
+    window.open(API_BASE + '/api/contracts/export?' + params.toString(), '_blank');
+    showToast('📥 Downloading CSV...');
+  }
+
+  // ── Ghost projects ───────────────────────────────────────────────────────
   async function loadGhost() {
     const grid = document.getElementById('ghost-grid');
     try {
@@ -598,11 +1003,11 @@
       if (data.success && data.data.length > 0) {
         data.data.forEach(g => {
           const el = document.createElement('div');
-          el.className = 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden';
+          el.className = 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover';
           el.innerHTML = `
             <div class="h-48 bg-slate-200 relative">
-              <img src="${g.satellite_image_url || 'https://placehold.co/600x400?text=Satellite'}" class="w-full h-full object-cover" loading="lazy">
-              <div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">${g.detection_status.toUpperCase()}</div>
+              <img src="${g.satellite_image_url || 'https://placehold.co/600x400?text=Satellite'}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Satellite'">
+              <div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'}">${g.detection_status.toUpperCase()}</div>
               <div class="absolute top-3 left-3">${dataTypeBadge(g.data_type)}</div>
             </div>
             <div class="p-5">
@@ -625,6 +1030,7 @@
     }
   }
 
+  // ── Report ───────────────────────────────────────────────────────────────
   async function submitReport(e) {
     e.preventDefault();
     const form = e.target;
@@ -634,16 +1040,23 @@
       const res = await apiFetch('/api/reports', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: form.type.value, county: form.county.value, description: form.description.value,
+          type: form.type.value, county: form.county.value, sector: form.sector.value || null,
+          description: form.description.value,
           amount: form.amount.value ? parseInt(form.amount.value, 10) : 0,
           anonymous: form.anonymous.checked,
         }),
       });
       const data = await res.json();
-      if (data.success) { alert('✅ Report submitted. Case number: ' + data.data.case_number); form.reset(); }
-      else { alert('Error: ' + data.error); }
-    } catch (err) { alert('Network error — please try again.'); }
+      if (data.success) { showToast('✅ Report submitted. Case number: ' + data.data.case_number); form.reset(); }
+      else { showToast('Error: ' + data.error); }
+    } catch (err) { showToast('Network error — please try again.'); }
     btn.innerHTML = '🔒 Submit Securely'; btn.disabled = false;
+  }
+
+  // ── AI chat ──────────────────────────────────────────────────────────────
+  function clearChat() {
+    const history = document.getElementById('chat-history');
+    history.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`;
   }
 
   async function sendAI(e) {
@@ -674,11 +1087,12 @@
     } catch (err) { document.getElementById('ai-loading')?.remove(); }
   }
 
+  // ── Scan contract ────────────────────────────────────────────────────────
   async function runScan() {
     const id = document.getElementById('scan-id').value;
     const supplier = document.getElementById('scan-supplier').value;
     const value = document.getElementById('scan-value').value;
-    if (!id || !supplier || !value) { alert('Fill required fields'); return; }
+    if (!id || !supplier || !value) { showToast('Fill required fields'); return; }
     const resultDiv = document.getElementById('scan-result');
     resultDiv.classList.remove('hidden');
     resultDiv.innerHTML = '<span class="text-blue-600 animate-pulse">Analysing...</span>';
@@ -703,6 +1117,7 @@
     } catch (e) { resultDiv.innerHTML = '<span class="text-red-600">Network error.</span>'; }
   }
 
+  // ── Sync ─────────────────────────────────────────────────────────────────
   async function startSync() {
     const year = document.getElementById('sync-year').value;
     const county = document.getElementById('sync-county').value;
@@ -733,9 +1148,10 @@
     } catch (e) { statusDiv.innerHTML = '<span class="text-red-600">Failed to load status.</span>'; }
   }
 
-  // ── Init ───────────────────────────────────────────────────────────────
+  // ── Init ─────────────────────────────────────────────────────────────────
   (async function init() {
     await loadMeta();
+    initReveal();
     showTab('v-overview');
   })();
 </script>

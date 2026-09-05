@@ -86,6 +86,47 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/contracts/export — CSV export of the current filtered view, so
+// researchers/journalists can download the dataset. Reuses the same filter
+// logic as the list endpoint. Must be declared BEFORE /:contractId.
+router.get('/export', async (req, res) => {
+  try {
+    const { county, sector, risk_level, year, data_type, search } = req.query;
+    let query = 'SELECT * FROM contracts WHERE 1=1';
+    const params = [];
+    let pIdx = 1;
+
+    if (county && county !== 'All') { query += ` AND county = $${pIdx}`; params.push(county); pIdx++; }
+    if (sector && sector !== 'All') { query += ` AND sector = $${pIdx}`; params.push(sector); pIdx++; }
+    if (risk_level && risk_level !== 'All') { query += ` AND risk_level = $${pIdx}`; params.push(risk_level); pIdx++; }
+    if (year && year !== 'All') { query += ` AND year = $${pIdx}`; params.push(parseInt(year, 10)); pIdx++; }
+    if (data_type && data_type !== 'All') { query += ` AND data_type = $${pIdx}`; params.push(data_type); pIdx++; }
+    if (search) {
+      query += ` AND (description ILIKE $${pIdx} OR supplier ILIKE $${pIdx} OR contract_id ILIKE $${pIdx} OR procuring_entity ILIKE $${pIdx})`;
+      params.push(`%${search}%`); pIdx++;
+    }
+    query += ' ORDER BY risk_score DESC, awarded_date DESC NULLS LAST';
+
+    const { rows } = await pool.query(query, params);
+
+    const cols = ['contract_id', 'description', 'county', 'sector', 'value', 'supplier', 'bid_type', 'awarded_date', 'year', 'risk_score', 'risk_level', 'procuring_entity', 'data_type', 'source_name', 'source_url'];
+    const esc = (v) => {
+      if (v === null || v === undefined) return '';
+      const s = String(v);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const header = cols.join(',');
+    const body = rows.map(r => cols.map(c => esc(r[c])).join(',')).join('\n');
+    const csv = header + '\n' + body;
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="kenyawatch-contracts.csv"');
+    res.send(csv);
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // GET /api/contracts/:contractId — full detail for the contract modal.
 router.get('/:contractId', async (req, res) => {
   try {
