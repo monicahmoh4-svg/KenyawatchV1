@@ -8,6 +8,70 @@ const { documentedContracts } = require('./Backend/data/documentedCases');
 console.log('Compiling comprehensive production KenyaWatch AI platform...');
 console.log('Loaded counties:', COUNTIES.length, 'Documented cases:', documentedContracts.length);
 
+const countyCoords = {
+  'Mombasa': [-4.0435, 39.6682],
+  'Kwale': [-4.1744, 39.4606],
+  'Kilifi': [-3.6305, 39.8499],
+  'Tana River': [-1.5000, 39.5000],
+  'Lamu': [-2.2717, 40.9020],
+  'Taita Taveta': [-3.3167, 38.3500],
+  'Garissa': [-0.4532, 39.6460],
+  'Wajir': [1.7500, 40.0500],
+  'Mandera': [3.9373, 41.8569],
+  'Marsabit': [2.3333, 37.9833],
+  'Isiolo': [0.3546, 37.5822],
+  'Meru': [0.0500, 37.6500],
+  'Tharaka-Nithi': [-0.3000, 37.9500],
+  'Embu': [-0.5333, 37.4500],
+  'Kitui': [-1.3667, 38.0167],
+  'Machakos': [-1.5167, 37.2667],
+  'Makueni': [-1.8000, 37.6167],
+  'Nyandarua': [-0.1800, 36.3600],
+  'Nyeri': [-0.4167, 36.9500],
+  'Kirinyaga': [-0.5000, 37.2800],
+  'Murang\'a': [-0.7167, 37.1500],
+  'Kiambu': [-1.1714, 36.8356],
+  'Turkana': [3.1167, 35.6000],
+  'West Pokot': [1.2333, 35.1167],
+  'Samburu': [1.1667, 36.6667],
+  'Trans Nzoia': [1.0167, 35.0000],
+  'Uasin Gishu': [0.5167, 35.2833],
+  'Elgeyo-Marakwet': [0.8000, 35.5000],
+  'Nandi': [0.1833, 35.1000],
+  'Baringo': [0.4667, 35.7500],
+  'Laikipia': [0.1800, 36.7800],
+  'Nakuru': [-0.3031, 36.0800],
+  'Narok': [-1.0833, 35.8667],
+  'Kajiado': [-1.8500, 36.7833],
+  'Kericho': [-0.3689, 35.2863],
+  'Bomet': [-0.7833, 35.3500],
+  'Kakamega': [0.2827, 34.7519],
+  'Vihiga': [0.0833, 34.7167],
+  'Bungoma': [0.5635, 34.5606],
+  'Busia': [0.4608, 34.1115],
+  'Siaya': [0.0607, 34.2878],
+  'Kisumu': [-0.0917, 34.7680],
+  'Homa Bay': [-0.5273, 34.4571],
+  'Migori': [-1.0634, 34.4731],
+  'Kisii': [-0.6817, 34.7667],
+  'Nyamira': [-0.5633, 34.9358],
+  'Nairobi': [-1.286389, 36.817223]
+};
+
+const ENRICHED_COUNTIES = COUNTIES.map((c, i) => {
+  const coords = countyCoords[c.name] || [0.0, 37.0];
+  return {
+    name: c.name,
+    code: c.code,
+    region: c.region,
+    code_id: String(i + 1).padStart(3, '0'),
+    code_str: String(i + 1).padStart(3, '0') + ' · ' + c.code,
+    code_num: i + 1,
+    lat: coords[0],
+    lng: coords[1]
+  };
+});
+
 // Generate expansive real government contracts across national agencies and all 47 counties
 const allContracts = [];
 
@@ -168,8 +232,8 @@ const sectors = [
   'Environment & Sanitation'
 ];
 
-COUNTIES.forEach((county, cIdx) => {
-  const seedMultiplier = (county.code * 17) % 50;
+ENRICHED_COUNTIES.forEach((county, cIdx) => {
+  const seedMultiplier = ((cIdx + 1) * 17) % 50;
   
   // High-value county flagship contract
   const sec1 = sectors[(cIdx * 2) % sectors.length];
@@ -186,7 +250,7 @@ COUNTIES.forEach((county, cIdx) => {
 
   allContracts.push({
     id: allContracts.length + 1,
-    contract_id: `KE-${county.code_str}-2026-001`,
+    contract_id: `KE-${county.code}-2026-001`,
     description: `${sec1} — Major Capital Works & Facility Upgrades in ${county.name} County (${county.region} Region)`,
     county: county.name,
     sector: sec1,
@@ -210,14 +274,14 @@ COUNTIES.forEach((county, cIdx) => {
 
   // Secondary sector contract
   const sec2 = sectors[(cIdx * 3 + 1) % sectors.length];
-  const val2 = Math.round((85000000 + (county.code * 3500000)));
+  const val2 = Math.round((85000000 + ((cIdx + 1) * 3500000)));
   const riskScore2 = (cIdx % 4 === 0) ? 72 : 35;
   const riskLevel2 = riskScore2 >= 70 ? 'HIGH' : (riskScore2 >= 40 ? 'MEDIUM' : 'LOW');
   const bid2 = (cIdx % 4 === 0) ? 'direct' : 'open';
 
   allContracts.push({
     id: allContracts.length + 1,
-    contract_id: `KE-${county.code_str}-2025-002`,
+    contract_id: `KE-${county.code}-2025-002`,
     description: `${sec2} — Equipment Supply, Modernization & Service Delivery in ${county.name} County`,
     county: county.name,
     sector: sec2,
@@ -241,10 +305,10 @@ COUNTIES.forEach((county, cIdx) => {
 
   // Tertiary maintenance / recurrent contract
   const sec3 = sectors[(cIdx * 5 + 2) % sectors.length];
-  const val3 = Math.round((14000000 + (county.code * 800000)));
+  const val3 = Math.round((14000000 + ((cIdx + 1) * 800000)));
   allContracts.push({
     id: allContracts.length + 1,
-    contract_id: `KE-${county.code_str}-2024-003`,
+    contract_id: `KE-${county.code}-2024-003`,
     description: `${sec3} — Routine Maintenance, Inspection & Materials Supply in ${county.name} County`,
     county: county.name,
     sector: sec3,
@@ -1523,7 +1587,7 @@ const html = `<!DOCTYPE html>
   <!-- ========================================== -->
   <script>
     // Embedded Active Datasets
-    const APP_COUNTIES = ${JSON.stringify(COUNTIES)};
+    const APP_COUNTIES = ${JSON.stringify(ENRICHED_COUNTIES)};
     let APP_CONTRACTS = ${JSON.stringify(allContracts)};
     let APP_GHOSTS = ${JSON.stringify(GHOST_PROJECTS)};
     let APP_REPORTS = ${JSON.stringify(INITIAL_REPORTS)};
@@ -1589,7 +1653,7 @@ const html = `<!DOCTYPE html>
         APP_COUNTIES.forEach(c => {
           const opt = document.createElement('option');
           opt.value = c.name;
-          opt.textContent = c.code_str + ' — ' + c.name + ' (' + c.region + ')';
+          opt.textContent = 'County ' + c.code_id + ' — ' + c.name + ' (' + c.region + ')';
           sel.appendChild(opt);
         });
       });
@@ -1754,7 +1818,7 @@ const html = `<!DOCTYPE html>
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
             <div class="absolute top-3 left-3 flex gap-2">
               <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-extrabold badge-ghost">\${g.detection_status.toUpperCase()} DETECTED</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900 text-purple-300 border border-purple-500/40">AI CONF: \${g.confidence_score}%</span>
+              <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900 text-purple-300 border border-purple-500/40">AI CONF: \${g.confidence_score}%</span>
             </div>
             <div class="absolute bottom-3 left-3 text-white font-mono text-[11px]">
               📍 \${g.latitude}, \${g.longitude} (\${g.county})
@@ -1815,7 +1879,7 @@ const html = `<!DOCTYPE html>
 
         card.innerHTML = \`
           <div class="flex items-center justify-between">
-            <span class="font-mono text-xs font-bold text-red-400">\${c.code_str}</span>
+            <span class="font-mono text-xs font-bold text-red-400">County \${c.code_id}</span>
             <span class="text-[10px] text-slate-400">\${c.region}</span>
           </div>
           <h4 class="font-black text-white text-sm truncate">\${c.name}</h4>
