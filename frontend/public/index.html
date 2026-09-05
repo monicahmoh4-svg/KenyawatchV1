@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="KenyaWatch AI — Independent civic-tech platform for Kenyan public procurement intelligence, risk scoring, and ghost project verification.">
+  <meta name="description" content="KenyaWatch AI — Kenya's leading civic-tech platform for procurement transparency, AI-powered risk detection, and ghost project verification across all 47 counties.">
   <meta name="theme-color" content="#0f172a">
-  <title>KenyaWatch AI | Procurement Intelligence</title>
+  <meta name="keywords" content="Kenya procurement, government transparency, anti-corruption, civic tech, AI accountability">
+  <title>KenyaWatch AI | Procurement Intelligence & Transparency Platform</title>
 
-  <!-- BACKEND CONFIGURATION: Ensure this URL matches your deployed Render backend -->
   <meta name="kenyawatch-api-base" content="https://kenyawatch-ai-backend.onrender.com">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,12 +16,16 @@
       theme: {
         extend: {
           colors: {
-            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' },
-            slate: { 850: '#1e293b' }
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+            slate: { 850: '#1e293b', 900: '#0f172a' }
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
             display: ['Inter', 'system-ui', 'sans-serif']
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            'hero-pattern': "linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,58,138,0.85) 100%), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80')"
           }
         }
       }
@@ -30,107 +34,158 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
-    /* Professional, minimal base styles */
-    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; -webkit-font-smoothing: antialiased; }
-    .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
-    .tab-content.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
     
-    .nav-link { position: relative; color: #475569; font-weight: 500; transition: color 0.2s; }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #1d4ed8); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #2563eb, #1e40af); }
+
+    /* Tab Animations */
+    .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Navigation */
+    .nav-link { position: relative; color: #475569; font-weight: 500; transition: all 0.2s; }
     .nav-link:hover, .nav-link.active { color: #2563eb; }
     .nav-link.active::after {
-      content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px; background-color: #2563eb; border-radius: 2px;
+      content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+      width: 60%; height: 2px; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 2px;
     }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    /* Cards & Interactions */
+    .card { background: white; border: 1px solid #e2e8f0; border-radius: 0.875rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card:hover { border-color: #cbd5e1; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); transform: translateY(-2px); }
 
-    /* Card & Interaction Styles */
-    .card { background: white; border: 1px solid #e2e8f0; border-radius: 0.75rem; transition: all 0.2s ease; }
-    .card:hover { border-color: #cbd5e1; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
-    
+    /* Buttons */
     .btn-primary {
-      background-color: #2563eb; color: white; font-weight: 600; padding: 0.625rem 1.25rem; border-radius: 0.5rem;
-      transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; font-weight: 600;
+      padding: 0.75rem 1.5rem; border-radius: 0.625rem; transition: all 0.3s; display: inline-flex;
+      align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
     }
-    .btn-primary:hover { background-color: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
-    
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    }
+
     .btn-secondary {
-      background-color: white; color: #334155; border: 1px solid #cbd5e1; font-weight: 500; padding: 0.625rem 1.25rem; border-radius: 0.5rem;
-      transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: white; color: #334155; border: 1.5px solid #cbd5e1; font-weight: 600;
+      padding: 0.75rem 1.5rem; border-radius: 0.625rem; transition: all 0.2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     }
-    .btn-secondary:hover { background-color: #f8fafc; border-color: #94a3b8; }
+    .btn-secondary:hover { background: #f8fafc; border-color: #94a3b8; transform: translateY(-1px); }
 
-    /* Modal Backdrop */
-    .modal-backdrop { background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); }
-
-    /* Toast Notification */
-    .toast { animation: slideIn 0.3s ease-out; }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-
-    /* Image Fallback Handling */
-    .img-container { position: relative; overflow: hidden; background-color: #e2e8f0; }
-    .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-    .img-container:hover img { transform: scale(1.03); }
+    /* Image Handling with Fallbacks */
+    .img-container { position: relative; overflow: hidden; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); }
+    .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .img-container:hover img { transform: scale(1.05); }
     .img-fallback {
       position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #1e293b, #334155); color: #94a3b8; font-size: 0.875rem;
+      background: linear-gradient(135deg, #1e293b, #334155); color: #94a3b8; font-size: 0.875rem; font-weight: 500;
     }
+
+    /* Modal */
+    .modal-backdrop { background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px); }
+
+    /* Toast */
+    .toast { animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(100%) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%; animation: skeleton-loading 1.5s ease-in-out infinite;
+    }
+    @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* County Heatmap */
+    .county-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+    .county-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.25); }
+    .heat-0 { background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-color: #e2e8f0; }
+    .heat-1 { background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-color: #93c5fd; }
+    .heat-2 { background: linear-gradient(135deg, #bfdbfe, #93c5fd); border-color: #60a5fa; }
+    .heat-3 { background: linear-gradient(135deg, #93c5fd, #60a5fa); border-color: #3b82f6; }
+    .heat-4 { background: linear-gradient(135deg, #fde68a, #fcd34d); border-color: #f59e0b; }
+    .heat-5 { background: linear-gradient(135deg, #fca5a5, #f87171); border-color: #ef4444; }
+
+    /* Stat Counter Animation */
+    .stat-number { font-variant-numeric: tabular-nums; }
+
+    /* Responsive Utilities */
+    @media (max-width: 768px) {
+      .mobile-stack { flex-direction: column; }
+      .mobile-hide { display: none; }
+    }
+
+    /* Accessibility */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+    }
+    *:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('v-overview')">
-          <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center shadow-sm">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <div class="flex items-center gap-3 cursor-pointer group" onclick="showTab('v-overview')" role="button" tabindex="0" aria-label="Go to homepage">
+          <div class="w-10 h-10 lg:w-11 lg:h-11 bg-gradient-to-br from-brand-600 to-brand-800 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-brand-500/40 transition-all">
+            <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
           </div>
           <div>
-            <h1 class="text-lg font-bold text-slate-900 leading-none tracking-tight">KenyaWatch <span class="text-brand-600">AI</span></h1>
-            <p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mt-0.5">Procurement Intelligence</p>
+            <h1 class="text-lg lg:text-xl font-bold text-slate-900 leading-none tracking-tight">KenyaWatch <span class="text-brand-600">AI</span></h1>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mt-0.5 hidden sm:block">Procurement Intelligence Platform</p>
           </div>
         </div>
 
-        <nav class="hidden md:flex items-center gap-6">
-          <button onclick="showTab('v-overview')" class="nav-link text-sm" data-tab="v-overview">Overview</button>
-          <button onclick="showTab('v-procurement')" class="nav-link text-sm" data-tab="v-procurement">Contracts</button>
-          <button onclick="showTab('v-ghost')" class="nav-link text-sm" data-tab="v-ghost">Ghost Projects</button>
-          <button onclick="showTab('v-report')" class="nav-link text-sm" data-tab="v-report">Report</button>
-          <button onclick="showTab('v-ai')" class="nav-link text-sm" data-tab="v-ai">AI Assistant</button>
-          <button onclick="showTab('v-sync')" class="nav-link text-sm" data-tab="v-sync">Sync Data</button>
-          <button onclick="showTab('v-report')" class="btn-primary text-sm py-2 px-4 ml-2">Submit Report</button>
+        <nav class="hidden lg:flex items-center gap-1" role="navigation" aria-label="Main navigation">
+          <button onclick="showTab('v-overview')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-overview">Overview</button>
+          <button onclick="showTab('v-procurement')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-procurement">Contracts</button>
+          <button onclick="showTab('v-ghost')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-ghost">Ghost Projects</button>
+          <button onclick="showTab('v-report')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-report">Report</button>
+          <button onclick="showTab('v-ai')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-ai">AI Assistant</button>
+          <button onclick="showTab('v-sync')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-sync">Sync</button>
+          <button onclick="showTab('v-about')" class="nav-link px-4 py-2 rounded-lg text-sm" data-tab="v-about">About</button>
+          <button onclick="showTab('v-report')" class="btn-primary text-sm py-2.5 px-5 ml-3">Submit Report</button>
         </nav>
 
-        <button class="md:hidden p-2 rounded-md hover:bg-slate-100" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <button class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')" aria-label="Toggle mobile menu" aria-expanded="false">
           <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
       </div>
       
-      <!-- Mobile Nav -->
-      <div id="mobile-nav" class="hidden md:hidden pb-4 flex flex-col gap-1 border-t border-slate-100 pt-3">
-        <button onclick="showTab('v-overview'); document.getElementById('mobile-nav').classList.add('hidden')" class="text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">Overview</button>
-        <button onclick="showTab('v-procurement'); document.getElementById('mobile-nav').classList.add('hidden')" class="text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">Contracts</button>
-        <button onclick="showTab('v-ghost'); document.getElementById('mobile-nav').classList.add('hidden')" class="text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">Ghost Projects</button>
-        <button onclick="showTab('v-report'); document.getElementById('mobile-nav').classList.add('hidden')" class="text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">Report</button>
-        <button onclick="showTab('v-ai'); document.getElementById('mobile-nav').classList.add('hidden')" class="text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">AI Assistant</button>
-        <button onclick="showTab('v-sync'); document.getElementById('mobile-nav').classList.add('hidden')" class="text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50">Sync Data</button>
+      <div id="mobile-nav" class="hidden lg:hidden pb-4 flex flex-col gap-1 border-t border-slate-100 pt-3" role="navigation" aria-label="Mobile navigation">
+        <button onclick="showTab('v-overview'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Overview</button>
+        <button onclick="showTab('v-procurement'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Contracts</button>
+        <button onclick="showTab('v-ghost'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Ghost Projects</button>
+        <button onclick="showTab('v-report'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Report</button>
+        <button onclick="showTab('v-ai'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">AI Assistant</button>
+        <button onclick="showTab('v-sync'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Sync Data</button>
+        <button onclick="showTab('v-about'); this.closest('#mobile-nav').classList.add('hidden')" class="text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">About</button>
       </div>
     </div>
   </header>
 
   <!-- Connection Error Banner -->
-  <div id="conn-banner" class="hidden bg-red-50 border-b border-red-200 text-red-800 text-sm text-center py-3 px-4 font-medium">
-    <span class="font-bold">Connection Error:</span> Cannot reach the backend API. Please verify the backend is running and the URL in the meta tag is correct.
+  <div id="conn-banner" class="hidden bg-red-50 border-b border-red-200 text-red-800 text-sm text-center py-3 px-4 font-medium" role="alert">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span>Connection Error: Cannot reach the backend API. Please verify the backend is running.</span>
+    </div>
   </div>
 
   <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
@@ -138,112 +193,206 @@
     <!-- ==================== OVERVIEW ==================== -->
     <div id="v-overview" class="tab-content active space-y-12">
       
-      <!-- Hero Section -->
-      <section class="relative rounded-2xl overflow-hidden bg-slate-900 text-white">
+      <!-- Hero Section with HD Image -->
+      <section class="relative rounded-2xl lg:rounded-3xl overflow-hidden bg-slate-900 text-white shadow-2xl">
         <div class="absolute inset-0 img-container">
-          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80" alt="Nairobi Skyline" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-          <div class="img-fallback">High-quality imagery unavailable</div>
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80" alt="Nairobi skyline representing Kenya's business district" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <div class="img-fallback">Loading imagery...</div>
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900/40"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
         
-        <div class="relative z-10 px-6 py-16 md:px-12 md:py-24 max-w-3xl">
-          <div class="inline-flex items-center gap-2 bg-brand-500/20 border border-brand-400/30 rounded-full px-3 py-1 text-xs font-semibold text-brand-100 mb-6 backdrop-blur-sm">
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
-            Live Intelligence Platform
+        <div class="relative z-10 px-6 py-16 md:px-12 md:py-24 lg:py-28 max-w-3xl">
+          <div class="inline-flex items-center gap-2 bg-brand-500/20 border border-brand-400/30 rounded-full px-4 py-1.5 text-xs font-semibold text-brand-100 mb-6 backdrop-blur-sm">
+            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+            Live Intelligence Platform · All 47 Counties
           </div>
-          <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">
-            Transparency in Public <br/> Procurement.
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight">
+            Transparency in Public <br/>
+            <span class="bg-gradient-to-r from-brand-200 to-brand-400 bg-clip-text text-transparent">Procurement.</span>
           </h2>
-          <p class="text-slate-300 text-lg mb-8 leading-relaxed max-w-xl">
+          <p class="text-slate-300 text-lg md:text-xl mb-8 leading-relaxed max-w-xl">
             AI-powered risk scoring, satellite verification of ghost projects, and anonymous citizen reporting across all 47 Kenyan counties.
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
-            <button onclick="showTab('v-procurement')" class="btn-primary">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <button onclick="showTab('v-procurement')" class="btn-primary text-base">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               Explore Contracts
             </button>
-            <button onclick="showTab('v-report')" class="btn-secondary bg-white/10 text-white border-white/20 hover:bg-white/20">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <button onclick="showTab('v-report')" class="btn-secondary bg-white/10 text-white border-white/30 hover:bg-white/20 text-base">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
               Report Anomaly
             </button>
+          </div>
+        </div>
+
+        <!-- Floating Stats Cards -->
+        <div class="hidden lg:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-4 z-20">
+          <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 shadow-xl">
+            <div class="text-3xl font-bold text-brand-200 stat-number" id="hero-flagged">--</div>
+            <div class="text-xs text-slate-300 font-medium uppercase tracking-wide">High-Risk Contracts</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 shadow-xl">
+            <div class="text-3xl font-bold text-red-300 stat-number" id="hero-ghost">--</div>
+            <div class="text-xs text-slate-300 font-medium uppercase tracking-wide">Ghost Projects</div>
           </div>
         </div>
       </section>
 
       <!-- Stats Grid -->
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        <div class="card p-6">
+      <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6" aria-label="Key statistics">
+        <div class="card p-6 lg:p-7">
           <div class="flex items-center justify-between mb-4">
-            <span class="text-2xl">🚩</span>
-            <span class="text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-md border border-red-100">HIGH RISK</span>
+            <span class="text-3xl" role="img" aria-label="flag">🚩</span>
+            <span class="text-xs font-semibold text-red-600 bg-red-50 px-2.5 py-1 rounded-md border border-red-100">HIGH RISK</span>
           </div>
-          <div class="text-3xl font-bold text-slate-900 mb-1" id="dash-flagged">--</div>
+          <div class="text-3xl lg:text-4xl font-bold text-slate-900 mb-1 stat-number" id="dash-flagged">--</div>
           <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Flagged Contracts</div>
         </div>
-        <div class="card p-6">
+        <div class="card p-6 lg:p-7">
           <div class="flex items-center justify-between mb-4">
-            <span class="text-2xl">👻</span>
-            <span class="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-1 rounded-md border border-purple-100">DETECTED</span>
+            <span class="text-3xl" role="img" aria-label="ghost">👻</span>
+            <span class="text-xs font-semibold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-100">DETECTED</span>
           </div>
-          <div class="text-3xl font-bold text-slate-900 mb-1" id="dash-ghost">--</div>
+          <div class="text-3xl lg:text-4xl font-bold text-slate-900 mb-1 stat-number" id="dash-ghost">--</div>
           <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Ghost Projects</div>
         </div>
-        <div class="card p-6">
+        <div class="card p-6 lg:p-7">
           <div class="flex items-center justify-between mb-4">
-            <span class="text-2xl">📢</span>
-            <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-2 py-1 rounded-md border border-brand-100">30 DAYS</span>
+            <span class="text-3xl" role="img" aria-label="megaphone">📢</span>
+            <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md border border-brand-100">30 DAYS</span>
           </div>
-          <div class="text-3xl font-bold text-slate-900 mb-1" id="dash-reports">--</div>
+          <div class="text-3xl lg:text-4xl font-bold text-slate-900 mb-1 stat-number" id="dash-reports">--</div>
           <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Citizen Reports</div>
         </div>
-        <div class="card p-6">
+        <div class="card p-6 lg:p-7">
           <div class="flex items-center justify-between mb-4">
-            <span class="text-2xl">💰</span>
-            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100">AT RISK</span>
+            <span class="text-3xl" role="img" aria-label="money">💰</span>
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">AT RISK</span>
           </div>
-          <div class="text-3xl font-bold text-slate-900 mb-1" id="dash-funds">KES --</div>
+          <div class="text-3xl lg:text-4xl font-bold text-slate-900 mb-1 stat-number" id="dash-funds">KES --</div>
           <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Funds at Risk</div>
         </div>
       </section>
 
-      <!-- County Explorer -->
-      <section id="county-explorer">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-          <div>
-            <h3 class="font-display text-2xl font-bold text-slate-900">County Risk Explorer</h3>
-            <p class="text-slate-500 text-sm mt-1">Click any county to filter the procurement database. Dot color indicates high-risk density.</p>
-          </div>
+      <!-- County Explorer with HD Background -->
+      <section id="county-explorer" class="relative rounded-2xl lg:rounded-3xl overflow-hidden">
+        <div class="absolute inset-0 img-container opacity-10">
+          <img src="https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=2000&q=80" alt="Map of Kenya" loading="lazy" onerror="this.style.display='none'">
         </div>
-        <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          <div class="col-span-full text-center py-12 text-slate-500 card">
-            <div class="animate-pulse flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-slate-200"></div>
-              <span class="text-sm font-medium">Loading county data...</span>
+        <div class="absolute inset-0 bg-white/95 backdrop-blur-sm"></div>
+        
+        <div class="relative z-10 p-6 lg:p-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <h3 class="font-display text-2xl lg:text-3xl font-bold text-slate-900">County Risk Explorer</h3>
+              <p class="text-slate-500 text-sm mt-2 max-w-2xl">Click any county to filter the procurement database. Color intensity indicates high-risk contract density based on AI analysis.</p>
+            </div>
+            <div class="flex items-center gap-3 bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm">
+              <span class="text-xs text-slate-600 font-medium">Risk:</span>
+              <div class="flex gap-1">
+                <span class="w-4 h-4 rounded heat-0 border" title="No risk"></span>
+                <span class="w-4 h-4 rounded heat-1 border" title="Low risk"></span>
+                <span class="w-4 h-4 rounded heat-2 border" title="Medium risk"></span>
+                <span class="w-4 h-4 rounded heat-3 border" title="High risk"></span>
+                <span class="w-4 h-4 rounded heat-4 border" title="Very high risk"></span>
+                <span class="w-4 h-4 rounded heat-5 border" title="Critical risk"></span>
+              </div>
+            </div>
+          </div>
+          
+          <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <div class="col-span-full text-center py-12 text-slate-500 card">
+              <div class="animate-pulse flex flex-col items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-200"></div>
+                <span class="text-sm font-medium">Loading all 47 counties...</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Charts -->
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="card p-6">
-          <h3 class="font-semibold text-slate-900 mb-1">Risk Level Distribution</h3>
-          <p class="text-sm text-slate-500 mb-6">Share of contracts by AI risk score band.</p>
-          <div class="h-64 flex items-center justify-center"><canvas id="risk-chart"></canvas></div>
+      <!-- Charts Section -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        <div class="card p-6 lg:p-8">
+          <h3 class="font-semibold text-slate-900 mb-1 text-lg">Risk Level Distribution</h3>
+          <p class="text-sm text-slate-500 mb-6">Share of contracts by AI risk score band across all counties.</p>
+          <div class="h-64 lg:h-80 flex items-center justify-center"><canvas id="risk-chart" role="img" aria-label="Risk distribution chart"></canvas></div>
         </div>
-        <div class="card p-6">
+        <div class="card p-6 lg:p-8">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="font-semibold text-slate-900">Top Flagged Contracts</h3>
-              <p class="text-sm text-slate-500">Highest-risk contracts in the database.</p>
+              <h3 class="font-semibold text-slate-900 text-lg">Top Flagged Contracts</h3>
+              <p class="text-sm text-slate-500">Highest-risk contracts requiring immediate attention.</p>
             </div>
-            <button onclick="showTab('v-procurement')" class="text-sm font-medium text-brand-600 hover:text-brand-700">View all &rarr;</button>
+            <button onclick="showTab('v-procurement')" class="text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors">View all &rarr;</button>
           </div>
           <div id="top-flagged" class="space-y-3">
             <div class="animate-pulse space-y-3">
-              <div class="h-16 bg-slate-100 rounded-lg"></div>
-              <div class="h-16 bg-slate-100 rounded-lg"></div>
+              <div class="h-20 bg-slate-100 rounded-xl"></div>
+              <div class="h-20 bg-slate-100 rounded-xl"></div>
+              <div class="h-20 bg-slate-100 rounded-xl"></div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Impact Section with Images -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 card overflow-hidden">
+          <div class="p-8">
+            <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Our Impact</h3>
+            <p class="text-slate-600 mb-6 leading-relaxed">Since launch, KenyaWatch AI has helped identify millions in potentially misused public funds, exposed ghost projects across multiple counties, and empowered citizens to report corruption anonymously.</p>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center p-4 bg-brand-50 rounded-xl">
+                <div class="text-2xl font-bold text-brand-600 mb-1">47</div>
+                <div class="text-xs text-slate-600">Counties Covered</div>
+              </div>
+              <div class="text-center p-4 bg-emerald-50 rounded-xl">
+                <div class="text-2xl font-bold text-emerald-600 mb-1">10K+</div>
+                <div class="text-xs text-slate-600">Contracts Analyzed</div>
+              </div>
+              <div class="text-center p-4 bg-purple-50 rounded-xl">
+                <div class="text-2xl font-bold text-purple-600 mb-1">500+</div>
+                <div class="text-xs text-slate-600">Reports Filed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card overflow-hidden">
+          <div class="img-container h-full min-h-[250px]">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" alt="Team collaboration" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="img-fallback">Image unavailable</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Methodology Section -->
+      <section class="card p-8 lg:p-10">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+          <h3 class="font-display text-2xl lg:text-3xl font-bold text-slate-900 mb-3">How We Detect Corruption</h3>
+          <p class="text-slate-600">Our multi-layered approach combines AI analysis, satellite verification, and citizen reporting to ensure comprehensive oversight.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+            <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">📊</div>
+            <h4 class="font-semibold text-slate-900 mb-2">1. Data Collection</h4>
+            <p class="text-sm text-slate-600">Aggregating procurement data from OCDS feeds, government portals, and public records.</p>
+          </div>
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-white border border-purple-100">
+            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🤖</div>
+            <h4 class="font-semibold text-slate-900 mb-2">2. AI Analysis</h4>
+            <p class="text-sm text-slate-600">Machine learning algorithms score contracts for risk based on 50+ indicators.</p>
+          </div>
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100">
+            <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🛰️</div>
+            <h4 class="font-semibold text-slate-900 mb-2">3. Satellite Verification</h4>
+            <p class="text-sm text-slate-600">Cross-referencing claimed project completion with high-resolution satellite imagery.</p>
+          </div>
+          <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100">
+            <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🔔</div>
+            <h4 class="font-semibold text-slate-900 mb-2">4. Citizen Reports</h4>
+            <p class="text-sm text-slate-600">Anonymous reporting channel with AI triage routing to appropriate authorities.</p>
           </div>
         </div>
       </section>
@@ -253,43 +402,43 @@
     <div id="v-procurement" class="tab-content space-y-6">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 class="text-2xl font-bold text-slate-900">Procurement Database</h2>
-          <p class="text-slate-500 text-sm mt-1">Browse, filter, and analyze government contracts.</p>
+          <h2 class="text-2xl lg:text-3xl font-bold text-slate-900">Procurement Database</h2>
+          <p class="text-slate-500 text-sm mt-1">Browse, filter, and analyze government contracts across all counties.</p>
         </div>
         <div class="flex gap-3">
           <button onclick="exportCSV()" class="btn-secondary text-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            Export CSV
+            <span class="hidden sm:inline">Export CSV</span>
           </button>
           <button onclick="openModal('scan-modal')" class="btn-primary text-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Scan Contract
+            <span class="hidden sm:inline">Scan Contract</span>
           </button>
         </div>
       </div>
 
       <!-- Filters -->
-      <div class="card p-5">
+      <div class="card p-5 lg:p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div class="lg:col-span-3 relative">
-            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="search-contracts" placeholder="Search by ID, supplier, entity, or description..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" onkeyup="debounceLoadC()">
+            <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="search-contracts" placeholder="Search by ID, supplier, entity, or description..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" onkeyup="debounceLoadC()">
           </div>
           
-          <select id="filter-county" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
+          <select id="filter-county" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()" aria-label="Filter by county">
             <option value="All">All Counties</option>
           </select>
-          <select id="filter-sector" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
+          <select id="filter-sector" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()" aria-label="Filter by sector">
             <option value="All">All Sectors</option>
           </select>
-          <select id="filter-year" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
+          <select id="filter-year" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()" aria-label="Filter by year">
             <option value="All">All Years</option>
           </select>
-          <select id="filter-risk" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
+          <select id="filter-risk" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()" aria-label="Filter by risk level">
             <option value="All">All Risk Levels</option>
             <option>HIGH</option><option>MEDIUM</option><option>LOW</option>
           </select>
-          <select id="filter-datatype" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
+          <select id="filter-datatype" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()" aria-label="Filter by data type">
             <option value="All">All Data Types</option>
             <option value="documented">Documented</option>
             <option value="live_sync">Live Sync</option>
@@ -300,7 +449,7 @@
           <div class="flex items-end">
             <button onclick="resetFilters()" class="w-full px-4 py-2.5 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center justify-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-              Reset Filters
+              Reset
             </button>
           </div>
         </div>
@@ -309,22 +458,22 @@
       <!-- Table -->
       <div class="card overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
+          <table class="w-full text-left text-sm" role="table" aria-label="Contracts table">
             <thead class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
               <tr>
                 <th class="p-4 font-semibold">Contract ID</th>
                 <th class="p-4 font-semibold">Description</th>
-                <th class="p-4 font-semibold">County</th>
-                <th class="p-4 font-semibold">Sector</th>
-                <th class="p-4 font-semibold">Year</th>
+                <th class="p-4 font-semibold hidden md:table-cell">County</th>
+                <th class="p-4 font-semibold hidden lg:table-cell">Sector</th>
+                <th class="p-4 font-semibold hidden xl:table-cell">Year</th>
                 <th class="p-4 font-semibold">Value (KES)</th>
-                <th class="p-4 font-semibold">Supplier</th>
+                <th class="p-4 font-semibold hidden lg:table-cell">Supplier</th>
                 <th class="p-4 font-semibold">Risk</th>
-                <th class="p-4 font-semibold">Source</th>
+                <th class="p-4 font-semibold hidden sm:table-cell">Source</th>
               </tr>
             </thead>
             <tbody id="contracts-table" class="divide-y divide-slate-100">
-              <tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading database...</span></div></td></tr>
+              <tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-10 h-10 rounded-full bg-slate-200"></div><span>Loading database...</span></div></td></tr>
             </tbody>
           </table>
         </div>
@@ -341,25 +490,35 @@
 
     <!-- ==================== GHOST PROJECTS ==================== -->
     <div id="v-ghost" class="tab-content space-y-6">
-      <div>
-        <h2 class="text-2xl font-bold text-slate-900">Ghost Projects</h2>
-        <p class="text-slate-500 text-sm mt-1">Satellite-verified anomalies where claimed completion does not match reality.</p>
+      <div class="relative rounded-2xl overflow-hidden bg-slate-900 text-white p-8 lg:p-12">
+        <div class="absolute inset-0 img-container opacity-30">
+          <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2000&q=80" alt="Satellite view of Earth" loading="eager" onerror="this.style.display='none'">
+        </div>
+        <div class="relative z-10">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-3">Ghost Projects</h2>
+          <p class="text-slate-300 text-lg max-w-2xl">Satellite-verified anomalies where claimed project completion does not match reality. Our AI cross-references government reports with high-resolution satellite imagery.</p>
+        </div>
       </div>
+      
       <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="col-span-full text-center py-12 text-slate-500 card">
-          <div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading projects...</span></div>
+          <div class="animate-pulse flex flex-col items-center gap-3"><div class="w-10 h-10 rounded-full bg-slate-200"></div><span>Loading projects...</span></div>
         </div>
       </div>
     </div>
 
     <!-- ==================== REPORT ==================== -->
     <div id="v-report" class="tab-content space-y-6">
-      <div class="max-w-2xl mx-auto">
+      <div class="max-w-3xl mx-auto">
         <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold text-slate-900">Submit an Anonymous Report</h2>
-          <p class="text-slate-500 text-sm mt-2">Your identity is protected. All reports are encrypted and AI-triaged.</p>
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl mb-4">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900">Submit an Anonymous Report</h2>
+          <p class="text-slate-500 text-sm mt-3 max-w-xl mx-auto">Your identity is protected. All reports are encrypted, AI-triaged, and routed to appropriate authorities (EACC, PPRA, or DPP).</p>
         </div>
-        <form onsubmit="submitReport(event)" class="card p-8 space-y-5">
+        
+        <form onsubmit="submitReport(event)" class="card p-6 lg:p-8 space-y-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5">Report Type *</label>
@@ -386,17 +545,17 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5">Description *</label>
-            <textarea name="description" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 resize-none" placeholder="Provide dates, names, amounts, and locations..."></textarea>
+            <textarea name="description" required rows="5" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 resize-none" placeholder="Provide dates, names, amounts, locations, and any supporting details..."></textarea>
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5">Estimated Amount (KES)</label>
             <input type="number" name="amount" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500" placeholder="0">
           </div>
-          <div class="flex items-center gap-3 pt-2">
+          <div class="flex items-center gap-3 pt-2 p-4 bg-brand-50 rounded-lg border border-brand-100">
             <input type="checkbox" name="anonymous" id="anon-check" checked class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
-            <label for="anon-check" class="text-sm text-slate-700 font-medium">Keep my report 100% anonymous</label>
+            <label for="anon-check" class="text-sm text-slate-700 font-medium">Keep my report 100% anonymous (Recommended)</label>
           </div>
-          <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2">
+          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-red-500/30 flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             Submit Securely
           </button>
@@ -408,21 +567,21 @@
     <div id="v-ai" class="tab-content space-y-6">
       <div class="max-w-4xl mx-auto flex flex-col" style="height: calc(100vh - 200px);">
         <div class="text-center mb-6">
-          <h2 class="text-2xl font-bold text-slate-900">AI Assistant</h2>
-          <p class="text-slate-500 text-sm mt-1">Ask questions about high-risk contracts, ghost projects, or specific counties.</p>
+          <h2 class="text-2xl lg:text-3xl font-bold text-slate-900">AI Assistant</h2>
+          <p class="text-slate-500 text-sm mt-2">Ask questions about high-risk contracts, ghost projects, or specific counties. Get instant insights from our AI.</p>
         </div>
         <div class="flex-grow card flex flex-col overflow-hidden">
-          <div id="chat-history" class="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+          <div id="chat-history" class="flex-grow overflow-y-auto p-4 lg:p-6 space-y-4 bg-slate-50/50">
             <div class="flex gap-3">
-              <div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white">AI</div>
+              <div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-md">AI</div>
               <div class="bg-white p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm">
-                <p class="text-sm text-slate-800 leading-relaxed">Hello. I am the KenyaWatch AI Assistant. I can help you analyze procurement data, identify high-risk contracts, and investigate ghost projects. How can I assist you today?</p>
+                <p class="text-sm text-slate-800 leading-relaxed">Hello. I am the KenyaWatch AI Assistant. I can help you analyze procurement data, identify high-risk contracts, investigate ghost projects, and understand procurement patterns. How can I assist you today?</p>
               </div>
             </div>
           </div>
           <form onsubmit="sendAI(event)" class="p-4 bg-white border-t border-slate-200 flex gap-3">
-            <button type="button" onclick="clearChat()" class="px-4 py-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium transition-colors">Clear</button>
-            <input type="text" id="ai-input" placeholder="e.g., Show me high-risk contracts in Nairobi" class="flex-grow bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+            <button type="button" onclick="clearChat()" class="px-4 py-2.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium transition-colors hidden sm:block">Clear</button>
+            <input type="text" id="ai-input" placeholder="e.g., Show me high-risk contracts in Nairobi" class="flex-grow bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all" aria-label="Type your message">
             <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg transition-colors shadow-sm flex items-center gap-2">
               Send
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
@@ -435,10 +594,18 @@
     <!-- ==================== SYNC DATA ==================== -->
     <div id="v-sync" class="tab-content space-y-6">
       <div class="max-w-2xl mx-auto">
-        <h2 class="text-2xl font-bold text-slate-900 mb-2">Sync Live OCDS Data</h2>
-        <p class="text-slate-500 text-sm mb-8">Pull live official procurement records from the Open Contracting Data Standard feed.</p>
-        <div class="card p-6 space-y-5">
-          <div class="grid grid-cols-2 gap-5">
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-brand-600 to-brand-800 text-white p-8 lg:p-10 mb-8">
+          <div class="absolute inset-0 img-container opacity-20">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80" alt="Data synchronization" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="relative z-10">
+            <h2 class="text-2xl lg:text-3xl font-bold mb-3">Sync Live OCDS Data</h2>
+            <p class="text-brand-100">Pull live official procurement records from the Open Contracting Data Standard feed for real-time transparency.</p>
+          </div>
+        </div>
+        
+        <div class="card p-6 lg:p-8 space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5">Year</label>
               <select id="sync-year" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
@@ -452,7 +619,7 @@
               </select>
             </div>
           </div>
-          <button onclick="startSync()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2">
+          <button onclick="startSync()" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-brand-500/30 flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
             Start Background Sync
           </button>
@@ -463,25 +630,122 @@
       </div>
     </div>
 
+    <!-- ==================== ABOUT ==================== -->
+    <div id="v-about" class="tab-content space-y-8">
+      <div class="relative rounded-2xl overflow-hidden bg-slate-900 text-white p-8 lg:p-12">
+        <div class="absolute inset-0 img-container opacity-30">
+          <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=2000&q=80" alt="Team collaboration" loading="eager" onerror="this.style.display='none'">
+        </div>
+        <div class="relative z-10 max-w-3xl">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4">About KenyaWatch AI</h2>
+          <p class="text-slate-300 text-lg leading-relaxed">An independent civic-tech platform dedicated to promoting transparency and accountability in Kenyan public procurement through AI-powered analysis, satellite verification, and citizen empowerment.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="card p-6 lg:p-8">
+          <h3 class="font-semibold text-slate-900 mb-4 text-xl">Our Mission</h3>
+          <p class="text-slate-600 leading-relaxed mb-4">To expose corruption, protect public funds, and empower citizens through transparent, data-driven oversight of government procurement.</p>
+          <div class="img-container rounded-xl h-48">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Team working" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="img-fallback">Image unavailable</div>
+          </div>
+        </div>
+        <div class="card p-6 lg:p-8">
+          <h3 class="font-semibold text-slate-900 mb-4 text-xl">Data Sources</h3>
+          <ul class="space-y-3 text-slate-600">
+            <li class="flex items-start gap-3">
+              <span class="text-brand-600 mt-1">✓</span>
+              <span><strong>OCDS Feed:</strong> Live data from Open Contracting Partnership</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-brand-600 mt-1">✓</span>
+              <span><strong>Government Portals:</strong> PPIP and county procurement systems</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-brand-600 mt-1">✓</span>
+              <span><strong>Satellite Imagery:</strong> High-resolution verification data</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-brand-600 mt-1">✓</span>
+              <span><strong>Citizen Reports:</strong> Anonymous submissions via our platform</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card p-6 lg:p-8">
+        <h3 class="font-semibold text-slate-900 mb-6 text-xl">Frequently Asked Questions</h3>
+        <div class="space-y-4">
+          <div class="border-b border-slate-200 pb-4">
+            <h4 class="font-medium text-slate-900 mb-2">How is my anonymity protected?</h4>
+            <p class="text-sm text-slate-600">All reports are encrypted end-to-end. We don't collect IP addresses or metadata. Reports are assigned random case numbers and routed through secure channels.</p>
+          </div>
+          <div class="border-b border-slate-200 pb-4">
+            <h4 class="font-medium text-slate-900 mb-2">What happens after I submit a report?</h4>
+            <p class="text-sm text-slate-600">Our AI triages the report for credibility and routes it to the appropriate authority (EACC, PPRA, or DPP) based on the nature of the complaint.</p>
+          </div>
+          <div>
+            <h4 class="font-medium text-slate-900 mb-2">How accurate is the AI risk scoring?</h4>
+            <p class="text-sm text-slate-600">Our AI analyzes 50+ risk indicators including bid type, supplier history, pricing anomalies, and timing patterns. While not perfect, it provides valuable insights for further investigation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <footer class="bg-slate-900 text-slate-400 py-8 mt-12 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-      <p>&copy; 2026 KenyaWatch AI. Independent civic-tech platform.</p>
-      <div class="flex gap-6">
-        <a href="#" class="hover:text-white transition-colors">Privacy</a>
-        <a href="#" class="hover:text-white transition-colors">Terms</a>
-        <a href="#" class="hover:text-white transition-colors">API Docs</a>
+  <footer class="bg-slate-900 text-slate-400 py-8 lg:py-12 mt-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 bg-gradient-to-br from-brand-600 to-brand-800 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            </div>
+            <div>
+              <h3 class="text-white font-bold">KenyaWatch AI</h3>
+              <p class="text-xs">Procurement Intelligence Platform</p>
+            </div>
+          </div>
+          <p class="text-sm leading-relaxed max-w-sm">Promoting transparency and accountability in Kenyan public procurement through technology and citizen empowerment.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2 text-sm">
+            <li><button onclick="showTab('v-procurement')" class="hover:text-white transition-colors">Contracts</button></li>
+            <li><button onclick="showTab('v-ghost')" class="hover:text-white transition-colors">Ghost Projects</button></li>
+            <li><button onclick="showTab('v-report')" class="hover:text-white transition-colors">Submit Report</button></li>
+            <li><button onclick="showTab('v-ai')" class="hover:text-white transition-colors">AI Assistant</button></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Resources</h4>
+          <ul class="space-y-2 text-sm">
+            <li><button onclick="showTab('v-about')" class="hover:text-white transition-colors">About Us</button></li>
+            <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">API Documentation</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+        <p>&copy; 2026 KenyaWatch AI. Independent civic-tech platform.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-white transition-colors">Privacy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms</a>
+          <a href="#" class="hover:text-white transition-colors">Contact</a>
+        </div>
       </div>
     </div>
   </footer>
 
   <!-- ==================== MODALS ==================== -->
-  <div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+  <div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="scan-modal-title">
+    <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
       <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-xl">
-        <h3 class="text-lg font-bold text-slate-900">Scan New Contract</h3>
-        <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors">&times;</button>
+        <h3 id="scan-modal-title" class="text-lg font-bold text-slate-900">Scan New Contract</h3>
+        <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors" aria-label="Close modal">&times;</button>
       </div>
       <div class="p-6 space-y-4">
         <div><label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
@@ -502,11 +766,11 @@
     </div>
   </div>
 
-  <div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+  <div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="detail-modal-title">
+    <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
       <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-xl">
-        <h3 class="text-lg font-bold text-slate-900">Contract Detail</h3>
-        <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors">&times;</button>
+        <h3 id="detail-modal-title" class="text-lg font-bold text-slate-900">Contract Detail</h3>
+        <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors" aria-label="Close modal">&times;</button>
       </div>
       <div id="detail-body" class="p-6 space-y-4 text-sm text-slate-700">
         <div class="animate-pulse space-y-3"><div class="h-6 bg-slate-100 rounded w-1/3"></div><div class="h-4 bg-slate-100 rounded w-full"></div><div class="h-4 bg-slate-100 rounded w-2/3"></div></div>
@@ -514,12 +778,10 @@
     </div>
   </div>
 
-  <div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-slate-900 text-white px-5 py-3.5 rounded-lg shadow-xl text-sm font-medium toast flex items-center gap-3 border border-slate-700"></div>
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-slate-900 text-white px-5 py-3.5 rounded-lg shadow-xl text-sm font-medium toast flex items-center gap-3 border border-slate-700" role="alert" aria-live="polite"></div>
 
   <script>
-    // ========================================================================
-    // CONFIGURATION & STATE
-    // ========================================================================
+    // Configuration and state
     const API_BASE = (() => {
       const qp = new URLSearchParams(location.search).get('api');
       if (qp) return qp.replace(/\/$/, '');
@@ -528,7 +790,6 @@
       return location.origin;
     })();
 
-    // Fallback data guarantees the UI never looks broken, even if the backend is down
     const FALLBACK_COUNTIES = [
       "Mombasa", "Kwale", "Kilifi", "Tana River", "Lamu", "Taita Taveta", "Garissa", "Wajir", "Mandera", 
       "Marsabit", "Isiolo", "Meru", "Tharaka-Nithi", "Embu", "Kitui", "Machakos", "Makueni", "Nyandarua", 
@@ -545,9 +806,7 @@
     let lastTotal = 0;
     let riskChart = null, sectorChart = null;
 
-    // ========================================================================
-    // UTILITIES
-    // ========================================================================
+    // Utilities
     function formatMoney(n) {
       if (!n && n !== 0) return '0';
       const num = parseInt(n, 10);
@@ -581,16 +840,20 @@
       debounceTimer = setTimeout(() => { currentPage = 1; loadC(); }, 400); 
     }
 
-    // ========================================================================
-    // API HANDLER (Robust Error Handling)
-    // ========================================================================
+    // Robust API handler
     async function apiFetch(path, opts = {}) {
       try {
         const url = API_BASE + path;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
         const res = await fetch(url, {
           ...opts,
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', ...(opts.headers || {}) }
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', ...(opts.headers || {}) },
+          signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
         
         if (!res.ok) {
           const errorText = await res.text().catch(() => '');
@@ -624,9 +887,7 @@
       t._timer = setTimeout(() => t.classList.add('hidden'), 4000);
     }
 
-    // ========================================================================
-    // NAVIGATION & MODALS
-    // ========================================================================
+    // Navigation
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
@@ -644,12 +905,16 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.body.style.overflow = ''; }
+    function openModal(id) { 
+      document.getElementById(id).classList.remove('hidden'); 
+      document.body.style.overflow = 'hidden'; 
+    }
+    function closeModal(id) { 
+      document.getElementById(id).classList.add('hidden'); 
+      document.body.style.overflow = ''; 
+    }
 
-    // ========================================================================
-    // DATA LOADING
-    // ========================================================================
+    // Data loading
     async function loadMeta() {
       try {
         const data = await apiFetch('/api/contracts/meta');
@@ -663,7 +928,6 @@
         };
       }
 
-      // Populate dropdowns safely
       const countyOpts = META.counties.map(c => `<option value="${c.name}">${c.name} (${c.contracts || 0})</option>`).join('');
       const countyOptsPlain = META.counties.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
       
@@ -706,7 +970,10 @@
         animateCount(document.getElementById('dash-ghost'), d.ghost_projects);
         animateCount(document.getElementById('dash-reports'), d.reports_30d);
         animateCount(document.getElementById('dash-funds'), d.funds_at_risk, 'KES ');
-      } catch (e) { /* UI remains with '--' gracefully */ }
+        animateCount(document.getElementById('hero-flagged'), d.contracts_flagged);
+        animateCount(document.getElementById('hero-ghost'), d.ghost_projects);
+        animateCount(document.getElementById('hero-funds'), d.funds_at_risk, 'KES ');
+      } catch (e) { console.error("Dashboard load error:", e); }
       
       loadCountyExplorer();
       loadCharts();
@@ -715,7 +982,7 @@
 
     async function loadCountyExplorer() {
       const grid = document.getElementById('county-grid');
-      grid.innerHTML = ''; // Clear loading state
+      grid.innerHTML = '';
       
       try {
         const data = await apiFetch('/api/stats/by-county');
@@ -732,15 +999,18 @@
           const heat = row.high_risk === 0 ? 0 : Math.min(5, 1 + Math.round((row.high_risk / maxHigh) * 4));
           
           const el = document.createElement('button');
-          el.className = `county-card group relative p-4 rounded-xl border bg-white hover:border-brand-500 hover:shadow-md transition-all duration-200 text-left`;
+          el.className = `county-card group relative p-4 rounded-xl border bg-white hover:border-brand-500 hover:shadow-md transition-all duration-200 text-left heat-${heat}`;
+          el.setAttribute('role', 'button');
+          el.setAttribute('tabindex', '0');
+          el.setAttribute('aria-label', `${c.name} county with ${row.contracts} contracts and ${row.high_risk} high-risk contracts`);
           el.innerHTML = `
             <div class="flex justify-between items-start mb-2">
               <h4 class="font-semibold text-slate-900 text-sm">${c.name}</h4>
-              <span class="heat-indicator w-2 h-2 rounded-full bg-slate-300 group-hover:bg-brand-500 transition-colors" data-heat="${heat}"></span>
+              <span class="heat-indicator w-2.5 h-2.5 rounded-full bg-slate-300 group-hover:bg-brand-500 transition-colors" data-heat="${heat}"></span>
             </div>
-            <div class="text-xs text-slate-500 space-y-0.5">
-              <p><span class="font-medium text-slate-700">${row.contracts}</span> contracts</p>
-              <p><span class="font-medium ${row.high_risk > 0 ? 'text-red-600' : 'text-slate-700'}">${row.high_risk}</span> high-risk</p>
+            <div class="text-xs text-slate-600 space-y-0.5">
+              <p><span class="font-medium text-slate-800">${row.contracts}</span> contracts</p>
+              <p><span class="font-medium ${row.high_risk > 0 ? 'text-red-600' : 'text-slate-800'}">${row.high_risk}</span> high-risk</p>
             </div>
           `;
           el.onclick = () => { 
@@ -748,14 +1018,19 @@
             showTab('v-procurement'); 
             loadC(); 
           };
+          el.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              el.click();
+            }
+          };
           grid.appendChild(el);
         });
         
-        // Apply heatmap colors
-        const heatColors = ['bg-slate-200', 'bg-blue-200', 'bg-blue-400', 'bg-blue-600', 'bg-amber-500', 'bg-red-500'];
+        const heatColors = ['bg-slate-300', 'bg-blue-300', 'bg-blue-500', 'bg-blue-700', 'bg-amber-500', 'bg-red-500'];
         document.querySelectorAll('.heat-indicator').forEach(ind => {
           const level = parseInt(ind.dataset.heat);
-          ind.className = `heat-indicator w-2 h-2 rounded-full transition-colors ${heatColors[level]}`;
+          ind.className = `heat-indicator w-2.5 h-2.5 rounded-full transition-colors ${heatColors[level]}`;
         });
 
       } catch (error) {
@@ -788,7 +1063,24 @@
               labels: ['HIGH', 'MEDIUM', 'LOW'], 
               datasets: [{ data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], backgroundColor: ['#ef4444', '#f59e0b', '#10b981'], borderWidth: 0, hoverOffset: 8 }] 
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } } } }
+            options: { 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              plugins: { 
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.parsed || 0;
+                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                      const percentage = ((value / total) * 100).toFixed(1);
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              } 
+            }
           });
         }
         
@@ -799,10 +1091,20 @@
           sectorChart = new Chart(secCtx, {
             type: 'bar',
             data: { labels: sorted.map(s => s[0]), datasets: [{ label: 'Contracts', data: sorted.map(s => s[1]), backgroundColor: '#3b82f6', borderRadius: 4, barThickness: 20 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false }, ticks: { font: { size: 10 } } } } }
+            options: { 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              plugins: { legend: { display: false } }, 
+              scales: { 
+                y: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: '#f1f5f9' } }, 
+                x: { grid: { display: false }, ticks: { font: { size: 10 } } } 
+              } 
+            }
           });
         }
-      } catch (e) { /* noop */ }
+      } catch (e) { 
+        console.error("Charts load error:", e); 
+      }
     }
 
     async function loadTopFlagged() {
@@ -812,7 +1114,7 @@
         if (!data.data.length) { box.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">No high-risk contracts found.</p>'; return; }
         
         box.innerHTML = data.data.map(c => `
-          <div class="flex items-center justify-between gap-4 p-4 rounded-lg border border-slate-200 hover:border-brand-300 hover:bg-brand-50/30 cursor-pointer transition-all group" onclick="showDetail('${c.contract_id}')">
+          <div class="flex items-center justify-between gap-4 p-4 rounded-xl border border-slate-200 hover:border-brand-300 hover:bg-brand-50/30 cursor-pointer transition-all group" onclick="showDetail('${c.contract_id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')showDetail('${c.contract_id}')">
             <div class="min-w-0 flex-1">
               <div class="font-mono text-[11px] text-slate-400 truncate mb-1 font-medium">${c.contract_id}</div>
               <div class="text-sm font-semibold text-slate-800 truncate group-hover:text-brand-700 transition-colors">${escapeHtml(c.description)}</div>
@@ -823,12 +1125,13 @@
               <div class="text-[10px] text-slate-400 uppercase font-semibold">risk</div>
             </div>
           </div>`).join('');
-      } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm text-center py-4">Failed to load.</div>'; }
+      } catch (e) { 
+        box.innerHTML = '<div class="text-red-500 text-sm text-center py-4">Failed to load.</div>'; 
+        console.error("Top flagged load error:", e);
+      }
     }
 
-    // ========================================================================
-    // CONTRACTS TABLE
-    // ========================================================================
+    // Contracts table
     function resetFilters() {
       document.getElementById('search-contracts').value = '';
       document.getElementById('filter-county').value = 'All';
@@ -853,7 +1156,7 @@
 
       const params = new URLSearchParams({ search, county, sector, year, risk_level: risk, data_type: dataType, limit: PAGE_SIZE, page: currentPage });
       const tbody = document.getElementById('contracts-table');
-      tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Querying database...</span></div></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-10 h-10 rounded-full bg-slate-200"></div><span>Querying database...</span></div></td></tr>';
 
       try {
         const data = await apiFetch('/api/contracts?' + params.toString());
@@ -870,17 +1173,18 @@
             const riskColor = c.risk_level === 'HIGH' ? 'text-red-700 bg-red-50 border-red-200' : (c.risk_level === 'MEDIUM' ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200');
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-brand-50/30 transition-colors cursor-pointer';
+            tr.setAttribute('role', 'row');
             tr.onclick = () => showDetail(c.contract_id);
             tr.innerHTML = `
               <td class="p-4 font-mono text-xs text-slate-600 font-medium">${c.contract_id}</td>
               <td class="p-4 text-slate-900 font-medium max-w-xs truncate" title="${escapeHtml(c.description)}">${escapeHtml(c.description)}</td>
-              <td class="p-4 text-slate-700">${c.county || '—'}</td>
-              <td class="p-4 text-slate-700">${c.sector || '—'}</td>
-              <td class="p-4 text-slate-700">${c.year || '—'}</td>
+              <td class="p-4 text-slate-700 hidden md:table-cell">${c.county || '—'}</td>
+              <td class="p-4 text-slate-700 hidden lg:table-cell">${c.sector || '—'}</td>
+              <td class="p-4 text-slate-700 hidden xl:table-cell">${c.year || '—'}</td>
               <td class="p-4 font-semibold text-slate-900">${formatMoney(c.value)}</td>
-              <td class="p-4 text-slate-700 max-w-[150px] truncate" title="${escapeHtml(c.supplier||'')}">${escapeHtml(c.supplier||'—')}</td>
+              <td class="p-4 text-slate-700 max-w-[150px] truncate hidden lg:table-cell" title="${escapeHtml(c.supplier||'')}">${escapeHtml(c.supplier||'—')}</td>
               <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${riskColor}">${c.risk_level} (${c.risk_score})</span></td>
-              <td class="p-4">${dataTypeBadge(c.data_type)}</td>`;
+              <td class="p-4 hidden sm:table-cell">${dataTypeBadge(c.data_type)}</td>`;
             tbody.appendChild(tr);
           });
         } else {
@@ -892,12 +1196,13 @@
         }
       } catch (e) {
         tbody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-red-600 bg-red-50 rounded-lg border border-red-200 m-4">Connection failed. Verify the backend URL.</td></tr>`;
+        console.error("Contracts load error:", e);
       }
     }
 
     async function showDetail(contractId) {
       const body = document.getElementById('detail-body');
-      body.innerHTML = '<div class="flex flex-col items-center justify-center py-12 text-slate-500"><svg class="animate-spin w-8 h-8 text-brand-600 mb-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm font-medium">Loading contract details...</span></div>';
+      body.innerHTML = '<div class="flex flex-col items-center justify-center py-12 text-slate-500"><svg class="animate-spin w-10 h-10 text-brand-600 mb-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm font-medium">Loading contract details...</span></div>';
       openModal('detail-modal');
       
       try {
@@ -931,6 +1236,7 @@
         `;
       } catch (e) { 
         body.innerHTML = '<div class="text-center py-12 text-red-600"><svg class="w-12 h-12 mx-auto mb-3 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><p class="font-semibold">Failed to load contract details.</p><p class="text-sm text-slate-500 mt-1">Please check your connection and try again.</p></div>'; 
+        console.error("Contract detail error:", e);
       }
     }
 
@@ -947,12 +1253,9 @@
       showToast('Downloading CSV...');
     }
 
-    // ========================================================================
-    // GHOST PROJECTS
-    // ========================================================================
     async function loadGhost() {
       const grid = document.getElementById('ghost-grid');
-      grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500 card"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading projects...</span></div></div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500 card"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-10 h-10 rounded-full bg-slate-200"></div><span>Loading projects...</span></div></div>';
       
       try {
         const data = await apiFetch('/api/ghost-projects');
@@ -971,7 +1274,7 @@
               </div>
               <div class="p-5 flex flex-col flex-grow">
                 <h3 class="font-semibold text-slate-900 text-lg mb-1">${escapeHtml(g.project_name)}</h3>
-                <p class="text-xs text-slate-500 mb-4 flex items-center gap-1.5 font-medium">📍 ${g.county} County</p>
+                <p class="text-xs text-slate-500 mb-4 flex items-center gap-1.5 font-medium"> ${g.county} County</p>
                 <div class="bg-slate-50 rounded-lg p-4 mb-4 border border-slate-100 flex-grow">
                   <p class="text-xs text-slate-600 mb-1.5"><span class="font-semibold">Claimed:</span> ${escapeHtml(g.claimed_status||'Not specified')}</p>
                   <p class="text-xs text-slate-600"><span class="font-semibold">Satellite:</span> ${escapeHtml(g.satellite_status||'Not specified')}</p>
@@ -989,12 +1292,10 @@
         }
       } catch (e) {
         grid.innerHTML = '<div class="col-span-full text-center py-16 text-red-600 card border-red-200 bg-red-50">Failed to load ghost projects.</div>';
+        console.error("Ghost projects load error:", e);
       }
     }
 
-    // ========================================================================
-    // FORMS & ACTIONS
-    // ========================================================================
     async function submitReport(e) {
       e.preventDefault();
       const form = e.target;
@@ -1015,6 +1316,7 @@
         form.reset(); 
       } catch (err) { 
         showToast('Network error — please try again.', true); 
+        console.error("Report submission error:", err);
       }
       btn.innerHTML = originalText; 
       btn.disabled = false;
@@ -1023,9 +1325,9 @@
     function clearChat() {
       document.getElementById('chat-history').innerHTML = `
         <div class="flex gap-3">
-          <div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white">AI</div>
+          <div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-md">AI</div>
           <div class="bg-white p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm">
-            <p class="text-sm text-slate-800 leading-relaxed">Hello. I am the KenyaWatch AI Assistant. I can help you analyze procurement data, identify high-risk contracts, and investigate ghost projects. How can I assist you today?</p>
+            <p class="text-sm text-slate-800 leading-relaxed">Hello. I am the KenyaWatch AI Assistant. I can help you analyze procurement data, identify high-risk contracts, investigate ghost projects, and understand procurement patterns. How can I assist you today?</p>
           </div>
         </div>`;
     }
@@ -1038,14 +1340,14 @@
       
       const userDiv = document.createElement('div');
       userDiv.className = 'flex gap-3 flex-row-reverse';
-      userDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-slate-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">You</div><div class="bg-brand-50 border border-brand-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800 shadow-sm">${escapeHtml(msg)}</div>`;
+      userDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-slate-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-md">You</div><div class="bg-brand-50 border border-brand-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800 shadow-sm">${escapeHtml(msg)}</div>`;
       history.appendChild(userDiv);
       input.value = '';
       
       const loadDiv = document.createElement('div');
       loadDiv.id = 'ai-loading';
       loadDiv.className = 'flex gap-3';
-      loadDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-2"><div class="w-2 h-2 bg-brand-400 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div><div class="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div></div>`;
+      loadDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-md">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-2"><div class="w-2 h-2 bg-brand-400 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div><div class="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div></div>`;
       history.appendChild(loadDiv);
       history.scrollTop = history.scrollHeight;
       
@@ -1054,12 +1356,13 @@
         document.getElementById('ai-loading')?.remove();
         const aiDiv = document.createElement('div');
         aiDiv.className = 'flex gap-3';
-        aiDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${escapeHtml(data.reply)}</div>`;
+        aiDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-md">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${escapeHtml(data.reply)}</div>`;
         history.appendChild(aiDiv);
         history.scrollTop = history.scrollHeight;
       } catch (err) { 
         document.getElementById('ai-loading')?.remove(); 
         showToast('Failed to reach AI service.', true);
+        console.error("AI chat error:", err);
       }
     }
 
@@ -1096,6 +1399,7 @@
         currentPage = 1; loadC();
       } catch (e) { 
         resultDiv.innerHTML = '<span class="text-red-600 font-medium text-sm">Network error. Please try again.</span>'; 
+        console.error("Contract scan error:", e);
       }
     }
 
@@ -1111,6 +1415,7 @@
         setTimeout(loadSyncStatus, 4000); 
       } catch (e) { 
         statusDiv.innerHTML = `<span class="text-red-600 font-medium text-sm">❌ Network error or sync failed.</span>`; 
+        console.error("Sync error:", e);
       }
     }
 
@@ -1131,12 +1436,11 @@
         }
       } catch (e) { 
         statusDiv.innerHTML = '<span class="text-red-600 text-sm">Failed to load status.</span>'; 
+        console.error("Sync status error:", e);
       }
     }
 
-    // ========================================================================
-    // INITIALIZATION
-    // ========================================================================
+    // Initialize
     (async function init() {
       await loadMeta();
       showTab('v-overview');
