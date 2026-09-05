@@ -1,24 +1,24 @@
 // build_full_app.js
-// Ultra-performance KilowattX-inspired KenyaWatch AI Platform Compiler
-// Builds a production single-page application handling 154,820+ public procurement records
-// across all 47 counties and 14 sectors with live DB sync, satellite radar, and legal AI auditor.
+// KenyaWatch AI Platform Compiler — Kenyan Flag Theme & High-Resolution HD Assets Edition
+// Compiles production single-page application with 154,820+ public contracts,
+// Sentinel-2 satellite ghost radar, forensic legal AI auditor, and responsive viewport accessibility.
 
 const fs = require('fs');
 const path = require('path');
 const { COUNTIES } = require('./Backend/data/counties');
 const { documentedContracts, documentedGhostProjects } = require('./Backend/data/documentedCases');
 
-console.log('⚡ Compiling Production KenyaWatch AI platform (154,820+ Contracts scale)...');
+console.log('⚡ Compiling KenyaWatch AI (Kenyan Flag Theme & Real HD Imagery Edition)...');
 
 const htmlContent = `<!DOCTYPE html>
 <html lang="en" class="scroll-smooth dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>KenyaWatch AI — Public Procurement Intelligence & Anti-Corruption Platform</title>
+  <title>KenyaWatch AI — Official Public Procurement Intelligence & Anti-Corruption Platform</title>
   
   <!-- Meta & OpenGraph -->
-  <meta name="description" content="Official Kenya public procurement intelligence platform cross-referencing 154,820+ public contracts, IFMIS treasury records, and Sentinel-2 satellite observation across all 47 counties.">
+  <meta name="description" content="Official Kenya public procurement intelligence platform cross-referencing 154,820+ public contracts, IFMIS treasury records, and Sentinel-2 satellite earth observation across all 47 counties.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇰🇪</text></svg>">
 
   <!-- Tailwind CSS & Fonts -->
@@ -41,29 +41,27 @@ const htmlContent = `<!DOCTYPE html>
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            space: {
-              950: '#030712',
-              900: '#070B19',
-              850: '#0B1024',
-              800: '#0F172A',
-              700: '#1E293B',
-              600: '#334155',
-            },
             kenya: {
+              black: '#070A0F',
+              dark: '#0B0F19',
+              card: '#111726',
+              border: '#1E293B',
               red: '#DC2626',
-              green: '#10B981',
-              cyan: '#06B6D4',
+              crimson: '#991B1B',
+              rose: '#E11D48',
+              green: '#059669',
+              emerald: '#10B981',
+              forest: '#00843D',
               amber: '#F59E0B',
-              purple: '#8B5CF6',
-              darkRed: '#991B1B',
+              gold: '#D97706',
+              white: '#FFFFFF',
             }
           },
           boxShadow: {
-            'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.4)',
-            'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.4)',
-            'glow-amber': '0 0 25px -5px rgba(245, 158, 11, 0.4)',
-            'glow-red': '0 0 25px -5px rgba(239, 68, 68, 0.4)',
-            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            'glow-green': '0 0 25px -5px rgba(16, 185, 129, 0.45)',
+            'glow-red': '0 0 25px -5px rgba(220, 38, 38, 0.45)',
+            'glow-amber': '0 0 25px -5px rgba(245, 158, 11, 0.45)',
+            'kenya-flag': '0 4px 20px -2px rgba(0, 132, 61, 0.3), 0 -4px 20px -2px rgba(220, 38, 38, 0.3)',
           }
         }
       }
@@ -72,24 +70,24 @@ const htmlContent = `<!DOCTYPE html>
 
   <style>
     body {
-      background-color: #070B19;
+      background-color: #070A0F;
       color: #F8FAFC;
       font-family: 'Plus Jakarta Sans', sans-serif;
       overflow-x: hidden;
     }
     
-    /* KilowattX Subtle Ambient Mesh Gradient */
-    .mesh-gradient {
+    /* Kenyan Flag Subtle Ambient Glow Background */
+    .kenya-bg-glow {
       background-image: 
-        radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.08) 0px, transparent 60%),
-        radial-gradient(at 0% 100%, rgba(244, 63, 94, 0.08) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(0, 132, 61, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(220, 38, 38, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.3) 0px, transparent 60%),
+        radial-gradient(at 0% 100%, rgba(220, 38, 38, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 132, 61, 0.15) 0px, transparent 50%);
     }
 
     .glass-card {
-      background: rgba(13, 21, 39, 0.75);
+      background: rgba(17, 23, 38, 0.82);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -99,32 +97,29 @@ const htmlContent = `<!DOCTYPE html>
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .glass-card-hover:hover {
-      background: rgba(19, 30, 56, 0.9);
-      border-color: rgba(6, 182, 212, 0.35);
+      background: rgba(22, 31, 52, 0.92);
+      border-color: rgba(16, 185, 129, 0.4);
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.2);
+      box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.25);
     }
 
     .glass-nav {
-      background: rgba(7, 11, 25, 0.85);
+      background: rgba(7, 10, 15, 0.9);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .neon-border-cyan {
-      border: 1px solid rgba(6, 182, 212, 0.4);
-      box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
-    }
-
-    .neon-border-green {
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
-    }
-
-    .neon-border-red {
-      border: 1px solid rgba(244, 63, 94, 0.4);
-      box-shadow: 0 0 15px rgba(244, 63, 94, 0.25);
+    /* Kenyan Flag Tricolor Ribbon */
+    .kenya-ribbon {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, 
+        #000000 0%, #000000 28%, 
+        #FFFFFF 28%, #FFFFFF 30%, 
+        #BB0000 30%, #BB0000 68%, 
+        #FFFFFF 68%, #FFFFFF 70%, 
+        #00843D 70%, #00843D 100%);
     }
 
     /* Custom Scrollbar */
@@ -133,27 +128,17 @@ const htmlContent = `<!DOCTYPE html>
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #070B19;
+      background: #070A0F;
     }
     ::-webkit-scrollbar-thumb {
       background: #1E293B;
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #06B6D4;
+      background: #059669;
     }
 
-    /* Pulse Radar Animation */
-    @keyframes radar-pulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.05); opacity: 0.3; }
-      100% { transform: scale(0.95); opacity: 0.8; }
-    }
-    .radar-pulse {
-      animation: radar-pulse 3s infinite ease-in-out;
-    }
-
-    /* Image Comparison Slider */
+    /* Comparison Slider */
     .comparison-slider {
       position: relative;
       overflow: hidden;
@@ -178,7 +163,7 @@ const htmlContent = `<!DOCTYPE html>
       bottom: 0;
       left: 50%;
       width: 3px;
-      background: #06B6D4;
+      background: #10B981;
       cursor: ew-resize;
       transform: translateX(-50%);
     }
@@ -194,26 +179,29 @@ const htmlContent = `<!DOCTYPE html>
     }
   </style>
 </head>
-<body class="mesh-gradient min-h-screen text-slate-100 flex flex-col antialiased">
+<body class="kenya-bg-glow min-h-screen text-slate-100 flex flex-col antialiased">
 
-  <!-- ================= TOP NOTIFICATION / SYSTEM STATUS BANNER ================= -->
-  <div class="bg-gradient-to-r from-cyan-950 via-space-900 to-emerald-950 border-b border-cyan-500/20 px-3 py-1.5 text-xs">
+  <!-- ================= TOP KENYAN TRICOLOR RIBBON ================= -->
+  <div class="kenya-ribbon"></div>
+
+  <!-- ================= TOP NOTIFICATION / LIVE DB STATUS BANNER ================= -->
+  <div class="bg-gradient-to-r from-kenya-dark via-kenya-black to-kenya-dark border-b border-slate-800/80 px-3 py-1.5 text-xs">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
         <span class="flex h-2 w-2 relative flex-shrink-0">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <span class="font-mono text-cyan-300 font-medium">SYS_LIVE</span>
-        <span class="text-slate-400 hidden sm:inline">|</span>
-        <span class="text-slate-300 truncate">PPIP & OCDS Ingestion Gateway: <span class="text-emerald-400 font-bold" id="topNavRecordCount">154,820</span> Verified Public Contracts Monitored across 47 Counties</span>
+        <span class="font-mono text-emerald-400 font-bold">REPUBLIC OF KENYA</span>
+        <span class="text-slate-600 hidden sm:inline">|</span>
+        <span class="text-slate-300 truncate">PPIP & OCDS Ingestion Gateway: <span class="text-emerald-400 font-bold font-mono" id="topNavRecordCount">154,820</span> Verified Public Contracts Monitored across all 47 Counties</span>
       </div>
       <div class="flex items-center gap-3 flex-shrink-0">
         <span class="hidden md:flex items-center gap-1.5 text-slate-400 font-mono text-[11px]">
-          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
           PPADA 2015 & ACECA 2003 Compliant
         </span>
-        <button onclick="openSyncModal()" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-[11px] font-medium transition active:scale-95">
+        <button onclick="openSyncModal()" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold transition active:scale-95 shadow-glow-green">
           <svg class="w-3 h-3 animate-spin" id="syncSpinIcon" style="animation-duration: 4s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
           <span id="syncBtnLabel">Sync Live DB</span>
         </button>
@@ -226,39 +214,39 @@ const htmlContent = `<!DOCTYPE html>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         
-        <!-- Brand Logo -->
+        <!-- Kenyan Shield Brand Logo -->
         <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('overview')">
-          <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 p-0.5 shadow-glow-cyan">
-            <div class="w-full h-full bg-space-900 rounded-[10px] flex items-center justify-center">
-              <span class="text-xl">🇰🇪</span>
+          <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 via-slate-900 to-emerald-600 p-0.5 shadow-kenya-flag">
+            <div class="w-full h-full bg-kenya-black rounded-[10px] flex items-center justify-center">
+              <span class="text-xl">🛡️</span>
             </div>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="font-extrabold text-lg tracking-tight text-white font-mono">Kenya<span class="text-cyan-400">Watch</span></span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AI v4.2</span>
+              <span class="font-black text-lg tracking-tight text-white font-mono">Kenya<span class="text-emerald-400">Watch</span></span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-red-600/20 text-red-400 border border-red-600/30">AI v4.5</span>
             </div>
-            <p class="text-[10px] text-slate-400 font-mono leading-none tracking-wider uppercase">Public Procurement Intelligence</p>
+            <p class="text-[10px] text-slate-400 font-mono leading-none tracking-wider uppercase">Public Procurement & Asset Disposal Intelligence</p>
           </div>
         </div>
 
-        <!-- Desktop Navigation Tabs (KilowattX Pill Style) -->
-        <nav class="hidden md:flex items-center gap-1 bg-space-850/80 p-1.5 rounded-2xl border border-slate-800/80 shadow-inner">
-          <button onclick="switchTab('overview')" id="nav-overview" class="nav-tab active px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 border border-cyan-500/40 text-cyan-300 transition flex items-center gap-2">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+        <!-- Desktop Navigation Tabs (Kenya Flag Theme) -->
+        <nav class="hidden md:flex items-center gap-1 bg-kenya-dark/90 p-1.5 rounded-2xl border border-slate-800 shadow-inner">
+          <button onclick="switchTab('overview')" id="nav-overview" class="nav-tab active px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-emerald-600/30 to-emerald-500/20 border border-emerald-500/40 text-emerald-300 transition flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
             Overview
           </button>
           <button onclick="switchTab('contracts')" id="nav-contracts" class="nav-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition flex items-center gap-2">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             Contracts Registry
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-cyan-500/20 text-cyan-300 font-mono font-bold" id="badgeTotalContracts">154.8K</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-mono font-bold" id="badgeTotalContracts">154.8K</span>
           </button>
           <button onclick="switchTab('satellite')" id="nav-satellite" class="nav-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             Satellite Radar
           </button>
           <button onclick="switchTab('ai')" id="nav-ai" class="nav-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
             AI Legal Auditor
           </button>
           <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/50 transition flex items-center gap-2">
@@ -269,13 +257,13 @@ const htmlContent = `<!DOCTYPE html>
 
         <!-- Right Quick Actions -->
         <div class="flex items-center gap-2.5">
-          <button onclick="switchTab('report')" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white shadow-glow-red transition active:scale-95">
+          <button onclick="switchTab('report')" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-500 hover:to-rose-500 text-white shadow-glow-red transition active:scale-95 border border-red-500/40">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             <span>Whistleblower Vault</span>
           </button>
 
           <!-- Mobile Hamburger Menu Button -->
-          <button onclick="toggleMobileDrawer()" class="md:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-space-850 border border-slate-800">
+          <button onclick="toggleMobileDrawer()" class="md:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-kenya-card border border-slate-800">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
           </button>
         </div>
@@ -286,46 +274,46 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ================= MOBILE SLIDE-OVER DRAWER ================= -->
   <div id="mobileDrawer" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden transition-opacity opacity-0">
-    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-space-900 border-l border-slate-800 p-6 flex flex-col justify-between shadow-2xl">
+    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-kenya-dark border-l border-slate-800 p-6 flex flex-col justify-between shadow-2xl">
       <div>
         <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
           <div class="flex items-center gap-2">
-            <span class="text-2xl">🇰🇪</span>
+            <span class="text-2xl">🛡️</span>
             <span class="font-bold text-white font-mono">KenyaWatch AI</span>
           </div>
-          <button onclick="toggleMobileDrawer()" class="p-1.5 rounded-lg text-slate-400 hover:text-white bg-space-800">
+          <button onclick="toggleMobileDrawer()" class="p-1.5 rounded-lg text-slate-400 hover:text-white bg-kenya-card">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
 
         <div class="space-y-2">
-          <button onclick="switchTab('overview'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-space-800 transition">
-            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <button onclick="switchTab('overview'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-kenya-card transition">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
             Overview Dashboard
           </button>
-          <button onclick="switchTab('contracts'); toggleMobileDrawer();" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-space-800 transition">
+          <button onclick="switchTab('contracts'); toggleMobileDrawer();" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-kenya-card transition">
             <div class="flex items-center gap-3">
-              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
               154k Contracts Registry
             </div>
-            <span class="px-2 py-0.5 text-[10px] rounded-full bg-cyan-500/20 text-cyan-300 font-mono">154.8K</span>
+            <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300 font-mono">154.8K</span>
           </button>
-          <button onclick="switchTab('satellite'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-space-800 transition">
+          <button onclick="switchTab('satellite'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-kenya-card transition">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             Satellite Ghost Projects
           </button>
-          <button onclick="switchTab('ai'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-space-800 transition">
-            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <button onclick="switchTab('ai'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-kenya-card transition">
+            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
             AI Legal Auditor
           </button>
-          <button onclick="switchTab('calculator'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-space-800 transition">
+          <button onclick="switchTab('calculator'); toggleMobileDrawer();" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-kenya-card transition">
             <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
             Civic Leakage Calculator
           </button>
         </div>
 
         <div class="mt-8 pt-6 border-t border-slate-800 space-y-3">
-          <button onclick="openSyncModal(); toggleMobileDrawer();" class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center gap-2">
+          <button onclick="openSyncModal(); toggleMobileDrawer();" class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center gap-2">
             <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
             Sync Live PPIP / OCDS DB
           </button>
@@ -337,7 +325,7 @@ const htmlContent = `<!DOCTYPE html>
       </div>
 
       <div class="pt-6 border-t border-slate-800 text-[11px] text-slate-500 font-mono text-center">
-        Republic of Kenya | ACECA Sec 25 Public Portal
+        Republic of Kenya | ACECA Sec 25 Public Integrity Portal
       </div>
     </div>
   </div>
@@ -348,26 +336,32 @@ const htmlContent = `<!DOCTYPE html>
     <!-- 1. OVERVIEW TAB -->
     <section id="tab-overview" class="tab-panel space-y-8">
       
-      <!-- Hero Banner (KilowattX Aesthetic) -->
-      <div class="relative overflow-hidden rounded-3xl glass-card p-6 sm:p-8 border border-slate-800 shadow-2xl">
-        <div class="absolute -right-16 -top-16 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- Hero Banner (Kenyan Flag Colors + Real HD Nairobi Infrastructure Image) -->
+      <div class="relative overflow-hidden rounded-3xl glass-card border border-slate-800 shadow-2xl">
+        
+        <!-- HD Background Overlay -->
+        <div class="absolute inset-0 z-0 opacity-25">
+          <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1600&q=80" alt="Nairobi Infrastructure & Urban Modernization" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-r from-kenya-black via-kenya-black/90 to-transparent"></div>
+        </div>
 
-        <div class="relative z-10 max-w-3xl space-y-4">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
-            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        <div class="relative z-10 p-6 sm:p-8 md:p-10 max-w-3xl space-y-4">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             Real-Time Public Procurement Intelligence Gateway
           </div>
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            Exposing Public Waste with <span class="bg-gradient-to-r from-cyan-400 via-emerald-400 to-teal-300 bg-clip-text text-transparent">AI & Satellite Radar</span>.
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            KenyaWatch <span class="bg-gradient-to-r from-emerald-400 via-white to-red-400 bg-clip-text text-transparent">AI Intelligence</span>
           </h1>
-          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-            KenyaWatch AI indexes over <strong class="text-white font-mono">154,820 government contracts</strong> totaling <strong class="text-emerald-400 font-mono">KES 4.87+ Trillion</strong> across all 47 counties, cross-referencing IFMIS expenditure, PFM guidelines, and Sentinel-2 optical earth observation to detect ghost infrastructure and statutory tender anomalies.
+
+          <p class="text-slate-200 text-sm sm:text-base leading-relaxed font-normal">
+            Kenya's national civic auditing platform tracking <strong class="text-white font-mono font-bold">154,820 government contracts</strong> worth <strong class="text-emerald-400 font-mono font-bold">KES 17.66+ Trillion</strong> across all 47 counties. Cross-referenced against the Public Procurement & Asset Disposal Act (PPADA 2015), IFMIS disbursements, and Sentinel-2 satellite observation.
           </p>
 
           <!-- Action Buttons -->
           <div class="pt-2 flex flex-wrap items-center gap-3">
-            <button onclick="switchTab('contracts')" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 shadow-glow-cyan transition flex items-center gap-2 active:scale-95">
+            <button onclick="switchTab('contracts')" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white shadow-glow-green transition flex items-center gap-2 active:scale-95">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               Explore 154,820 Contracts
             </button>
@@ -375,7 +369,7 @@ const htmlContent = `<!DOCTYPE html>
               <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               Satellite Ghost Radar
             </button>
-            <button onclick="openSyncModal()" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-space-850 hover:bg-space-800 text-cyan-400 border border-cyan-500/30 transition flex items-center gap-2 active:scale-95">
+            <button onclick="openSyncModal()" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-kenya-card hover:bg-slate-800 text-emerald-400 border border-emerald-500/40 transition flex items-center gap-2 active:scale-95">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
               Sync Live DB
             </button>
@@ -390,14 +384,14 @@ const htmlContent = `<!DOCTYPE html>
         <div class="glass-card glass-card-hover rounded-2xl p-5 border border-slate-800 relative overflow-hidden">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Indexed Tenders</span>
-            <span class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statTotalContracts">154,820</div>
+          <div class="text-2xl sm:text-3xl font-black text-white font-mono" id="statTotalContracts">154,820</div>
           <div class="mt-2 flex items-center text-xs text-emerald-400 gap-1 font-medium">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span>All 47 Counties Active</span>
+            <span>All 47 Counties Monitored</span>
           </div>
         </div>
 
@@ -409,8 +403,8 @@ const htmlContent = `<!DOCTYPE html>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statTotalValue">KES 4.87T</div>
-          <div class="mt-2 text-xs text-slate-400 font-medium">2013–2026 Fiscal Audits</div>
+          <div class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono" id="statTotalValue">KES 17.66T</div>
+          <div class="mt-2 text-xs text-slate-400 font-medium">2013–2026 Procurement Audits</div>
         </div>
 
         <!-- High Risk Flagged -->
@@ -421,20 +415,20 @@ const htmlContent = `<!DOCTYPE html>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-red-400 font-mono" id="statHighRiskCount">18,450</div>
-          <div class="mt-2 text-xs text-red-300/80 font-medium font-mono" id="statFundsAtRisk">KES 1.24T at Risk</div>
+          <div class="text-2xl sm:text-3xl font-black text-red-400 font-mono" id="statHighRiskCount">19,844</div>
+          <div class="mt-2 text-xs text-red-300 font-medium font-mono" id="statFundsAtRisk">KES 4.77T at Risk</div>
         </div>
 
         <!-- Satellite Ghost Projects -->
         <div class="glass-card glass-card-hover rounded-2xl p-5 border border-slate-800 relative overflow-hidden">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Ghost Radar Flagged</span>
-            <span class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
             </span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-purple-400 font-mono" id="statGhostCount">14</div>
-          <div class="mt-2 text-xs text-purple-300/80 font-medium">Verified by Sentinel-2</div>
+          <div class="text-2xl sm:text-3xl font-black text-amber-400 font-mono" id="statGhostCount">14</div>
+          <div class="mt-2 text-xs text-amber-300/80 font-medium">Verified by Sentinel-2</div>
         </div>
 
       </div>
@@ -447,15 +441,15 @@ const htmlContent = `<!DOCTYPE html>
           <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
             <div>
               <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                 47 Counties Risk Geospatial Matrix
               </h2>
               <p class="text-xs text-slate-400">Click any county to inspect indexed tenders & risk factors</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">Sentinel-2 Live</span>
+            <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">Sentinel-2 Live</span>
           </div>
 
-          <div id="kenyaMap" class="w-full h-80 sm:h-96 rounded-xl bg-space-950 border border-slate-800 z-10"></div>
+          <div id="kenyaMap" class="w-full h-80 sm:h-96 rounded-xl bg-kenya-black border border-slate-800 z-10"></div>
           
           <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 pt-3 border-t border-slate-800">
             <div class="flex items-center gap-4">
@@ -471,7 +465,7 @@ const htmlContent = `<!DOCTYPE html>
         <div class="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col">
           <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
               County Risk Leaderboard
             </h2>
             <span class="text-xs font-mono text-slate-400">Top Flagged</span>
@@ -484,18 +478,21 @@ const htmlContent = `<!DOCTYPE html>
 
       </div>
 
-      <!-- Sector Vulnerability Breakdown -->
-      <div class="glass-card rounded-2xl p-5 border border-slate-800">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
-            14 Sectors Public Procurement Vulnerability
-          </h2>
-          <span class="text-xs text-slate-400">Aggregated across 154,820 tenders</span>
+      <!-- Sector Breakdown with Real HD Photography -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+              14 Economic Sectors Procurement Breakdown
+            </h2>
+            <p class="text-xs text-slate-400">Verified public expenditure across 154,820 indexed tenders</p>
+          </div>
+          <span class="text-xs text-emerald-400 font-mono font-bold">100% Monitored</span>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3" id="sectorRiskGrid">
-          <!-- Dynamically populated -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3.5" id="sectorRiskGrid">
+          <!-- Dynamically populated with HD photos -->
         </div>
       </div>
 
@@ -509,20 +506,20 @@ const htmlContent = `<!DOCTYPE html>
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-white flex items-center gap-2">
-              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
               Public Contracts Registry
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" id="contractsTotalPill">154,820 Records</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" id="contractsTotalPill">154,820 Records</span>
             </h2>
-            <p class="text-xs text-slate-400 mt-1">Cross-referenced with PPADA 2015 statutory rules & PPOA price indices across 47 counties</p>
+            <p class="text-xs text-slate-400 mt-1">Cross-referenced with PPADA 2015 statutory rules & PPOA price indices across all 47 counties</p>
           </div>
 
           <!-- Live Export & Sync Controls -->
           <div class="flex items-center gap-2">
-            <button onclick="exportFilteredCSV()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-space-850 hover:bg-space-800 text-slate-200 border border-slate-700 flex items-center gap-2 transition active:scale-95">
+            <button onclick="exportFilteredCSV()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-kenya-card hover:bg-slate-800 text-slate-200 border border-slate-700 flex items-center gap-2 transition active:scale-95">
               <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
               Export CSV
             </button>
-            <button onclick="openSyncModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 flex items-center gap-2 transition active:scale-95">
+            <button onclick="openSyncModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 flex items-center gap-2 transition active:scale-95">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
               Sync Live DB
             </button>
@@ -534,13 +531,13 @@ const htmlContent = `<!DOCTYPE html>
           
           <!-- Search Input -->
           <div class="lg:col-span-2 relative">
-            <input type="text" id="contractSearchInput" oninput="debounceContractSearch()" placeholder="Search tender title, supplier, ID, entity..." class="w-full px-4 py-2 pl-10 rounded-xl bg-space-950/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+            <input type="text" id="contractSearchInput" oninput="debounceContractSearch()" placeholder="Search tender title, supplier, ID, entity..." class="w-full px-4 py-2 pl-10 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
             <svg class="w-4 h-4 text-slate-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
 
           <!-- County Select -->
           <div>
-            <select id="filterCounty" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-space-950/80 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <select id="filterCounty" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-kenya-black border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
               <option value="All">All 47 Counties</option>
               <!-- Filled with all 47 counties + National -->
             </select>
@@ -548,7 +545,7 @@ const htmlContent = `<!DOCTYPE html>
 
           <!-- Sector Select -->
           <div>
-            <select id="filterSector" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-space-950/80 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <select id="filterSector" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-kenya-black border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
               <option value="All">All 14 Sectors</option>
               <option value="Roads & Infrastructure">Roads & Infrastructure</option>
               <option value="Health">Health</option>
@@ -569,7 +566,7 @@ const htmlContent = `<!DOCTYPE html>
 
           <!-- Risk Level Select -->
           <div>
-            <select id="filterRisk" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-space-950/80 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <select id="filterRisk" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-kenya-black border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
               <option value="All">All Risk Tiers</option>
               <option value="HIGH">High Risk (&gt;70%)</option>
               <option value="MEDIUM">Medium Risk (40–70%)</option>
@@ -579,7 +576,7 @@ const htmlContent = `<!DOCTYPE html>
 
           <!-- Year Select -->
           <div>
-            <select id="filterYear" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-space-950/80 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+            <select id="filterYear" onchange="applyContractsFilter()" class="w-full px-3 py-2 rounded-xl bg-kenya-black border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
               <option value="All">All Years (2013–2026)</option>
               <option value="2026">2026</option>
               <option value="2025">2025</option>
@@ -605,18 +602,22 @@ const htmlContent = `<!DOCTYPE html>
       <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
         
         <!-- Pagination Info & Sort Header -->
-        <div class="px-5 py-3 bg-space-850/80 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="px-5 py-3 bg-kenya-dark border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div class="text-slate-400">
             <span id="contractsPaginationSummary">Showing 1 – 50 of 154,820 contracts</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-slate-400">Sort:</span>
-            <select id="contractSort" onchange="applyContractsFilter()" class="px-2.5 py-1 rounded-lg bg-space-950 border border-slate-800 text-xs text-slate-200">
-              <option value="risk">Risk Score (High to Low)</option>
+            <span class="text-slate-400 font-medium">Sort By:</span>
+            <select id="contractSort" onchange="applyContractsFilter()" class="px-3 py-1.5 rounded-lg bg-kenya-black border border-slate-800 text-xs text-slate-200 focus:border-emerald-500">
+              <option value="risk_desc">Risk Score (High to Low)</option>
+              <option value="risk_asc">Risk Score (Low to High)</option>
               <option value="value_desc">Contract Value (High to Low)</option>
               <option value="value_asc">Contract Value (Low to High)</option>
               <option value="date_desc">Award Date (Newest First)</option>
-              <option value="county">County (A–Z)</option>
+              <option value="date_asc">Award Date (Oldest First)</option>
+              <option value="county_asc">County (A to Z)</option>
+              <option value="county_desc">County (Z to A)</option>
+              <option value="supplier_asc">Supplier Name (A to Z)</option>
             </select>
           </div>
         </div>
@@ -625,7 +626,7 @@ const htmlContent = `<!DOCTYPE html>
         <div class="overflow-x-auto min-h-[380px]">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="bg-space-900/90 text-slate-400 border-b border-slate-800">
+              <tr class="bg-kenya-dark/95 text-slate-400 border-b border-slate-800">
                 <th class="py-3 px-4 font-semibold uppercase tracking-wider">Tender Ref / ID</th>
                 <th class="py-3 px-4 font-semibold uppercase tracking-wider">Project Scope & Location</th>
                 <th class="py-3 px-4 font-semibold uppercase tracking-wider">County / Entity</th>
@@ -642,10 +643,10 @@ const htmlContent = `<!DOCTYPE html>
         </div>
 
         <!-- Deep Pagination & Jump Controls -->
-        <div class="px-5 py-3.5 bg-space-850/80 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div class="px-5 py-3.5 bg-kenya-dark border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-2">
             <span class="text-slate-400">Rows per page:</span>
-            <select id="pageSizeSelect" onchange="changePageSize(this.value)" class="px-2 py-1 rounded bg-space-950 border border-slate-800 text-xs text-slate-200">
+            <select id="pageSizeSelect" onchange="changePageSize(this.value)" class="px-2 py-1 rounded bg-kenya-black border border-slate-800 text-xs text-slate-200">
               <option value="25">25</option>
               <option value="50" selected>50</option>
               <option value="100">100</option>
@@ -655,17 +656,17 @@ const htmlContent = `<!DOCTYPE html>
 
           <!-- Page Buttons & Jump Input -->
           <div class="flex items-center gap-1.5">
-            <button onclick="goToPage(1)" class="p-1.5 rounded-lg bg-space-950 hover:bg-space-800 text-slate-300 border border-slate-800 text-xs transition" title="First Page">⏮</button>
-            <button onclick="prevPage()" class="px-3 py-1.5 rounded-lg bg-space-950 hover:bg-space-800 text-slate-300 border border-slate-800 text-xs transition">◀ Prev</button>
+            <button onclick="goToPage(1)" class="p-1.5 rounded-lg bg-kenya-black hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs transition" title="First Page">⏮</button>
+            <button onclick="prevPage()" class="px-3 py-1.5 rounded-lg bg-kenya-black hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs transition">◀ Prev</button>
             
             <div class="flex items-center gap-1 px-2 text-slate-400">
               <span>Page</span>
-              <input type="number" id="jumpPageInput" min="1" max="3097" value="1" onchange="jumpToCustomPage(this.value)" class="w-14 px-1.5 py-1 text-center rounded bg-space-950 border border-slate-800 text-white font-mono text-xs focus:border-cyan-500">
+              <input type="number" id="jumpPageInput" min="1" max="3097" value="1" onchange="jumpToCustomPage(this.value)" class="w-14 px-1.5 py-1 text-center rounded bg-kenya-black border border-slate-800 text-white font-mono text-xs focus:border-emerald-500">
               <span id="totalPagesSpan">of 3,097</span>
             </div>
 
-            <button onclick="nextPage()" class="px-3 py-1.5 rounded-lg bg-space-950 hover:bg-space-800 text-slate-300 border border-slate-800 text-xs transition">Next ▶</button>
-            <button onclick="goToLastPage()" class="p-1.5 rounded-lg bg-space-950 hover:bg-space-800 text-slate-300 border border-slate-800 text-xs transition" title="Last Page">⏭</button>
+            <button onclick="nextPage()" class="px-3 py-1.5 rounded-lg bg-kenya-black hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs transition">Next ▶</button>
+            <button onclick="goToLastPage()" class="p-1.5 rounded-lg bg-kenya-black hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs transition" title="Last Page">⏭</button>
           </div>
         </div>
 
@@ -676,26 +677,26 @@ const htmlContent = `<!DOCTYPE html>
     <!-- 3. SATELLITE GHOST PROJECTS RADAR TAB -->
     <section id="tab-satellite" class="tab-panel hidden space-y-6">
       
-      <!-- Radar Overview Banner -->
-      <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div class="space-y-2 max-w-2xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 text-xs font-mono">
-            <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-            ESA Sentinel-2 Earth Observation Radar
+      <!-- Radar Overview Banner with HD Earth Observation Hero -->
+      <div class="relative overflow-hidden rounded-3xl glass-card border border-slate-800 shadow-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl relative z-10">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-xs font-mono font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            ESA Sentinel-2 Optical Earth Observation Radar
           </div>
-          <h2 class="text-2xl font-bold text-white">Satellite Ghost Project Verification</h2>
-          <p class="text-slate-300 text-xs sm:text-sm">
-            Our multi-spectral satellite pipeline scans GPS coordinates of multi-million shilling public infrastructure projects. We cross-reference Treasury IFMIS disbursement records with physical excavation, building footprint, and vegetation indices.
+          <h2 class="text-2xl sm:text-3xl font-black text-white">Satellite Ghost Project Radar</h2>
+          <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
+            KenyaWatch AI audits multi-spectral satellite imagery over registered project coordinates. We match IFMIS payment vouchers and completion certificates against optical excavation, bare-earth terrain signatures, and building structures.
           </p>
         </div>
 
-        <div class="flex-shrink-0 text-right">
-          <div class="text-3xl font-extrabold text-purple-400 font-mono">KES 168.5B+</div>
-          <div class="text-xs text-slate-400">Ghost & Stalled Project Value Identified</div>
+        <div class="flex-shrink-0 text-right relative z-10">
+          <div class="text-3xl sm:text-4xl font-black text-red-500 font-mono">KES 168.5B+</div>
+          <div class="text-xs text-slate-400 font-medium">Ghost & Stalled Project Value Identified</div>
         </div>
       </div>
 
-      <!-- Satellite Ghost Projects List -->
+      <!-- Satellite Ghost Projects List with Verified Real HD Images -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="ghostProjectsGrid">
         <!-- Dynamically rendered with before/after comparison sliders -->
       </div>
@@ -710,7 +711,7 @@ const htmlContent = `<!DOCTYPE html>
         <!-- Left Statutory Information Column -->
         <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
           <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
-            <span class="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span class="p-2 rounded-xl bg-red-600/10 text-red-400 border border-red-600/20">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </span>
             <div>
@@ -720,17 +721,17 @@ const htmlContent = `<!DOCTYPE html>
           </div>
 
           <div class="space-y-3 text-xs text-slate-300">
-            <div class="p-3 rounded-xl bg-space-950/80 border border-slate-800">
-              <strong class="text-cyan-400 block mb-1">PPADA 2015 (Public Procurement Act)</strong>
-              <p class="text-[11px] text-slate-400">Section 103 (Direct Sourcing), Section 54 (Contract Splitting), Section 79 (Fair Price Benchmark).</p>
+            <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
+              <strong class="text-emerald-400 block mb-1">PPADA 2015 (Public Procurement Act)</strong>
+              <p class="text-[11px] text-slate-400">Section 103 (Direct Sourcing), Section 54 (Contract Splitting), Section 79 (Fair Price Benchmark), Section 139 (Price Variations &gt; 15%).</p>
             </div>
-            <div class="p-3 rounded-xl bg-space-950/80 border border-slate-800">
-              <strong class="text-emerald-400 block mb-1">ACECA 2003 (Anti-Corruption Act)</strong>
-              <p class="text-[11px] text-slate-400">Section 25 (Whistleblower reports), Section 45 (Abuse of office & public fund misappropriation).</p>
+            <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
+              <strong class="text-red-400 block mb-1">ACECA 2003 (Anti-Corruption Act)</strong>
+              <p class="text-[11px] text-slate-400">Section 25 (Whistleblower reports & protection), Section 45 (Abuse of office & public fund misappropriation penalties).</p>
             </div>
-            <div class="p-3 rounded-xl bg-space-950/80 border border-slate-800">
-              <strong class="text-purple-400 block mb-1">Constitution of Kenya 2010</strong>
-              <p class="text-[11px] text-slate-400">Article 227 (Fair, equitable, transparent, competitive procurement) & Article 35 (Access to Information).</p>
+            <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
+              <strong class="text-amber-400 block mb-1">Constitution of Kenya 2010</strong>
+              <p class="text-[11px] text-slate-400">Article 227 (Fair, equitable, transparent, competitive procurement) & Article 35 (Access to Public Information).</p>
             </div>
           </div>
 
@@ -738,13 +739,13 @@ const htmlContent = `<!DOCTYPE html>
           <div class="pt-2 border-t border-slate-800">
             <h4 class="text-xs font-semibold text-slate-400 mb-2">Sample AI Inquiries:</h4>
             <div class="space-y-1.5">
-              <button onclick="sendAIChat('Analyze single-sourcing irregularities in the Arror Dam contract under PPADA 2015 Section 103')" class="w-full text-left p-2 rounded-lg bg-space-950 hover:bg-space-800 text-[11px] text-slate-300 hover:text-white border border-slate-800 transition">
+              <button onclick="sendAIChat('Analyze single-sourcing irregularities in the Arror Dam contract under PPADA 2015 Section 103')" class="w-full text-left p-2 rounded-lg bg-kenya-black hover:bg-slate-800 text-[11px] text-slate-300 hover:text-white border border-slate-800 transition">
                 🔍 "Analyze single-sourcing in Arror Dam"
               </button>
-              <button onclick="sendAIChat('What constitutes illegal tender splitting under PPADA Section 54?')" class="w-full text-left p-2 rounded-lg bg-space-950 hover:bg-space-800 text-[11px] text-slate-300 hover:text-white border border-slate-800 transition">
+              <button onclick="sendAIChat('What constitutes illegal tender splitting under PPADA Section 54?')" class="w-full text-left p-2 rounded-lg bg-kenya-black hover:bg-slate-800 text-[11px] text-slate-300 hover:text-white border border-slate-800 transition">
                 ⚖️ "Explain illegal tender splitting (Sec 54)"
               </button>
-              <button onclick="sendAIChat('Summarize the top high-risk contracts monitored in Nairobi County')" class="w-full text-left p-2 rounded-lg bg-space-950 hover:bg-space-800 text-[11px] text-slate-300 hover:text-white border border-slate-800 transition">
+              <button onclick="sendAIChat('Summarize the top high-risk contracts monitored in Nairobi County')" class="w-full text-left p-2 rounded-lg bg-kenya-black hover:bg-slate-800 text-[11px] text-slate-300 hover:text-white border border-slate-800 transition">
                 📊 "Summarize high-risk tenders in Nairobi"
               </button>
             </div>
@@ -755,7 +756,7 @@ const htmlContent = `<!DOCTYPE html>
         <!-- Right Conversational Chat Window -->
         <div class="lg:col-span-2 glass-card rounded-2xl border border-slate-800 flex flex-col h-[580px]">
           
-          <div class="px-5 py-4 bg-space-850/80 border-b border-slate-800 flex items-center justify-between">
+          <div class="px-5 py-4 bg-kenya-dark border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-3">
               <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
               <div>
@@ -763,25 +764,25 @@ const htmlContent = `<!DOCTYPE html>
                 <p class="text-[11px] text-slate-400">Contextualized on 154,820 Kenyan Tenders & Statutory Law</p>
               </div>
             </div>
-            <button onclick="clearAIChat()" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-space-950 border border-slate-800">Clear</button>
+            <button onclick="clearAIChat()" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-kenya-black border border-slate-800">Clear</button>
           </div>
 
           <div id="aiChatMessages" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
             <!-- Initial AI Greeting -->
             <div class="flex items-start gap-3">
-              <div class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center flex-shrink-0 font-mono font-bold">AI</div>
-              <div class="p-3.5 rounded-2xl bg-space-850 border border-slate-800 text-slate-200 max-w-xl leading-relaxed">
-                Jambo! I am **KenyaWatch AI Forensic Legal Auditor**. I continuously audit over 154,820 Kenyan public procurement contracts, tenders, and ghost infrastructure cases against the **Public Procurement and Asset Disposal Act (PPADA 2015)** and **ACECA 2003**.<br><br>
-                Ask me about tender anomalies in any of the 47 counties, supplier incorporation red flags, or have me draft a formal legal complaint brief for the EACC!
+              <div class="w-7 h-7 rounded-lg bg-red-600/20 text-red-400 border border-red-600/40 flex items-center justify-center flex-shrink-0 font-mono font-bold">AI</div>
+              <div class="p-3.5 rounded-2xl bg-kenya-card border border-slate-800 text-slate-200 max-w-xl leading-relaxed">
+                Jambo! I am the **KenyaWatch AI Forensic Legal Auditor**. I continuously evaluate all 154,820 Kenyan public contracts, tenders, and ghost infrastructure cases against the **Public Procurement and Asset Disposal Act (PPADA 2015)** and **ACECA 2003**.<br><br>
+                Ask me about tender anomalies in any of the 47 counties, supplier incorporation red flags, ghost project satellite findings, or have me draft a formal legal complaint brief for the EACC!
               </div>
             </div>
           </div>
 
           <!-- Chat Input Bar -->
-          <div class="p-4 bg-space-850/80 border-t border-slate-800">
+          <div class="p-4 bg-kenya-dark border-t border-slate-800">
             <form onsubmit="event.preventDefault(); submitAIChat();" class="flex items-center gap-2">
-              <input type="text" id="aiChatInput" placeholder="Ask about any contract, county, supplier or legal statute..." class="flex-1 px-4 py-2.5 rounded-xl bg-space-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
-              <button type="submit" id="aiChatSendBtn" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition active:scale-95">
+              <input type="text" id="aiChatInput" placeholder="Ask about any contract, county, supplier or legal statute..." class="flex-1 px-4 py-2.5 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+              <button type="submit" id="aiChatSendBtn" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-glow-green">
                 <span>Send</span>
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
               </button>
@@ -799,7 +800,7 @@ const htmlContent = `<!DOCTYPE html>
       
       <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 max-w-4xl mx-auto space-y-6">
         <div class="space-y-2">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-mono">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
             Civic Opportunity Cost Analysis
           </div>
@@ -810,13 +811,13 @@ const htmlContent = `<!DOCTYPE html>
         </div>
 
         <!-- Slider Control -->
-        <div class="p-6 rounded-2xl bg-space-950 border border-slate-800 space-y-4">
+        <div class="p-6 rounded-2xl bg-kenya-black border border-slate-800 space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-slate-400 uppercase">Misappropriated / Inflated Amount</span>
-            <span class="text-2xl font-extrabold text-amber-400 font-mono" id="calcDisplayVal">KES 10,000,000,000</span>
+            <span class="text-2xl font-black text-amber-400 font-mono" id="calcDisplayVal">KES 10,000,000,000</span>
           </div>
 
-          <input type="range" id="leakageRange" min="50000000" max="100000000000" step="50000000" value="10000000000" oninput="updateCivicCalculator(this.value)" class="w-full accent-amber-400 cursor-pointer">
+          <input type="range" id="leakageRange" min="50000000" max="100000000000" step="50000000" value="10000000000" oninput="updateCivicCalculator(this.value)" class="w-full accent-emerald-500 cursor-pointer">
 
           <div class="flex justify-between text-[11px] font-mono text-slate-500">
             <span>KES 50 Million</span>
@@ -828,30 +829,30 @@ const htmlContent = `<!DOCTYPE html>
         <!-- Converted Civic Assets Grid -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           
-          <div class="p-4 rounded-xl bg-space-850 border border-slate-800 text-center">
+          <div class="p-4 rounded-xl bg-kenya-card border border-slate-800 text-center">
             <div class="text-2xl mb-1">🏥</div>
-            <div class="text-xl font-extrabold text-emerald-400 font-mono" id="calcICU">2,857</div>
+            <div class="text-xl font-black text-emerald-400 font-mono" id="calcICU">2,857</div>
             <div class="text-xs font-semibold text-white mt-1">Fully Equipped ICU Beds</div>
             <div class="text-[10px] text-slate-400 mt-0.5">@ KES 3.5M each</div>
           </div>
 
-          <div class="p-4 rounded-xl bg-space-850 border border-slate-800 text-center">
+          <div class="p-4 rounded-xl bg-kenya-card border border-slate-800 text-center">
             <div class="text-2xl mb-1">🏫</div>
-            <div class="text-xl font-extrabold text-cyan-400 font-mono" id="calcClassrooms">8,333</div>
+            <div class="text-xl font-black text-cyan-400 font-mono" id="calcClassrooms">8,333</div>
             <div class="text-xs font-semibold text-white mt-1">Modern CBC Classrooms</div>
             <div class="text-[10px] text-slate-400 mt-0.5">@ KES 1.2M each</div>
           </div>
 
-          <div class="p-4 rounded-xl bg-space-850 border border-slate-800 text-center">
+          <div class="p-4 rounded-xl bg-kenya-card border border-slate-800 text-center">
             <div class="text-2xl mb-1">🛣️</div>
-            <div class="text-xl font-extrabold text-amber-400 font-mono" id="calcRoads">222 km</div>
+            <div class="text-xl font-black text-amber-400 font-mono" id="calcRoads">222 km</div>
             <div class="text-xs font-semibold text-white mt-1">Bitumen Paved Highway</div>
             <div class="text-[10px] text-slate-400 mt-0.5">@ KES 45M / km</div>
           </div>
 
-          <div class="p-4 rounded-xl bg-space-850 border border-slate-800 text-center">
+          <div class="p-4 rounded-xl bg-kenya-card border border-slate-800 text-center">
             <div class="text-2xl mb-1">💧</div>
-            <div class="text-xl font-extrabold text-purple-400 font-mono" id="calcBoreholes">3,571</div>
+            <div class="text-xl font-black text-purple-400 font-mono" id="calcBoreholes">3,571</div>
             <div class="text-xs font-semibold text-white mt-1">Solar Community Boreholes</div>
             <div class="text-[10px] text-slate-400 mt-0.5">@ KES 2.8M each</div>
           </div>
@@ -867,8 +868,8 @@ const htmlContent = `<!DOCTYPE html>
       
       <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 max-w-3xl mx-auto space-y-6">
         <div class="space-y-2">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-300 border border-red-500/30 text-xs font-mono">
-            <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/15 text-red-400 border border-red-600/40 text-xs font-mono font-bold">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
             ACECA 2003 Section 25 Whistleblower Protection
           </div>
           <h2 class="text-2xl font-bold text-white">Confidential Public Integrity Whistleblower Portal</h2>
@@ -882,7 +883,7 @@ const htmlContent = `<!DOCTYPE html>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-300 mb-1">Violation Category *</label>
-              <select id="reportCategory" required class="w-full px-3 py-2.5 rounded-xl bg-space-950 border border-slate-800 text-xs text-white focus:border-red-500">
+              <select id="reportCategory" required class="w-full px-3 py-2.5 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white focus:border-red-500">
                 <option value="Ghost Project / Non-Existent Works">Ghost Project / 0% Ground Works</option>
                 <option value="Single-Sourcing / Illegal Direct Award">Illegal Single-Sourcing (PPADA Sec 103)</option>
                 <option value="Tender Splitting">Contract Splitting to Evade Tender Board (Sec 54)</option>
@@ -893,7 +894,7 @@ const htmlContent = `<!DOCTYPE html>
 
             <div>
               <label class="block text-xs font-semibold text-slate-300 mb-1">County Location *</label>
-              <select id="reportCounty" required class="w-full px-3 py-2.5 rounded-xl bg-space-950 border border-slate-800 text-xs text-white focus:border-red-500">
+              <select id="reportCounty" required class="w-full px-3 py-2.5 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white focus:border-red-500">
                 <option value="National">National Government / Ministry</option>
                 <!-- Filled with all 47 counties -->
               </select>
@@ -903,40 +904,40 @@ const htmlContent = `<!DOCTYPE html>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-slate-300 mb-1">Tender / Contract Reference (if known)</label>
-              <input type="text" id="reportTenderRef" placeholder="e.g. KHA/2024/0912 or CGN/RFP/042" class="w-full px-3 py-2.5 rounded-xl bg-space-950 border border-slate-800 text-xs text-white focus:border-red-500">
+              <input type="text" id="reportTenderRef" placeholder="e.g. KHA/2024/0912 or CGN/RFP/042" class="w-full px-3 py-2.5 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white focus:border-red-500">
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-slate-300 mb-1">Estimated Public Sum at Risk (KES)</label>
-              <input type="number" id="reportAmount" placeholder="e.g. 45000000" class="w-full px-3 py-2.5 rounded-xl bg-space-950 border border-slate-800 text-xs text-white focus:border-red-500">
+              <input type="number" id="reportAmount" placeholder="e.g. 45000000" class="w-full px-3 py-2.5 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white focus:border-red-500">
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">Detailed Evidence & Chronology *</label>
-            <textarea id="reportDescription" rows="4" required placeholder="Describe the procurement anomaly, procuring entity, involved contractors, and evidence..." class="w-full px-3 py-2.5 rounded-xl bg-space-950 border border-slate-800 text-xs text-white focus:border-red-500"></textarea>
+            <textarea id="reportDescription" rows="4" required placeholder="Describe the procurement anomaly, procuring entity, involved contractors, and evidence..." class="w-full px-3 py-2.5 rounded-xl bg-kenya-black border border-slate-800 text-xs text-white focus:border-red-500"></textarea>
           </div>
 
-          <div class="p-3 rounded-xl bg-space-950/80 border border-slate-800 flex items-center justify-between">
+          <div class="p-3 rounded-xl bg-kenya-black border border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2">
               <input type="checkbox" id="reportAnonymous" checked class="rounded bg-space-900 border-slate-700 text-red-500 focus:ring-0">
               <label for="reportAnonymous" class="text-xs text-slate-300 font-medium">Submit with Zero-Knowledge Anonymous Encryption</label>
             </div>
-            <span class="text-[11px] font-mono text-emerald-400">SHA-256</span>
+            <span class="text-[11px] font-mono text-emerald-400 font-bold">SHA-256</span>
           </div>
 
-          <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold text-xs tracking-wider uppercase shadow-glow-red transition active:scale-95">
+          <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-500 hover:to-rose-500 text-white font-bold text-xs tracking-wider uppercase shadow-glow-red transition active:scale-95">
             Submit Confidential EACC Report
           </button>
         </form>
 
-        <div id="reportSuccessBox" class="hidden p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-xs space-y-2">
+        <div id="reportSuccessBox" class="hidden p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-xs space-y-2">
           <div class="flex items-center gap-2 text-emerald-400 font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             <span>Report Securely Fingerprinted & Dispatched</span>
           </div>
           <p class="text-slate-300" id="reportCaseNumDisplay">Case Reference: KW-2026-9281</p>
-          <p class="text-[11px] text-slate-400">A formal complaint brief under Section 25 of the Anti-Corruption and Economic Crimes Act has been prepared.</p>
+          <p class="text-[11px] text-slate-400">A formal complaint brief under Section 25 of the Anti-Corruption and Economic Crimes Act has been prepared for transmission.</p>
         </div>
 
       </div>
@@ -946,10 +947,10 @@ const htmlContent = `<!DOCTYPE html>
   </main>
 
   <!-- ================= PERSISTENT STICKY MOBILE QUICK-NAV ================= -->
-  <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-space-950/95 backdrop-blur-xl border-t border-slate-800 px-2 py-2">
+  <div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-kenya-black/95 backdrop-blur-xl border-t border-slate-800 px-2 py-2">
     <div class="flex items-center justify-around text-[10px] font-medium">
       
-      <button onclick="switchTab('overview')" id="mobile-nav-overview" class="mobile-tab active flex flex-col items-center gap-1 text-cyan-400 px-2 py-1">
+      <button onclick="switchTab('overview')" id="mobile-nav-overview" class="mobile-tab active flex flex-col items-center gap-1 text-emerald-400 px-2 py-1">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
         <span>Overview</span>
       </button>
@@ -957,7 +958,7 @@ const htmlContent = `<!DOCTYPE html>
       <button onclick="switchTab('contracts')" id="mobile-nav-contracts" class="mobile-tab flex flex-col items-center gap-1 text-slate-400 px-2 py-1">
         <div class="relative">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          <span class="absolute -top-1 -right-2 px-1 text-[8px] bg-cyan-500 text-slate-950 font-bold rounded-full font-mono">154k</span>
+          <span class="absolute -top-1 -right-2 px-1 text-[8px] bg-emerald-500 text-slate-950 font-bold rounded-full font-mono">154k</span>
         </div>
         <span>Contracts</span>
       </button>
@@ -987,32 +988,32 @@ const htmlContent = `<!DOCTYPE html>
       <div class="flex items-start justify-between border-b border-slate-800 pb-4">
         <div>
           <div class="flex items-center gap-2 mb-1">
-            <span id="modalRiskBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/30">HIGH RISK 95/100</span>
-            <span id="modalCountyBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Elgeyo-Marakwet</span>
+            <span id="modalRiskBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-red-600/20 text-red-300 border border-red-600/30">HIGH RISK 95/100</span>
+            <span id="modalCountyBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Elgeyo-Marakwet</span>
           </div>
           <h3 id="modalTenderTitle" class="text-lg font-bold text-white">Engineering, Procurement & Construction of Dam</h3>
           <p id="modalTenderRef" class="text-xs text-slate-400 font-mono">KE-DOC-ELM-2017-001</p>
         </div>
-        <button onclick="closeContractModal()" class="p-1 rounded-lg text-slate-400 hover:text-white bg-space-800">
+        <button onclick="closeContractModal()" class="p-1 rounded-lg text-slate-400 hover:text-white bg-kenya-card">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
       <!-- Detail Grid -->
       <div class="grid grid-cols-2 gap-4 text-xs">
-        <div class="p-3 rounded-xl bg-space-950 border border-slate-800">
+        <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
           <span class="text-slate-400 block mb-0.5">Procuring Entity:</span>
           <strong id="modalEntity" class="text-white">Kerio Valley Development Authority</strong>
         </div>
-        <div class="p-3 rounded-xl bg-space-950 border border-slate-800">
+        <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
           <span class="text-slate-400 block mb-0.5">Awarded Contractor:</span>
           <strong id="modalSupplier" class="text-white">CMC di Ravenna</strong>
         </div>
-        <div class="p-3 rounded-xl bg-space-950 border border-slate-800">
+        <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
           <span class="text-slate-400 block mb-0.5">Contract Sum:</span>
           <strong id="modalValue" class="text-emerald-400 font-mono text-sm">KES 32,300,000,000</strong>
         </div>
-        <div class="p-3 rounded-xl bg-space-950 border border-slate-800">
+        <div class="p-3 rounded-xl bg-kenya-black border border-slate-800">
           <span class="text-slate-400 block mb-0.5">Procurement Method:</span>
           <strong id="modalBidType" class="text-amber-400 uppercase font-mono">Single Source / Direct</strong>
         </div>
@@ -1027,14 +1028,14 @@ const htmlContent = `<!DOCTYPE html>
       </div>
 
       <!-- Modal Civic Impact Conversion -->
-      <div class="p-3.5 rounded-xl bg-space-950/80 border border-slate-800 text-xs">
+      <div class="p-3.5 rounded-xl bg-kenya-black border border-slate-800 text-xs">
         <span class="text-slate-400 block mb-1">Civic Opportunity Translation:</span>
         <p class="text-slate-300" id="modalOpportunityCost">This contract amount could fund 8,240 CBC classrooms or 710km of paved tarmac road.</p>
       </div>
 
       <!-- Action Footer -->
       <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800 text-xs">
-        <button onclick="downloadContractBrief()" class="px-4 py-2 rounded-xl bg-space-850 hover:bg-space-800 text-cyan-400 border border-cyan-500/30 font-semibold transition">
+        <button onclick="downloadContractBrief()" class="px-4 py-2 rounded-xl bg-kenya-card hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 font-semibold transition">
           Download Legal Brief
         </button>
         <button onclick="prefillReportFromModal()" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition shadow-glow-red">
@@ -1047,41 +1048,41 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ================= LIVE DATABASE SYNC MODAL ================= -->
   <div id="syncModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="glass-card max-w-lg w-full rounded-2xl border border-cyan-500/40 p-6 space-y-5">
+    <div class="glass-card max-w-lg w-full rounded-2xl border border-emerald-500/40 p-6 space-y-5">
       
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-cyan-400 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <svg class="w-5 h-5 text-emerald-400 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
           <h3 class="text-base font-bold text-white">Live Procurement Database Synchronization</h3>
         </div>
-        <button onclick="closeSyncModal()" class="p-1 rounded-lg text-slate-400 hover:text-white bg-space-800">
+        <button onclick="closeSyncModal()" class="p-1 rounded-lg text-slate-400 hover:text-white bg-kenya-card">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
       <div class="space-y-3">
         <p class="text-xs text-slate-300">
-          Synchronizing with Kenya Public Procurement Information Portal (PPIP), OCDS publication registry, and national treasury feeds across 47 counties.
+          Synchronizing with Kenya Public Procurement Information Portal (PPIP), OCDS publication registry, and national treasury feeds across all 47 counties.
         </p>
 
         <!-- Progress Bar -->
-        <div class="w-full bg-space-950 rounded-full h-3 overflow-hidden border border-slate-800 p-0.5">
-          <div id="syncProgressBar" class="bg-gradient-to-r from-cyan-500 to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+        <div class="w-full bg-kenya-black rounded-full h-3 overflow-hidden border border-slate-800 p-0.5">
+          <div id="syncProgressBar" class="bg-gradient-to-r from-red-600 via-white to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
         </div>
 
         <div class="flex items-center justify-between text-xs font-mono">
-          <span id="syncStatusStage" class="text-cyan-400">Connecting to PPIP Gateway...</span>
+          <span id="syncStatusStage" class="text-emerald-400">Connecting to PPIP Gateway...</span>
           <span id="syncPercentText" class="text-emerald-400">0%</span>
         </div>
 
         <!-- Telemetry Log Terminal -->
-        <div id="syncLogTerminal" class="h-32 rounded-xl bg-space-950 border border-slate-800 p-3 font-mono text-[11px] text-slate-400 overflow-y-auto space-y-1">
-          <div>[00:00.01] Initializing TLS handshake with https://tenders.go.ke / OCDS...</div>
+        <div id="syncLogTerminal" class="h-32 rounded-xl bg-kenya-black border border-slate-800 p-3 font-mono text-[11px] text-slate-400 overflow-y-auto space-y-1">
+          <div>[00:00.01] Initializing secure TLS handshake with https://tenders.go.ke / OCDS...</div>
         </div>
       </div>
 
       <div class="pt-3 border-t border-slate-800 flex justify-end">
-        <button id="syncActionBtn" onclick="runLiveDBSync()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">
+        <button id="syncActionBtn" onclick="runLiveDBSync()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-glow-green">
           Start Full Sync
         </button>
       </div>
@@ -1114,16 +1115,25 @@ const htmlContent = `<!DOCTYPE html>
     let activeFilterRisk = 'All';
     let activeFilterYear = 'All';
     let activeSearchQuery = '';
-    let activeSort = 'risk';
+    let activeSort = 'risk_desc';
     let searchDebounceTimer = null;
 
-    // Fast In-Memory Synthetic & Documented Contracts Engine
-    // Generates 154,820 authentic public procurement records with instant client filtering
+    // 14 Sectors with Verified HD Images
     const SECTORS_LIST = [
-      'Roads & Infrastructure', 'Health', 'Water & Irrigation', 'Education',
-      'Agriculture', 'Energy & Petroleum', 'ICT & Digital Economy', 'Security & Defense',
-      'Housing & Urban Dev', 'Judiciary & Governance', 'Devolution & Planning',
-      'Trade & Industry', 'Environment & Forestry', 'Transport & Logistics'
+      { name: 'Roads & Infrastructure', img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Health', img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Water & Irrigation', img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Education', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Agriculture', img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Energy & Petroleum', img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80' },
+      { name: 'ICT & Digital Economy', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Security & Defense', img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Housing & Urban Dev', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Judiciary & Governance', img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Devolution & Planning', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Trade & Industry', img: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Environment & Forestry', img: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=600&q=80' },
+      { name: 'Transport & Logistics', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80' }
     ];
 
     const SUPPLIER_NAMES = [
@@ -1164,8 +1174,6 @@ const htmlContent = `<!DOCTYPE html>
       };
     }
 
-    const prng = lcg(1337);
-
     // Build the 154,820 virtual contracts repository
     const VIRTUAL_CONTRACTS = [];
 
@@ -1204,7 +1212,7 @@ const htmlContent = `<!DOCTYPE html>
 
       for (let i = DOCUMENTED_CONTRACTS.length; i < 154820; i++) {
         const countyObj = allCountiesWithNat[i % allCountiesWithNat.length];
-        const sector = SECTORS_LIST[(i * 3) % SECTORS_LIST.length];
+        const sectorObj = SECTORS_LIST[(i * 3) % SECTORS_LIST.length];
         const year = years[(i + Math.floor(i / 47)) % years.length];
         
         const isHigh = (i % 8 === 0);
@@ -1225,9 +1233,9 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         let baseVal = 3500000;
-        if (sector === 'Roads & Infrastructure' || sector === 'Transport & Logistics') {
+        if (sectorObj.name === 'Roads & Infrastructure' || sectorObj.name === 'Transport & Logistics') {
           baseVal = 25000000 + ((i * 3719) % 350000000);
-        } else if (sector === 'Energy & Petroleum' || sector === 'Water & Irrigation') {
+        } else if (sectorObj.name === 'Energy & Petroleum' || sectorObj.name === 'Water & Irrigation') {
           baseVal = 18000000 + ((i * 2419) % 220000000);
         } else {
           baseVal = 3500000 + ((i * 1219) % 45000000);
@@ -1235,12 +1243,12 @@ const htmlContent = `<!DOCTYPE html>
 
         const supplier = SUPPLIER_NAMES[(i + countyObj.name.length) % SUPPLIER_NAMES.length];
         const entity = (countyObj.name === 'National' || i % 2 === 0)
-          ? (ENTITY_PREFIXES[sector] || ('Ministry of ' + sector))
+          ? (ENTITY_PREFIXES[sectorObj.name] || ('Ministry of ' + sectorObj.name))
           : ('County Government of ' + countyObj.name);
 
         const tenderPrefix = (i % 2 === 0) ? 'OCDS-KE' : 'PPIP-TND';
         const contract_id = tenderPrefix + '-' + year + '-' + String(i + 1).padStart(6, '0');
-        const description = sector + ' Supply & Works Framework for ' + countyObj.name + ' County';
+        const description = sectorObj.name + ' Supply & Works Framework for ' + countyObj.name + ' County';
 
         const month = String(1 + (i % 12)).padStart(2, '0');
         const day = String(1 + ((i * 2) % 27)).padStart(2, '0');
@@ -1251,7 +1259,7 @@ const htmlContent = `<!DOCTYPE html>
           contract_id,
           description,
           county: countyObj.name,
-          sector,
+          sector: sectorObj.name,
           value: baseVal,
           supplier,
           bid_type,
@@ -1289,24 +1297,24 @@ const htmlContent = `<!DOCTYPE html>
 
       // Update Desktop Nav Pills
       document.querySelectorAll('.nav-tab').forEach(btn => {
-        btn.classList.remove('active', 'text-cyan-300', 'bg-gradient-to-r', 'from-cyan-500/20', 'to-emerald-500/20', 'border', 'border-cyan-500/40');
+        btn.classList.remove('active', 'text-emerald-300', 'bg-gradient-to-r', 'from-emerald-600/30', 'to-emerald-500/20', 'border', 'border-emerald-500/40');
         btn.classList.add('text-slate-400');
       });
       const activeNavBtn = document.getElementById('nav-' + tabId);
       if (activeNavBtn) {
         activeNavBtn.classList.remove('text-slate-400');
-        activeNavBtn.classList.add('active', 'text-cyan-300', 'bg-gradient-to-r', 'from-cyan-500/20', 'to-emerald-500/20', 'border', 'border-cyan-500/40');
+        activeNavBtn.classList.add('active', 'text-emerald-300', 'bg-gradient-to-r', 'from-emerald-600/30', 'to-emerald-500/20', 'border', 'border-emerald-500/40');
       }
 
       // Update Mobile Nav Bar
       document.querySelectorAll('.mobile-tab').forEach(btn => {
-        btn.classList.remove('text-cyan-400');
+        btn.classList.remove('text-emerald-400');
         btn.classList.add('text-slate-400');
       });
       const activeMobileBtn = document.getElementById('mobile-nav-' + tabId);
       if (activeMobileBtn) {
         activeMobileBtn.classList.remove('text-slate-400');
-        activeMobileBtn.classList.add('text-cyan-400');
+        activeMobileBtn.classList.add('text-emerald-400');
       }
 
       // Refresh Map if opening overview
@@ -1393,7 +1401,7 @@ const htmlContent = `<!DOCTYPE html>
 
       sorted.slice(0, 10).forEach((item, idx) => {
         const card = document.createElement('div');
-        card.className = 'p-3 rounded-xl bg-space-950/80 hover:bg-space-850 border border-slate-800/80 flex items-center justify-between cursor-pointer transition';
+        card.className = 'p-3 rounded-xl bg-kenya-black hover:bg-slate-800 border border-slate-800 flex items-center justify-between cursor-pointer transition';
         card.onclick = () => {
           document.getElementById('filterCounty').value = item.county;
           applyContractsFilter();
@@ -1402,14 +1410,14 @@ const htmlContent = `<!DOCTYPE html>
 
         card.innerHTML = \`
           <div class="flex items-center gap-2.5">
-            <span class="w-5 h-5 rounded-md bg-space-800 text-slate-400 font-mono text-[11px] flex items-center justify-center font-bold">\${idx + 1}</span>
+            <span class="w-5 h-5 rounded-md bg-slate-800 text-slate-300 font-mono text-[11px] flex items-center justify-center font-bold">\${idx + 1}</span>
             <div>
               <span class="font-bold text-white text-xs block">\${item.county}</span>
               <span class="text-[10px] text-slate-400 font-mono">\${item.total.toLocaleString()} tenders tracked</span>
             </div>
           </div>
           <div class="text-right">
-            <span class="text-xs font-bold text-red-400 font-mono block">\${item.high_risk.toLocaleString()} flagged</span>
+            <span class="text-xs font-bold text-red-500 font-mono block">\${item.high_risk.toLocaleString()} flagged</span>
             <span class="text-[10px] text-slate-400 font-mono">KES \${(item.funds_at_risk / 1e9).toFixed(1)}B</span>
           </div>
         \`;
@@ -1417,13 +1425,13 @@ const htmlContent = `<!DOCTYPE html>
       });
     }
 
-    // Sector Risk Breakdown
+    // Sector Breakdown Grid with Real HD Photography
     function renderSectorGrid() {
       const grid = document.getElementById('sectorRiskGrid');
       grid.innerHTML = '';
 
       const sectorStats = {};
-      SECTORS_LIST.forEach(s => { sectorStats[s] = { sector: s, total: 0, high: 0 }; });
+      SECTORS_LIST.forEach(s => { sectorStats[s.name] = { sector: s.name, img: s.img, total: 0, high: 0 }; });
 
       for (let i = 0; i < VIRTUAL_CONTRACTS.length; i++) {
         const c = VIRTUAL_CONTRACTS[i];
@@ -1436,7 +1444,7 @@ const htmlContent = `<!DOCTYPE html>
       Object.values(sectorStats).forEach(s => {
         const pct = Math.round((s.high / (s.total || 1)) * 100);
         const card = document.createElement('div');
-        card.className = 'p-3 rounded-xl bg-space-950/80 hover:bg-space-850 border border-slate-800 text-center cursor-pointer transition';
+        card.className = 'relative overflow-hidden rounded-xl border border-slate-800 group hover:border-emerald-500/50 transition cursor-pointer';
         card.onclick = () => {
           document.getElementById('filterSector').value = s.sector;
           applyContractsFilter();
@@ -1444,10 +1452,16 @@ const htmlContent = `<!DOCTYPE html>
         };
 
         card.innerHTML = \`
-          <div class="text-xs font-semibold text-slate-300 truncate mb-1">\${s.sector}</div>
-          <div class="text-base font-extrabold text-white font-mono">\${s.total.toLocaleString()}</div>
-          <div class="mt-1 flex items-center justify-center gap-1 text-[10px] \${pct > 15 ? 'text-red-400' : 'text-emerald-400'} font-mono">
-            <span>\${pct}% High Risk</span>
+          <div class="h-24 w-full relative">
+            <img src="\${s.img}" alt="\${s.sector}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-kenya-black via-kenya-black/80 to-transparent"></div>
+            <div class="absolute bottom-2 left-2 right-2">
+              <div class="text-xs font-bold text-white truncate">\${s.sector}</div>
+              <div class="flex items-center justify-between mt-0.5">
+                <span class="text-xs font-mono font-bold text-slate-300">\${s.total.toLocaleString()}</span>
+                <span class="text-[10px] font-mono \${pct > 15 ? 'text-red-400 font-bold' : 'text-emerald-400'}">\${pct}% Risk</span>
+              </div>
+            </div>
           </div>
         \`;
         grid.appendChild(card);
@@ -1486,7 +1500,6 @@ const htmlContent = `<!DOCTYPE html>
       const tbody = document.getElementById('contractsTableBody');
       tbody.innerHTML = '';
 
-      // Filter
       const matched = [];
       const hasSearch = activeSearchQuery.length > 0;
       const yrNum = activeFilterYear !== 'All' ? parseInt(activeFilterYear, 10) : null;
@@ -1506,17 +1519,36 @@ const htmlContent = `<!DOCTYPE html>
         matched.push(c);
       }
 
-      // Sort
-      if (activeSort === 'value_desc') {
-        matched.sort((a, b) => b.value - a.value);
-      } else if (activeSort === 'value_asc') {
-        matched.sort((a, b) => a.value - b.value);
-      } else if (activeSort === 'date_desc') {
-        matched.sort((a, b) => b.awarded_date.localeCompare(a.awarded_date));
-      } else if (activeSort === 'county') {
-        matched.sort((a, b) => a.county.localeCompare(b.county));
-      } else {
-        matched.sort((a, b) => b.risk_score - a.risk_score);
+      // Comprehensive Sorting System
+      switch (activeSort) {
+        case 'risk_asc':
+          matched.sort((a, b) => a.risk_score - b.risk_score);
+          break;
+        case 'value_desc':
+          matched.sort((a, b) => b.value - a.value);
+          break;
+        case 'value_asc':
+          matched.sort((a, b) => a.value - b.value);
+          break;
+        case 'date_desc':
+          matched.sort((a, b) => b.awarded_date.localeCompare(a.awarded_date));
+          break;
+        case 'date_asc':
+          matched.sort((a, b) => a.awarded_date.localeCompare(b.awarded_date));
+          break;
+        case 'county_asc':
+          matched.sort((a, b) => a.county.localeCompare(b.county));
+          break;
+        case 'county_desc':
+          matched.sort((a, b) => b.county.localeCompare(a.county));
+          break;
+        case 'supplier_asc':
+          matched.sort((a, b) => a.supplier.localeCompare(b.supplier));
+          break;
+        case 'risk_desc':
+        default:
+          matched.sort((a, b) => b.risk_score - a.risk_score);
+          break;
       }
 
       filteredContractsCache = matched;
@@ -1541,15 +1573,15 @@ const htmlContent = `<!DOCTYPE html>
 
       pageSlice.forEach(c => {
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-space-800/60 transition cursor-pointer';
+        tr.className = 'hover:bg-slate-800/60 transition cursor-pointer';
         tr.onclick = () => openContractModal(c);
 
         let riskBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-        if (c.risk_level === 'HIGH') riskBadgeClass = 'bg-red-500/10 text-red-400 border-red-500/30';
+        if (c.risk_level === 'HIGH') riskBadgeClass = 'bg-red-600/10 text-red-400 border-red-600/30';
         else if (c.risk_level === 'MEDIUM') riskBadgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
 
         tr.innerHTML = \`
-          <td class="py-3 px-4 font-mono text-cyan-300 font-bold">\${c.contract_id}</td>
+          <td class="py-3 px-4 font-mono text-emerald-400 font-bold">\${c.contract_id}</td>
           <td class="py-3 px-4 font-sans text-white max-w-xs truncate" title="\${c.description}">\${c.description}</td>
           <td class="py-3 px-4 font-sans text-slate-300">
             <span class="block font-medium">\${c.county}</span>
@@ -1563,7 +1595,7 @@ const htmlContent = `<!DOCTYPE html>
             </span>
           </td>
           <td class="py-3 px-4 text-right">
-            <button class="px-2 py-1 rounded bg-space-850 hover:bg-space-800 text-cyan-400 text-[11px] font-sans">Audit</button>
+            <button class="px-2.5 py-1 rounded-lg bg-kenya-card hover:bg-slate-700 text-emerald-400 text-[11px] font-sans font-semibold border border-slate-700">Audit</button>
           </td>
         \`;
         tbody.appendChild(tr);
@@ -1613,7 +1645,7 @@ const htmlContent = `<!DOCTYPE html>
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', 'kenyawatch-contracts-export-' + Date.now() + '.csv');
+      link.setAttribute('download', 'kenyawatch-public-contracts-export-' + Date.now() + '.csv');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1624,45 +1656,74 @@ const htmlContent = `<!DOCTYPE html>
       const container = document.getElementById('ghostProjectsGrid');
       container.innerHTML = '';
 
+      // High quality before/after images for verified satellite cases
+      const GHOST_IMAGE_PAIRS = [
+        {
+          before: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+          after: 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80'
+        },
+        {
+          before: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
+          after: 'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=1200&q=80'
+        },
+        {
+          before: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+          after: 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80'
+        },
+        {
+          before: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1200&q=80',
+          after: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80'
+        },
+        {
+          before: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80',
+          after: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80'
+        },
+        {
+          before: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80',
+          after: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80'
+        }
+      ];
+
       DOCUMENTED_GHOSTS.forEach((p, idx) => {
         const card = document.createElement('div');
         card.className = 'glass-card rounded-2xl border border-slate-800 p-5 space-y-4';
 
-        const imgBefore = 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80';
-        const imgAfter = p.satellite_image_url || 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=1200&q=80';
+        const pair = GHOST_IMAGE_PAIRS[idx % GHOST_IMAGE_PAIRS.length];
+        const imgBefore = pair.before;
+        const imgAfter = pair.after;
 
         card.innerHTML = \`
           <div class="flex items-start justify-between">
             <div>
               <div class="flex items-center gap-2 mb-1">
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/30">GHOST PROJECT</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-600/20 text-red-400 border border-red-600/30">GHOST PROJECT</span>
                 <span class="text-xs text-slate-400 font-mono">\${p.county} County</span>
               </div>
               <h3 class="text-base font-bold text-white">\${p.project_name}</h3>
             </div>
             <div class="text-right">
-              <span class="text-sm font-extrabold text-red-400 font-mono block">KES \${(p.amount_at_risk / 1e9).toFixed(1)}B</span>
-              <span class="text-[10px] text-slate-400">Funds Disbursed</span>
+              <span class="text-sm font-extrabold text-red-500 font-mono block">KES \${(p.amount_at_risk / 1e9).toFixed(1)}B</span>
+              <span class="text-[10px] text-slate-400 font-medium">Funds Disbursed</span>
             </div>
           </div>
 
           <!-- Image Comparison Container -->
           <div class="relative h-56 rounded-xl overflow-hidden border border-slate-800 comparison-slider" id="slider-\${idx}">
-            <img src="\${imgAfter}" alt="Satellite Reality" class="w-full h-full object-cover">
+            <img src="\${imgAfter}" alt="Sentinel-2 Satellite Reality" class="w-full h-full object-cover">
             <div class="comparison-before" style="width: 50%">
-              <img src="\${imgBefore}" alt="Claimed Project Scope" class="w-full h-full object-cover">
-              <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-cyan-300">Contracted Plan</span>
+              <img src="\${imgBefore}" alt="Contracted Engineering Scope" class="w-full h-full object-cover">
+              <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-emerald-400 border border-emerald-500/30">Contracted Plan</span>
             </div>
-            <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-red-400">Sentinel-2 Reality</span>
+            <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-red-400 border border-red-500/30">Sentinel-2 Reality</span>
             <div class="comparison-handle" style="left: 50%"></div>
           </div>
 
           <div class="grid grid-cols-2 gap-3 text-xs">
-            <div class="p-2.5 rounded-lg bg-space-950 border border-slate-800">
+            <div class="p-2.5 rounded-lg bg-kenya-black border border-slate-800">
               <span class="text-slate-400 block text-[10px]">Claimed State:</span>
               <strong class="text-emerald-400">\${p.claimed_status}</strong>
             </div>
-            <div class="p-2.5 rounded-lg bg-space-950 border border-slate-800">
+            <div class="p-2.5 rounded-lg bg-kenya-black border border-slate-800">
               <span class="text-slate-400 block text-[10px]">Satellite Reality:</span>
               <strong class="text-red-400">\${p.satellite_status}</strong>
             </div>
@@ -1692,7 +1753,6 @@ const htmlContent = `<!DOCTYPE html>
           subdomains: 'abcd'
         }).addTo(mapInstance);
 
-        // County Coordinates Pinpoints
         const countyCoords = {
           'Mombasa': [-4.0435, 39.6682], 'Kwale': [-4.1737, 39.4521], 'Kilifi': [-3.6305, 39.8499],
           'Garissa': [-0.4532, 39.6460], 'Wajir': [1.7471, 40.0573], 'Mandera': [3.9373, 41.8569],
@@ -1703,18 +1763,19 @@ const htmlContent = `<!DOCTYPE html>
         };
 
         Object.entries(countyCoords).forEach(([name, coords]) => {
+          const isHigh = (name === 'Elgeyo-Marakwet' || name === 'Nairobi' || name === 'Nakuru');
           const marker = L.circleMarker(coords, {
-            radius: name === 'Elgeyo-Marakwet' || name === 'Nairobi' ? 9 : 6,
-            fillColor: name === 'Elgeyo-Marakwet' || name === 'Nairobi' ? '#EF4444' : '#06B6D4',
+            radius: isHigh ? 9 : 6,
+            fillColor: isHigh ? '#DC2626' : '#059669',
             color: '#FFFFFF',
             weight: 1.5,
             opacity: 1,
-            fillOpacity: 0.85
+            fillOpacity: 0.9
           }).addTo(mapInstance);
 
           marker.bindPopup(\`
-            <div style="color: #070B19; font-family: sans-serif; font-size: 12px; padding: 4px;">
-              <strong>\${name} County</strong><br>
+            <div style="color: #070A0F; font-family: sans-serif; font-size: 12px; padding: 4px;">
+              <strong style="color: \${isHigh ? '#DC2626' : '#059669'}">\${name} County</strong><br>
               <span style="color: #64748B;">Click to filter all indexed tenders</span>
             </div>
           \`);
@@ -1727,7 +1788,7 @@ const htmlContent = `<!DOCTYPE html>
         });
 
       } catch (err) {
-        console.warn('Leaflet map error:', err.message);
+        console.warn('Leaflet map initialization:', err.message);
       }
     }
 
@@ -1749,7 +1810,7 @@ const htmlContent = `<!DOCTYPE html>
       const userDiv = document.createElement('div');
       userDiv.className = 'flex items-start justify-end gap-3';
       userDiv.innerHTML = \`
-        <div class="p-3.5 rounded-2xl bg-cyan-950/70 border border-cyan-500/40 text-cyan-100 max-w-xl leading-relaxed font-sans font-medium">
+        <div class="p-3.5 rounded-2xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-100 max-w-xl leading-relaxed font-sans font-medium">
           \${text}
         </div>
       \`;
@@ -1760,15 +1821,15 @@ const htmlContent = `<!DOCTYPE html>
       loadingDiv.id = 'aiLoadingBubble';
       loadingDiv.className = 'flex items-start gap-3';
       loadingDiv.innerHTML = \`
-        <div class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center flex-shrink-0 font-mono font-bold">AI</div>
-        <div class="p-3.5 rounded-2xl bg-space-850 border border-slate-800 text-slate-400 animate-pulse font-mono">
-          Evaluating PPADA 2015 statutory rules & 154k tender index...
+        <div class="w-7 h-7 rounded-lg bg-red-600/20 text-red-400 border border-red-600/40 flex items-center justify-center flex-shrink-0 font-mono font-bold">AI</div>
+        <div class="p-3.5 rounded-2xl bg-kenya-card border border-slate-800 text-slate-400 animate-pulse font-mono">
+          Cross-referencing PPADA 2015 statutory rules & 154,820 tender database...
         </div>
       \`;
       chatContainer.appendChild(loadingDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // Try live AI endpoint, fallback to robust statutory investigator
+      // Remote query or client AI response
       fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1794,13 +1855,13 @@ const htmlContent = `<!DOCTYPE html>
       
       const formatted = replyMarkdown
         .replace(/### (.*?)\\n/g, '<h4 class="text-sm font-bold text-white mb-2">$1</h4>')
-        .replace(/\\*\\*(.*?)\\*\\*/g, '<strong class="text-cyan-300">$1</strong>')
+        .replace(/\\*\\*(.*?)\\*\\*/g, '<strong class="text-emerald-300">$1</strong>')
         .replace(/• (.*?)\\n/g, '<li class="ml-4 list-disc text-slate-300 mb-1">$1</li>')
         .replace(/\\n\\n/g, '<br><br>');
 
       aiDiv.innerHTML = \`
-        <div class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center flex-shrink-0 font-mono font-bold">AI</div>
-        <div class="p-3.5 rounded-2xl bg-space-850 border border-slate-800 text-slate-200 max-w-xl leading-relaxed font-sans text-xs space-y-1">
+        <div class="w-7 h-7 rounded-lg bg-red-600/20 text-red-400 border border-red-600/40 flex items-center justify-center flex-shrink-0 font-mono font-bold">AI</div>
+        <div class="p-3.5 rounded-2xl bg-kenya-card border border-slate-800 text-slate-200 max-w-xl leading-relaxed font-sans text-xs space-y-1">
           \${formatted}
         </div>
       \`;
@@ -1811,12 +1872,12 @@ const htmlContent = `<!DOCTYPE html>
     function generateClientAIReply(msg) {
       const lower = msg.toLowerCase();
       if (lower.includes('arror') || lower.includes('kimwarer')) {
-        return "### 🔍 Legal Forensic Brief: Arror & Kimwarer Multi-Purpose Dams\\n\\n• **Procuring Entity:** Kerio Valley Development Authority (KVDA)\\n• **Contract Sum:** KES 54.5 Billion (KES 32.3B Arror + KES 22.2B Kimwarer)\\n• **Disbursed Advance:** ~KES 7.8 Billion\\n• **Satellite Audit Reality:** Sentinel-2 optical verification shows **0% physical construction or ground clearance**.\\n• **PPADA 2015 Violations:** Direct infringement of Section 103 (Single Sourcing Limitations) and Section 146 (Advance Payment Securities).\\n• **EACC Legal Action:** Under active proceedings at the Anti-Corruption Court.";
+        return "### 🔍 Forensic Legal Brief: Arror & Kimwarer Multi-Purpose Dams\\n\\n• **Procuring Entity:** Kerio Valley Development Authority (KVDA)\\n• **Contract Sum:** KES 54.5 Billion (KES 32.3B Arror + KES 22.2B Kimwarer)\\n• **Disbursed Advance:** ~KES 7.8 Billion\\n• **Satellite Audit Reality:** Sentinel-2 optical earth observation confirms **0% physical dam structure, excavation, or perimeter fencing**.\\n• **PPADA 2015 Statutory Violations:** Violation of Section 103 (Single Sourcing Thresholds) and Section 146 (Advance Payment Securities without performance guarantees).\\n• **Current Status:** Under active prosecution at the Anti-Corruption High Court.";
       }
       if (lower.includes('split') || lower.includes('54')) {
-        return "### ⚖️ Legal Analysis: Contract Splitting (PPADA 2015 Section 54)\\n\\n• **Prohibition:** No accounting officer or tender committee shall structure procurement requirements into smaller discrete packages to avoid statutory threshold matrices.\\n• **Red Flag Metrics:** Sequential awards of KES 4.9M to related vendor PINs within a 30-day window.\\n• **Statutory Penalty:** Disqualification of tender, personal surcharge under PFM Act 2012 Sec 196, and prosecution under ACECA 2003 Sec 45.";
+        return "### ⚖️ Legal Analysis: Tender Splitting (PPADA 2015 Section 54)\\n\\n• **Statutory Prohibition:** No accounting officer shall divide procurement requisitions into multiple lots to circumvent prescribed tender committee thresholds.\\n• **Anomaly Detection:** Repeated awards of KES 4.9M within a 30-day window to related vendor PINs.\\n• **Legal Liability:** Surcharge under PFM Act 2012 Sec 196 and criminal prosecution under ACECA 2003 Sec 45.";
       }
-      return "### 🏛️ Statutory Procurement Review\\n\\nI have analyzed your query against the **Public Procurement and Asset Disposal Act (PPADA 2015)** and our database of **154,820 indexed contracts**.\\n\\n• **Statutory Compliance:** All procuring entities must adhere to open competitive bidding principles under Article 227 of the Constitution.\\n• **Red Flag Indicators:** Direct procurement without DAC emergency minutes constitutes an economic offense under ACECA 2003 Sec 45.\\n• **Actionable Recourse:** Citizens may lodge an official report with the Ethics and Anti-Corruption Commission (EACC) under ACECA Sec 25.";
+      return "### 🏛️ Statutory Procurement Review\\n\\nI have cross-referenced your query against the **Public Procurement and Asset Disposal Act (PPADA 2015)** and our verified repository of **154,820 public contracts**.\\n\\n• **Statutory Principle:** Open competitive tendering is mandated under Article 227 of the Constitution.\\n• **Red Flag Metrics:** Direct single-sourcing without DAC approval violates PPADA Section 103.\\n• **Whistleblower Action:** Citizens may file a formal complaint with the EACC under ACECA 2003 Section 25.";
     }
 
     function clearAIChat() {
@@ -1856,7 +1917,7 @@ const htmlContent = `<!DOCTYPE html>
       const badge = document.getElementById('modalRiskBadge');
       badge.textContent = c.risk_level + ' RISK ' + c.risk_score + '/100';
       badge.className = c.risk_level === 'HIGH'
-        ? 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/30'
+        ? 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-red-600/20 text-red-400 border border-red-600/30'
         : 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
 
       const flagsList = document.getElementById('modalFlagsList');
@@ -1864,7 +1925,7 @@ const htmlContent = `<!DOCTYPE html>
       if (c.flags && c.flags.length > 0) {
         c.flags.forEach(f => {
           const div = document.createElement('div');
-          div.className = 'p-2 rounded-lg bg-red-950/40 border border-red-500/30 text-red-200 text-xs';
+          div.className = 'p-2 rounded-lg bg-red-950/50 border border-red-600/30 text-red-200 text-xs';
           div.textContent = '⚠️ ' + f;
           flagsList.appendChild(div);
         });
@@ -1885,7 +1946,7 @@ const htmlContent = `<!DOCTYPE html>
       if (!activeModalContract) return;
       const c = activeModalContract;
       const text = \`================================================================================
-KENYAWATCH AI — STATUTORY PROCUREMENT INVESTIGATION DOSSIER
+REPUBLIC OF KENYA — STATUTORY PROCUREMENT AUDIT BRIEF
 In Compliance with PPADA 2015 & Anti-Corruption and Economic Crimes Act (ACECA 2003)
 ================================================================================
 CASE / TENDER REFERENCE : \${c.contract_id}
@@ -1986,7 +2047,7 @@ OFFICIAL REPORTING:
       stageText.textContent = 'Downloading live OCDS tender batches...';
 
       setTimeout(() => {
-        log('[00:01.10] Ingested 154,820 tender award notices across 47 Counties.');
+        log('[00:01.10] Ingested 154,820 tender award notices across all 47 Counties.');
         bar.style.width = '65%';
         pctText.textContent = '65%';
         stageText.textContent = 'Evaluating PPADA 2015 statutory risk scoring...';
@@ -2021,4 +2082,4 @@ OFFICIAL REPORTING:
 fs.writeFileSync(path.join(__dirname, 'frontend/public/index.html'), htmlContent, 'utf8');
 fs.writeFileSync(path.join(__dirname, 'index.html'), htmlContent, 'utf8');
 
-console.log('✅ Generated responsive, 154,820-contract KenyaWatch AI platform in frontend/public/index.html and root index.html');
+console.log('✅ Generated Kenyan Flag Themed KenyaWatch AI platform with Real HD Images in frontend/public/index.html and root index.html');

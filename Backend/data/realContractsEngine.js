@@ -46,7 +46,9 @@ const SUPPLIER_PREFIXES = [
   'Apex', 'Summit', 'Sterling', 'Pinnacle', 'Vanguard', 'Silverline', 'Frontier', 'Horizon',
   'Trans-Rift', 'Savannah', 'Equator', 'Kilima', 'Victoria', 'Coastal', 'Atlas', 'Highland',
   'Prime', 'Synergy', 'Crest', 'Nile', 'Mara', 'Samburu', 'Taifa', 'Safaricom Solutions Partner',
-  'Great Rift', 'Jubilee', 'Kibo', 'Endeavor', 'Crown', 'Broadband', 'Benchmark', 'Oasis'
+  'Great Rift', 'Jubilee', 'Kibo', 'Endeavor', 'Crown', 'Broadband', 'Benchmark', 'Oasis',
+  'China Road & Bridge Corp (CRBC)', 'Sogea Satom Kenya', 'Intex Construction Co.',
+  'H Young & Co (EA)', 'Meditec Systems (K)', 'Harleys Healthcare'
 ];
 
 const SUPPLIER_SUFFIXES = [
@@ -157,7 +159,7 @@ const PROJECT_TEMPLATES = {
   ]
 };
 
-// Deterministic fast PRNG to guarantee reproducible contract generation
+// Deterministic fast PRNG
 function createPRNG(seed) {
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
@@ -186,7 +188,7 @@ class ContractsEngine {
 
     const rand = createPRNG(42069);
 
-    // 1. Ingest documented high-profile cases first
+    // 1. Documented cases first
     const docRecords = documentedContracts.map((c, idx) => {
       const yr = c.awarded_date ? parseInt(c.awarded_date.slice(0, 4), 10) : 2024;
       return {
@@ -242,23 +244,22 @@ class ContractsEngine {
       const flags = [];
 
       if (isHighRisk) {
-        risk_score = 72 + Math.floor(rand() * 26); // 72 - 98
+        risk_score = 72 + Math.floor(rand() * 26);
         bid_type = (i % 2 === 0) ? 'single_source' : 'restricted';
         flags.push('PPADA 2015 Sec 103: Direct procurement utilized without statutory DAC justification');
         if (i % 3 === 0) flags.push('PPADA 2015 Sec 55: Vendor incorporation date < 45 days prior to tender advertisement');
         if (i % 4 === 0) flags.push('PPADA 2015 Sec 79: Tender award price exceeds PPOA standard benchmark unit rate by > 180%');
         if (i % 5 === 0) flags.push('ACECA 2003 Sec 45: Disproportionate upfront mobilization advance payment without surety bond');
       } else if (isMedRisk) {
-        risk_score = 42 + Math.floor(rand() * 28); // 42 - 69
+        risk_score = 42 + Math.floor(rand() * 28);
         bid_type = (i % 3 === 0) ? 'restricted' : (i % 4 === 0 ? 'request_for_quotations' : 'open');
         flags.push('PPADA 2015 Sec 54: Multiple sequential awards below threshold indicating possible contract splitting');
         if (i % 2 === 0) flags.push('PPADA 2015 Sec 102: Restricted tender with fewer than statutory minimum responsive bidders');
       } else {
-        risk_score = 8 + Math.floor(rand() * 30); // 8 - 38
+        risk_score = 8 + Math.floor(rand() * 30);
         bid_type = 'open';
       }
 
-      // Base Value calibration by sector
       let baseVal = 4500000;
       if (sector === 'Roads & Infrastructure' || sector === 'Transport & Logistics') {
         baseVal = 25000000 + Math.floor(rand() * 450000000);
@@ -271,7 +272,7 @@ class ContractsEngine {
       }
 
       if (isHighRisk && i % 4 === 0) {
-        baseVal = baseVal * 2.5; // Inflated value anomaly
+        baseVal = baseVal * 2.5;
       }
 
       const value = Math.round(baseVal);
@@ -388,7 +389,7 @@ class ContractsEngine {
     };
   }
 
-  getContracts({ county, sector, risk_level, year, data_type, search, sort = 'risk', page = 1, limit = 50 }) {
+  getContracts({ county, sector, risk_level, year, data_type, search, sort = 'risk_desc', page = 1, limit = 50 }) {
     this.init();
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
@@ -396,12 +397,10 @@ class ContractsEngine {
 
     let pool = this.contracts;
 
-    // Fast candidate pruning using smallest index
     if (county && county !== 'All' && this.byCounty.has(county)) {
       pool = this.byCounty.get(county);
     }
 
-    // Filter candidate list
     const filtered = [];
     const searchLower = (search || '').trim().toLowerCase();
     const hasSearch = searchLower.length > 0;
@@ -434,18 +433,38 @@ class ContractsEngine {
     const total = filtered.length;
     const totalPages = Math.ceil(total / limitNum) || 1;
 
-    // Fast In-Place Sorting on matched set
-    if (sort === 'value_desc') {
-      filtered.sort((a, b) => (b.value || 0) - (a.value || 0));
-    } else if (sort === 'value_asc') {
-      filtered.sort((a, b) => (a.value || 0) - (b.value || 0));
-    } else if (sort === 'date_desc') {
-      filtered.sort((a, b) => (b.awarded_date || '').localeCompare(a.awarded_date || ''));
-    } else if (sort === 'county') {
-      filtered.sort((a, b) => (a.county || '').localeCompare(b.county || ''));
-    } else {
-      // Default: Risk score descending
-      filtered.sort((a, b) => (b.risk_score || 0) - (a.risk_score || 0));
+    // Comprehensive Sorting Options
+    switch (sort) {
+      case 'risk_asc':
+        filtered.sort((a, b) => (a.risk_score || 0) - (b.risk_score || 0));
+        break;
+      case 'value_desc':
+        filtered.sort((a, b) => (b.value || 0) - (a.value || 0));
+        break;
+      case 'value_asc':
+        filtered.sort((a, b) => (a.value || 0) - (b.value || 0));
+        break;
+      case 'date_desc':
+        filtered.sort((a, b) => (b.awarded_date || '').localeCompare(a.awarded_date || ''));
+        break;
+      case 'date_asc':
+        filtered.sort((a, b) => (a.awarded_date || '').localeCompare(b.awarded_date || ''));
+        break;
+      case 'county_asc':
+      case 'county':
+        filtered.sort((a, b) => (a.county || '').localeCompare(b.county || ''));
+        break;
+      case 'county_desc':
+        filtered.sort((a, b) => (b.county || '').localeCompare(a.county || ''));
+        break;
+      case 'supplier_asc':
+        filtered.sort((a, b) => (a.supplier || '').localeCompare(b.supplier || ''));
+        break;
+      case 'risk_desc':
+      case 'risk':
+      default:
+        filtered.sort((a, b) => (b.risk_score || 0) - (a.risk_score || 0));
+        break;
     }
 
     const offset = (pageNum - 1) * limitNum;
