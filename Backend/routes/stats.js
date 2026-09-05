@@ -19,7 +19,7 @@ router.get('/by-county', async (_req, res) => {
     const dataMap = {};
     rows.forEach(row => { dataMap[row.county] = row; });
     
-    // Guarantee all 47 counties are present
+    // Guarantee all 47 counties are present in the response
     const completeData = COUNTIES.map(county => {
       return dataMap[county.name] || {
         county: county.name,
@@ -30,6 +30,7 @@ router.get('/by-county', async (_req, res) => {
       };
     });
     
+    // Sort by high_risk DESC, then contracts DESC
     completeData.sort((a, b) => {
       if (b.high_risk !== a.high_risk) return b.high_risk - a.high_risk;
       return b.contracts - a.contracts;
