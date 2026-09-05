@@ -9,36 +9,30 @@ const { initDB } = require('./db/index');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Render/Vercel sit behind a reverse proxy — without this, express-rate-limit
-// reads the proxy's IP instead of the client's and throws/limits incorrectly.
 app.set('trust proxy', 1);
 
-// ── Security & CORS ───────────────────────────────────────────────────────────
-app.use(helmet({ contentSecurityPolicy: false }));
-
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || '*')
-  .split(',')
-  .map(o => o.trim())
-  .filter(Boolean);
+// Security & CORS
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 
 app.use(cors({
-  origin: allowedOrigins.includes('*') ? '*' : allowedOrigins,
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-key'],
 }));
 app.options('*', cors());
 
-app.use('/api/ai', rateLimit({ windowMs: 60000, max: 40 }));
-app.use('/api/chatbot', rateLimit({ windowMs: 60000, max: 40 }));
-app.use('/api', rateLimit({ windowMs: 60000, max: 500 }));
+// Gentle rate limiting that doesn't block legitimate users
+app.use('/api/ai', rateLimit({ windowMs: 60000, max: 120 }));
+app.use('/api', rateLimit({ windowMs: 60000, max: 1000 }));
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '15mb' }));
+app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 
-// ── Static admin panel (previously created but never served) ─────────────────
+// Static frontend serving if accessed through backend port
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+// API Routes
 app.use('/api/contracts', require('./routes/contracts'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/ghost-projects', require('./routes/ghostProjects'));
@@ -48,17 +42,22 @@ app.use('/api/sync', require('./routes/ocdsSync'));
 app.use('/api/stats', require('./routes/stats'));
 app.use('/api/admin', require('./routes/admin'));
 
-app.get('/health', (_req, res) => res.status(200).json({ status: 'ok', version: '3.5.0' }));
+app.get('/health', (_req, res) => res.status(200).json({ status: 'ok', version: '4.0.0', service: 'KenyaWatch AI' }));
 
-app.get('/', (_req, res) => {
+app.get('/api', (_req, res) => {
   res.status(200).json({
-    name: 'KenyaWatch AI Backend',
-    version: '3.5.0',
+    name: 'KenyaWatch AI Procurement Intelligence API',
+    version: '4.0.0',
+    status: 'online',
+    counties_covered: 47,
     endpoints: [
       'GET  /health',
       'GET  /api/stats',
+      'GET  /api/stats/by-county',
+      'GET  /api/stats/by-sector',
       'GET  /api/contracts',
       'GET  /api/contracts/meta',
+      'GET  /api/contracts/export',
       'GET  /api/contracts/:contractId',
       'POST /api/contracts/scan',
       'GET  /api/ghost-projects',
@@ -67,20 +66,27 @@ app.get('/', (_req, res) => {
       'POST /api/reports',
       'PATCH /api/reports/:id/status',
       'POST /api/ai/chat',
-      'POST /api/chatbot/message',
       'POST /api/sync/ocds',
       'GET  /api/sync/status',
       'GET  /api/admin/stats',
-      'POST /api/admin/reseed (protected — requires x-admin-key header)',
-      'GET  /admin',
+      'POST /api/admin/reseed',
     ],
   });
 });
 
-app.use((req, res) => res.status(404).json({ success: false, error: `Not found: ${req.method} ${req.path}` }));
+// Fallback to index.html for single-page app routing
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ success: false, error: `Not found: ${req.method} ${req.path}` });
+  }
+  const indexPath = path.join(__dirname, '../frontend/public/index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) next();
+  });
+});
 
-// ── Startup: LISTEN FIRST ─────────────────────────────────────────────────────
+// Startup
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 KenyaWatch AI Backend running on port ${PORT}`);
-  initDB().then(() => console.log('✅ Database initialized and seeded')).catch(e => console.error('DB Error:', e));
+  initDB().then(() => console.log('✅ Database initialized and ready for production')).catch(e => console.error('DB Error:', e));
 });
