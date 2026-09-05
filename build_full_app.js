@@ -5,8 +5,8 @@ const path = require('path');
 const { COUNTIES } = require('./Backend/data/counties');
 const { documentedContracts } = require('./Backend/data/documentedCases');
 
-console.log('Compiling comprehensive production KenyaWatch AI platform...');
-console.log('Loaded counties:', COUNTIES.length, 'Documented cases:', documentedContracts.length);
+console.log('Compiling ultra-responsive, KilowattX-inspired KenyaWatch AI platform...');
+console.log('Counties loaded:', COUNTIES.length, 'Documented cases:', documentedContracts.length);
 
 const countyCoords = {
   'Mombasa': [-4.0435, 39.6682],
@@ -529,47 +529,48 @@ const INITIAL_REPORTS = [
 ];
 
 const html = `<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KenyaWatch AI — Public Procurement Intelligence & Anti-Corruption Oversight Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>KenyaWatch AI — Public Procurement Intelligence & Anti-Corruption Oversight</title>
   
   <!-- Meta & OpenGraph -->
-  <meta name="description" content="Independent AI-powered public procurement intelligence, forensic corruption detection, and satellite verification platform across all 47 counties in Kenya.">
+  <meta name="description" content="Production civic intelligence platform cross-referencing Kenyan public procurement, IFMIS treasury records, and Sentinel-2 satellite observation across all 47 counties.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇰🇪</text></svg>">
 
-  <!-- Tailwind CSS & Lucide Icons & Inter Font -->
+  <!-- Tailwind CSS & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Leaflet CSS & JS for Kenya Geospatial Intelligence -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-  <!-- Chart.js for Visual Procurement Analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
             brand: {
-              red: '#B91C1C',
+              red: '#EF4444',
+              crimson: '#DC2626',
               darkred: '#991B1B',
-              green: '#047857',
-              darkgreen: '#065F46',
-              black: '#0F172A',
-              slate: '#1E293B',
-              accent: '#2563EB',
-              warning: '#D97706',
+              green: '#10B981',
+              emerald: '#059669',
+              darkgreen: '#047857',
+              navy: '#070B19',
+              card: '#0D1527',
+              elevated: '#111C38',
+              border: '#1E293B',
+              accent: '#3B82F6',
               gold: '#F59E0B',
             }
           }
@@ -579,148 +580,214 @@ const html = `<!DOCTYPE html>
   </script>
 
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #0B1120; color: #F8FAFC; }
-    .card { background-color: #131E36; border: 1px solid #1E293B; border-radius: 1rem; }
-    .card-elevated { background: linear-gradient(145deg, #162444, #0F172A); border: 1px solid rgba(255,255,255,0.08); }
-    .badge-high { background-color: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .badge-med { background-color: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .badge-low { background-color: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .badge-ghost { background-color: rgba(168, 85, 247, 0.15); color: #C084FC; border: 1px solid rgba(168, 85, 247, 0.4); }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #070B19; color: #F8FAFC; overflow-x: hidden; }
     
+    /* Sleek card design */
+    .kw-card {
+      background: linear-gradient(145deg, rgba(17, 28, 56, 0.7), rgba(13, 21, 39, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.25rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .kw-card:hover {
+      border-color: rgba(239, 68, 68, 0.35);
+      box-shadow: 0 12px 30px -10px rgba(220, 38, 38, 0.18);
+    }
+
+    .kw-card-elevated {
+      background: linear-gradient(145deg, #162444, #0D1527);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.25rem;
+    }
+
+    /* Badges */
+    .badge-high { background-color: rgba(239, 68, 68, 0.18); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .badge-med { background-color: rgba(245, 158, 11, 0.18); color: #FDE68A; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-low { background-color: rgba(16, 185, 129, 0.18); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-ghost { background-color: rgba(168, 85, 247, 0.18); color: #E9D5FF; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .badge-pill { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; }
+
     /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0B1120; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #070B19; }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-    /* Radar scan animation */
-    @keyframes sweep {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .radar-sweep {
-      animation: sweep 4s linear infinite;
-      transform-origin: center center;
+    /* Ambient Glow & Radar */
+    .ambient-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.12) 0%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    @keyframes pulse-red {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.85; transform: scale(1.02); }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
     }
-    .pulse-alert {
-      animation: pulse-red 2.5s ease-in-out infinite;
-    }
+    .pulse-ring { animation: pulse-ring 3s ease-in-out infinite; }
 
     .tab-btn.active {
-      background-color: #DC2626;
+      background: linear-gradient(135deg, #DC2626, #B91C1C);
       color: #FFFFFF;
-      box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
+      box-shadow: 0 4px 18px 0 rgba(220, 38, 38, 0.4);
     }
-    .subtab-btn.active {
-      background-color: #2563EB;
+    .region-tab.active {
+      background: #2563EB;
       color: #FFFFFF;
+    }
+    .mobile-tab-btn.active {
+      color: #EF4444;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-rose-500 selection:text-white">
+<body class="min-h-screen flex flex-col antialiased selection:bg-red-500 selection:text-white relative pb-20 lg:pb-0">
+
+  <!-- Ambient Glow Orbs in Background -->
+  <div class="ambient-glow top-0 left-1/4"></div>
+  <div class="ambient-glow top-96 right-10 opacity-75"></div>
 
   <!-- TOP LIVE CORRUPTION ALERT TICKER -->
-  <div class="bg-gradient-to-r from-red-950 via-slate-900 to-red-950 border-b border-red-800/40 px-4 py-2 text-xs font-mono">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-600 text-white uppercase tracking-wider animate-pulse">
+  <div class="bg-gradient-to-r from-red-950 via-slate-950 to-red-950 border-b border-red-800/40 px-3 sm:px-6 py-2 text-xs font-mono relative z-40">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-4">
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-600 text-white uppercase tracking-wider animate-pulse shrink-0">
           🚨 Live Alert
         </span>
-        <span id="ticker-text" class="text-slate-300 font-semibold truncate">
-          AI Detection Alert: Flagged KES 4.3B single-source advance disbursement with 0% ground progress (Arror Dam).
+        <span id="ticker-text" class="text-slate-300 font-semibold truncate text-[11px] sm:text-xs">
+          AI Detection Alert: Flagged KES 4.3B advance payout with 0% verified ground footprint (Arror Dam).
         </span>
       </div>
-      <div class="flex items-center gap-4 text-slate-400">
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 47 Counties Synced</span>
-        <span class="hidden sm:inline text-slate-500">|</span>
-        <span class="hidden sm:inline">EACC Automated Direct Routing: ACTIVE</span>
+      <div class="hidden sm:flex items-center gap-3 text-slate-400 text-[11px] shrink-0">
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 47 Counties Active</span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-300">EACC Direct Referral: READY</span>
       </div>
     </div>
   </div>
 
-  <!-- NAVIGATION HEADER -->
-  <header class="sticky top-0 z-40 bg-[#0B1120]/95 backdrop-blur-md border-b border-slate-800 shadow-lg">
+  <!-- MAIN NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-[#070B19]/90 backdrop-blur-xl border-b border-slate-800/80 shadow-2xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-18">
+      <div class="flex items-center justify-between h-20">
         
         <!-- Brand / Logo -->
-        <div class="flex items-center gap-3 cursor-pointer" onclick="switchMainTab('overview')">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 via-stone-900 to-emerald-600 flex items-center justify-center shadow-md shadow-red-900/30 border border-white/10 font-black text-white text-xl">
+        <div class="flex items-center gap-3 cursor-pointer select-none" onclick="switchMainTab('overview')">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-red-600 via-stone-900 to-emerald-600 flex items-center justify-center shadow-lg shadow-red-900/30 border border-white/10 text-2xl font-black text-white">
             🇰🇪
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-extrabold text-lg text-white tracking-tight">KENYA<span class="text-red-500">WATCH</span></span>
-              <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-red-500/20 text-red-400 border border-red-500/30">AI PRO 4.2</span>
+              <span class="font-black text-xl text-white tracking-tight">KENYA<span class="text-red-500">WATCH</span></span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-red-500/20 text-red-400 border border-red-500/30">AI PRO 4.3</span>
             </div>
-            <p class="text-[11px] text-slate-400 font-medium">Public Procurement Oversight & Anti-Corruption Intel</p>
+            <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Public Procurement & Anti-Corruption Intel</p>
           </div>
         </div>
 
         <!-- Desktop Navigation Tabs -->
         <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm">
-          <button onclick="switchMainTab('overview')" id="nav-overview" class="tab-btn active px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all">
+          <button onclick="switchMainTab('overview')" id="nav-overview" class="tab-btn active px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold">
             📊 Overview
           </button>
-          <button onclick="switchMainTab('scanner')" id="nav-scanner" class="tab-btn px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
-            <span class="text-red-400">⚡</span> AI Corruption Scanner
+          <button onclick="switchMainTab('scanner')" id="nav-scanner" class="tab-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold flex items-center gap-1.5">
+            <span class="text-red-400">⚡</span> AI Scanner
           </button>
-          <button onclick="switchMainTab('contracts')" id="nav-contracts" class="tab-btn px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all">
-            📑 Contracts (153)
+          <button onclick="switchMainTab('contracts')" id="nav-contracts" class="tab-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold">
+            📑 Contracts (<span id="header-contracts-count">158</span>)
           </button>
-          <button onclick="switchMainTab('ghost')" id="nav-ghost" class="tab-btn px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
-            🛰️ Satellite Radar
+          <button onclick="switchMainTab('ghost')" id="nav-ghost" class="tab-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold flex items-center gap-1.5">
+            🛰️ Ghost Radar
           </button>
-          <button onclick="switchMainTab('counties')" id="nav-counties" class="tab-btn px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all">
+          <button onclick="switchMainTab('counties')" id="nav-counties" class="tab-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold">
             🇰🇪 47 Counties
           </button>
-          <button onclick="switchMainTab('map')" id="nav-map" class="tab-btn px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all">
-            🗺️ Geospatial Map
+          <button onclick="switchMainTab('map')" id="nav-map" class="tab-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold">
+            🗺️ Map
           </button>
-          <button onclick="switchMainTab('investigator')" id="nav-investigator" class="tab-btn px-3.5 py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
-            🤖 AI Legal Auditor
+          <button onclick="switchMainTab('investigator')" id="nav-investigator" class="tab-btn px-3.5 py-2 rounded-xl text-slate-300 hover:text-white transition-all font-semibold flex items-center gap-1.5">
+            🤖 AI Auditor
           </button>
-          <button onclick="switchMainTab('report')" id="nav-report" class="tab-btn px-3.5 py-2 rounded-lg bg-red-700/80 hover:bg-red-600 text-white font-bold transition-all border border-red-500/40">
-            📢 Report to EACC
+          <button onclick="switchMainTab('report')" id="nav-report" class="tab-btn px-3.5 py-2 rounded-xl bg-red-700/80 hover:bg-red-600 text-white font-bold transition-all border border-red-500/40">
+            📢 Report EACC
           </button>
         </nav>
 
         <!-- Right Quick Actions -->
-        <div class="flex items-center gap-2.5">
-          <button onclick="syncLiveData()" id="btn-sync-trigger" title="Sync live procurement records" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700">
-            <span id="sync-spinner" class="inline-block">🔄</span>
-            <span id="sync-status-text">Sync Live Data</span>
+        <div class="flex items-center gap-2 sm:gap-3">
+          
+          <!-- Live Sync Trigger Button (ALWAYS VISIBLE) -->
+          <button onclick="syncLiveData()" id="btn-sync-trigger" title="Sync live procurement records from database & OCDS" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 shadow-md transition-all">
+            <span id="sync-spinner" class="inline-block text-sm">🔄</span>
+            <span id="sync-status-text" class="hidden sm:inline">Sync Live DB</span>
           </button>
-          <button onclick="openScannerModal()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-md shadow-red-900/30">
-            <span>🔍</span> Scan Tender
+
+          <!-- Scan Tender Quick CTA -->
+          <button onclick="switchMainTab('scanner')" class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold shadow-lg shadow-red-900/40 transition-all">
+            <span>⚡</span> Scan Tender
+          </button>
+
+          <!-- Mobile Hamburger Toggle Button -->
+          <button onclick="toggleMobileMenu()" id="btn-mobile-toggle" aria-label="Toggle Menu" class="lg:hidden p-2.5 rounded-xl bg-slate-800/90 text-slate-200 hover:text-white border border-slate-700 focus:outline-none">
+            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
           </button>
         </div>
+
       </div>
     </div>
 
-    <!-- Mobile Navigation Sub-bar -->
-    <div class="lg:hidden overflow-x-auto px-4 py-2 bg-slate-900/90 border-t border-slate-800 flex space-x-2 text-xs">
-      <button onclick="switchMainTab('overview')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">Overview</button>
-      <button onclick="switchMainTab('scanner')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">⚡ AI Scanner</button>
-      <button onclick="switchMainTab('contracts')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">📑 Contracts</button>
-      <button onclick="switchMainTab('ghost')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">🛰️ Satellite Radar</button>
-      <button onclick="switchMainTab('counties')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">47 Counties</button>
-      <button onclick="switchMainTab('map')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">Map</button>
-      <button onclick="switchMainTab('investigator')" class="px-2.5 py-1.5 rounded bg-slate-800 text-slate-200 whitespace-nowrap">AI Auditor</button>
-      <button onclick="switchMainTab('report')" class="px-2.5 py-1.5 rounded bg-red-700 text-white font-bold whitespace-nowrap">📢 Report EACC</button>
+    <!-- MOBILE DROPDOWN MENU -->
+    <div id="mobile-menu-drawer" class="hidden lg:hidden border-t border-slate-800 bg-[#070B19]/98 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 shadow-2xl">
+      <div class="grid grid-cols-2 gap-2 text-xs font-bold pt-2">
+        <button onclick="switchMainTab('overview'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 border border-slate-700/60">
+          <span>📊</span> Overview
+        </button>
+        <button onclick="switchMainTab('scanner'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 text-red-400 border border-slate-700/60">
+          <span>⚡</span> AI Scanner
+        </button>
+        <button onclick="switchMainTab('contracts'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 border border-slate-700/60">
+          <span>📑</span> Contracts (158)
+        </button>
+        <button onclick="switchMainTab('ghost'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 border border-slate-700/60">
+          <span>🛰️</span> Ghost Radar
+        </button>
+        <button onclick="switchMainTab('counties'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 border border-slate-700/60">
+          <span>🇰🇪</span> 47 Counties
+        </button>
+        <button onclick="switchMainTab('map'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 border border-slate-700/60">
+          <span>🗺️</span> Kenya Map
+        </button>
+        <button onclick="switchMainTab('investigator'); toggleMobileMenu();" class="p-3 rounded-xl bg-slate-800/80 text-left flex items-center gap-2 border border-slate-700/60">
+          <span>🤖</span> AI Auditor
+        </button>
+        <button onclick="switchMainTab('report'); toggleMobileMenu();" class="p-3 rounded-xl bg-red-700 text-white text-left flex items-center gap-2 border border-red-500/50">
+          <span>📢</span> Report to EACC
+        </button>
+      </div>
+
+      <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+        <button onclick="syncLiveData(); toggleMobileMenu();" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold border border-slate-700 flex items-center justify-center gap-2">
+          <span>🔄</span> Force Synchronize Live Govt Data
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 relative z-10">
 
     <!-- REAL-TIME CORRUPTION ALERT BANNER -->
-    <div id="dynamic-alert-banner" class="hidden pulse-alert card p-4 sm:p-5 border-l-4 border-l-red-500 bg-gradient-to-r from-red-950/80 via-slate-900 to-slate-900 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+    <div id="dynamic-alert-banner" class="hidden kw-card p-4 sm:p-5 border-l-4 border-l-red-500 bg-gradient-to-r from-red-950/90 via-slate-900 to-slate-900 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-2xl">
       <div class="flex items-start gap-3.5">
         <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 border border-red-500/40 flex items-center justify-center text-xl shrink-0 mt-0.5">
           ⚠️
@@ -728,7 +795,7 @@ const html = `<!DOCTYPE html>
         <div>
           <div class="flex items-center gap-2">
             <span class="text-xs font-extrabold uppercase tracking-wider text-red-400">Critical Anti-Corruption Alert</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-red-900/60 text-red-200 border border-red-700">PPADA 2015 VIOLATION</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-red-900/60 text-red-200 border border-red-700">PPADA 2015 VIOLATION</span>
           </div>
           <h4 id="alert-title" class="text-sm sm:text-base font-bold text-white mt-0.5">
             Single-source KES 4.3B advance payout detected with 0% verified ground footprint (Arror Dam).
@@ -738,11 +805,11 @@ const html = `<!DOCTYPE html>
           </p>
         </div>
       </div>
-      <div class="flex items-center gap-2.5 shrink-0 self-end md:self-center">
-        <button onclick="openAlertCaseDossier()" class="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-all shadow">
+      <div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+        <button onclick="openAlertCaseDossier()" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-all shadow">
           Inspect Case File
         </button>
-        <button onclick="forwardCurrentAlertToEACC()" class="px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition-all flex items-center gap-1.5">
+        <button onclick="forwardCurrentAlertToEACC()" class="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition-all flex items-center gap-1.5">
           <span>⚖️</span> Forward to EACC
         </button>
         <button onclick="dismissAlertBanner()" class="p-2 text-slate-400 hover:text-white text-xs">✕</button>
@@ -752,85 +819,135 @@ const html = `<!DOCTYPE html>
     <!-- ========================================== -->
     <!-- TAB 1: OVERVIEW DASHBOARD -->
     <!-- ========================================== -->
-    <div id="tab-overview" class="tab-view space-y-8">
+    <div id="tab-overview" class="tab-view space-y-10">
       
-      <!-- HERO BANNER WITH REAL KENYAN INFRASTRUCTURE HD PHOTOGRAPHY -->
-      <div class="relative overflow-hidden rounded-2xl border border-slate-700/60 shadow-2xl">
-        <!-- HD Background with Overlay -->
+      <!-- HERO BANNER (KilowattX Inspired Hero Structure) -->
+      <div class="relative overflow-hidden rounded-3xl border border-slate-700/60 shadow-2xl bg-slate-950">
+        <!-- HD Background Imagery -->
         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80" 
              alt="Kenyan Modern Infrastructure & Expressway" 
-             class="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.35]"
+             class="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.32] scale-105 transition-all duration-1000"
              onerror="this.src='https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1600&q=80'">
-        <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#070B19] via-[#070B19]/85 to-transparent"></div>
 
-        <div class="relative z-10 p-6 sm:p-10 lg:p-12 max-w-3xl space-y-5">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-mono font-bold">
+        <div class="relative z-10 p-6 sm:p-10 lg:p-14 max-w-3xl space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-mono font-bold">
             <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-            KENYA PUBLIC INTEGRITY & INTELLIGENCE RADAR
+            ACTIVE ACROSS ALL 47 KENYAN COUNTIES
           </div>
 
           <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-            Algorithmic Oversight for Kenya's Public Procurement.
+            Independent Algorithmic Public Procurement Oversight.
           </h1>
 
           <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Cross-referencing government IFMIS treasury disbursements against statutory requirements (<span class="text-red-400 font-semibold">PPADA 2015</span>) and multi-spectral Sentinel-2 satellite imagery to detect inflated tenders, briefcase contractors, and 0% delivery ghost projects.
+            Cross-referencing government IFMIS treasury disbursements against statutory requirements (<span class="text-red-400 font-bold">PPADA 2015</span>) and multi-spectral Sentinel-2 satellite imagery to detect inflated tenders, briefcase contractors, and 0% delivery ghost projects.
           </p>
 
           <div class="flex flex-wrap items-center gap-3 pt-2">
-            <button onclick="switchMainTab('scanner')" class="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-red-900/40 transition-all">
-              <span>⚡</span> Run AI Forensic Scanner
+            <button onclick="switchMainTab('scanner')" class="px-5 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-extrabold text-sm flex items-center gap-2 shadow-xl shadow-red-950/60 transition-all">
+              <span>⚡</span> Launch AI Forensic Scanner
             </button>
-            <button onclick="switchMainTab('ghost')" class="px-5 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-600 flex items-center gap-2 transition-all">
-              <span>🛰️</span> Satellite Ghost Radar (6)
+            <button onclick="switchMainTab('ghost')" class="px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition-all">
+              <span>🛰️</span> Satellite Radar (6)
             </button>
-            <button onclick="switchMainTab('report')" class="px-5 py-3 rounded-xl bg-emerald-700/90 hover:bg-emerald-600 text-white font-semibold text-sm border border-emerald-500/40 flex items-center gap-2 transition-all">
+            <button onclick="switchMainTab('report')" class="px-5 py-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-sm border border-emerald-500/40 flex items-center gap-2 transition-all shadow-lg shadow-emerald-950/50">
               <span>📢</span> Report Corruption to EACC
             </button>
           </div>
         </div>
       </div>
 
-      <!-- KEY METRICS STATS TILES -->
+      <!-- KEY IMPACT METRICS TILES (KilowattX Inspired Stats) -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        <div class="card p-5 space-y-2 border-t-4 border-t-red-500">
-          <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
-            <span>High Risk Flagged Tenders</span>
+        <div class="kw-card p-5 space-y-2 border-t-4 border-t-red-500">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+            <span>High Risk Flagged</span>
             <span class="text-red-400 font-bold">CRITICAL</span>
           </div>
-          <div class="text-3xl sm:text-4xl font-extrabold text-white" id="stat-high-risk">31</div>
+          <div class="text-3xl sm:text-4xl font-black text-white" id="stat-high-risk">31</div>
           <p class="text-xs text-slate-400">Score &ge; 70/100 (Single-source, inflation, briefcase)</p>
         </div>
 
-        <div class="card p-5 space-y-2 border-t-4 border-t-purple-500">
-          <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
+        <div class="kw-card p-5 space-y-2 border-t-4 border-t-purple-500">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
             <span>Satellite Ghost Projects</span>
             <span class="text-purple-400 font-bold">ORBITAL</span>
           </div>
-          <div class="text-3xl sm:text-4xl font-extrabold text-white" id="stat-ghost-count">6</div>
+          <div class="text-3xl sm:text-4xl font-black text-white" id="stat-ghost-count">6</div>
           <p class="text-xs text-slate-400">0% ground works verified by earth observation</p>
         </div>
 
-        <div class="card p-5 space-y-2 border-t-4 border-t-amber-500">
-          <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
+        <div class="kw-card p-5 space-y-2 border-t-4 border-t-amber-500">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
             <span>Public Funds at Risk</span>
             <span class="text-amber-400 font-bold">KES</span>
           </div>
-          <div class="text-3xl sm:text-4xl font-extrabold text-amber-400" id="stat-funds-risk">KES 18.23B</div>
+          <div class="text-3xl sm:text-4xl font-black text-amber-400" id="stat-funds-risk">KES 18.23B</div>
           <p class="text-xs text-slate-400">Flagged contracts requiring forensic audit</p>
         </div>
 
-        <div class="card p-5 space-y-2 border-t-4 border-t-emerald-500">
-          <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
-            <span>County Devolution Scope</span>
+        <div class="kw-card p-5 space-y-2 border-t-4 border-t-emerald-500">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+            <span>Devolution Coverage</span>
             <span class="text-emerald-400 font-bold">100%</span>
           </div>
-          <div class="text-3xl sm:text-4xl font-extrabold text-emerald-400">47 / 47</div>
+          <div class="text-3xl sm:text-4xl font-black text-emerald-400">47 / 47</div>
           <p class="text-xs text-slate-400">All 47 counties actively tracked</p>
         </div>
       </div>
 
-      <!-- VISUAL HIGHLIGHTS: HIGH IMPACT CORRUPTION DOSSIERS & SECTOR GALLERY -->
+      <!-- HOW IT WORKS: 4-STEP CIVIC ANTI-CORRUPTION PIPELINE -->
+      <div class="space-y-4">
+        <div class="text-center sm:text-left">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-red-400">Automated Forensic Workflow</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white mt-0.5">From Tender Ingestion to EACC Prosecution</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="kw-card p-5 space-y-3 relative overflow-hidden group">
+            <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 border border-red-500/40 flex items-center justify-center font-mono font-bold text-sm">
+              01
+            </div>
+            <h3 class="font-extrabold text-white text-base">Ingest & Parse</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              KenyaWatch ingests tender notices, IFMIS treasury disbursement vouchers, and supplier registers across all 47 counties.
+            </p>
+          </div>
+
+          <div class="kw-card p-5 space-y-3 relative overflow-hidden group">
+            <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/40 flex items-center justify-center font-mono font-bold text-sm">
+              02
+            </div>
+            <h3 class="font-extrabold text-white text-base">Satellite Reality Check</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Multi-spectral Sentinel-2 optical radar cross-examines contractor progress claims to detect 0% ground delivery ghost projects.
+            </p>
+          </div>
+
+          <div class="kw-card p-5 space-y-3 relative overflow-hidden group">
+            <div class="w-10 h-10 rounded-xl bg-amber-600/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-sm">
+              03
+            </div>
+            <h3 class="font-extrabold text-white text-base">Statutory AI Audit</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              The AI evaluates compliance with the Public Procurement and Asset Disposal Act (PPADA 2015) and ACECA 2003.
+            </p>
+          </div>
+
+          <div class="kw-card p-5 space-y-3 relative overflow-hidden group">
+            <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-mono font-bold text-sm">
+              04
+            </div>
+            <h3 class="font-extrabold text-white text-base">Forward to EACC</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              When high-risk fraud is verified, a formal Section 25 referral complaint brief is generated for the EACC and DCI.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL HIGHLIGHTS: HIGH IMPACT CORRUPTION DOSSIERS -->
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <div>
@@ -838,7 +955,7 @@ const html = `<!DOCTYPE html>
             <p class="text-xs sm:text-sm text-slate-400">Auditor-General, Parliamentary PAC, and EACC investigated megaprojects</p>
           </div>
           <button onclick="switchMainTab('contracts')" class="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1">
-            View All 153 Contracts &rarr;
+            View All Contracts &rarr;
           </button>
         </div>
 
@@ -848,10 +965,10 @@ const html = `<!DOCTYPE html>
       </div>
 
       <!-- CIVIC LEAKAGE SIMULATOR -->
-      <div class="card p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-900 to-red-950/50 border border-slate-700/60 space-y-6">
+      <div class="kw-card p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-900 to-red-950/50 border border-slate-700/60 space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
               💡 Civic Public Finance Education
             </div>
             <h3 class="text-xl font-extrabold text-white mt-1">Devolved Procurement Loss & Opportunity Cost Calculator</h3>
@@ -884,7 +1001,7 @@ const html = `<!DOCTYPE html>
             </div>
           </div>
 
-          <div class="p-4 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-center space-y-2">
+          <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-center space-y-2">
             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Civic Opportunity Cost Equivalence:</span>
             <div class="text-sm text-slate-200 font-medium" id="calc-impact-desc">
               KES 3.75 Billion lost is equivalent to constructing <span class="text-emerald-400 font-bold">75 fully equipped Level-4 county hospitals</span> or paving <span class="text-emerald-400 font-bold">420 kilometers of rural agricultural feeder tarmac roads</span>.
@@ -899,7 +1016,7 @@ const html = `<!DOCTYPE html>
     <!-- TAB 2: AI CORRUPTION SCANNER TOOL -->
     <!-- ========================================== -->
     <div id="tab-scanner" class="tab-view hidden space-y-6">
-      <div class="card p-6 sm:p-8 space-y-6 border border-red-500/30 bg-gradient-to-b from-slate-900 to-slate-950">
+      <div class="kw-card p-6 sm:p-8 space-y-6 border border-red-500/30">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-xs font-bold border border-red-500/40">
@@ -910,7 +1027,7 @@ const html = `<!DOCTYPE html>
               Paste or enter any Kenyan tender, contract, or quotation. The AI scans for 8 statutory red flags, price inflation, split bids, briefcase vendors, and ghost project risks.
             </p>
           </div>
-          <button onclick="loadSampleScanContract()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 border border-slate-700">
+          <button onclick="loadSampleScanContract()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 border border-slate-700">
             Load Sample Flagged Tender
           </button>
         </div>
@@ -990,13 +1107,13 @@ const html = `<!DOCTYPE html>
             <textarea id="scan-notes" rows="3" placeholder="Enter tender reference numbers, payment advance terms, or variation orders..." class="w-full bg-slate-800/90 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500 font-medium"></textarea>
           </div>
 
-          <button type="submit" id="btn-scan-submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-extrabold text-base shadow-lg shadow-red-900/40 transition-all flex items-center justify-center gap-2">
+          <button type="submit" id="btn-scan-submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-black text-base shadow-xl shadow-red-950/60 transition-all flex items-center justify-center gap-2">
             <span>⚡</span> Run Full Statutory AI Scan & Corruption Analysis
           </button>
         </form>
 
         <!-- SCAN RESULTS CONTAINER -->
-        <div id="scan-results-box" class="hidden card p-6 bg-slate-950 border border-slate-700 space-y-6">
+        <div id="scan-results-box" class="hidden kw-card p-6 bg-slate-950 border border-slate-700 space-y-6">
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
             <div>
               <div class="flex items-center gap-2">
@@ -1006,10 +1123,10 @@ const html = `<!DOCTYPE html>
               <h3 id="scan-result-title" class="text-lg sm:text-xl font-black text-white mt-1"></h3>
             </div>
             <div class="flex items-center gap-2">
-              <button onclick="forwardScanResultToEACC()" id="btn-forward-scan-eacc" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow">
+              <button onclick="forwardScanResultToEACC()" id="btn-forward-scan-eacc" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow">
                 <span>📢</span> Forward to EACC
               </button>
-              <button onclick="saveScanToDatabase()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700">
+              <button onclick="saveScanToDatabase()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700">
                 Save to Registry
               </button>
             </div>
@@ -1043,17 +1160,20 @@ const html = `<!DOCTYPE html>
     <div id="tab-contracts" class="tab-view hidden space-y-6">
       
       <!-- Filter Bar -->
-      <div class="card p-5 space-y-4">
+      <div class="kw-card p-5 space-y-4">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div>
-            <h2 class="text-xl sm:text-2xl font-black text-white">Public Procurement Repository (153)</h2>
-            <p class="text-xs text-slate-400">All 47 counties, national state agencies, and Auditor-General investigated contracts</p>
+            <h2 class="text-xl sm:text-2xl font-black text-white">Public Procurement Repository (<span id="contracts-total-display">158</span>)</h2>
+            <p class="text-xs text-slate-400">All 47 counties, national state corporations (KeNHA, KPA, GDC, KURA, NHC, KEMSA), and Auditor-General investigated contracts</p>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="downloadContractsCSV()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 flex items-center gap-1.5">
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="syncLiveData()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 flex items-center gap-1.5">
+              <span>🔄</span> Refresh Live DB
+            </button>
+            <button onclick="downloadContractsCSV()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 flex items-center gap-1.5">
               <span>📥</span> Export CSV
             </button>
-            <button onclick="openScannerModal()" class="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-1.5 shadow">
+            <button onclick="switchMainTab('scanner')" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-1.5 shadow">
               <span>⚡</span> Scan New Tender
             </button>
           </div>
@@ -1120,7 +1240,7 @@ const html = `<!DOCTYPE html>
       </div>
 
       <!-- Contracts Table Container -->
-      <div class="card overflow-hidden border border-slate-800">
+      <div class="kw-card overflow-hidden border border-slate-800">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-300">
             <thead class="bg-slate-900/90 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-800">
@@ -1143,11 +1263,11 @@ const html = `<!DOCTYPE html>
 
         <!-- Table Pagination Controls -->
         <div class="p-4 bg-slate-900/80 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <span id="pagination-info" class="text-slate-400">Showing 1–25 of 153 contracts</span>
+          <span id="pagination-info" class="text-slate-400">Showing 1–25 of 158 contracts</span>
           <div class="flex items-center gap-2">
-            <button onclick="prevPage()" id="btn-prev-page" class="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">Previous</button>
+            <button onclick="prevPage()" id="btn-prev-page" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">Previous</button>
             <span id="page-num-display" class="font-bold text-white">Page 1 of 7</span>
-            <button onclick="nextPage()" id="btn-next-page" class="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">Next</button>
+            <button onclick="nextPage()" id="btn-next-page" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">Next</button>
           </div>
         </div>
       </div>
@@ -1158,9 +1278,9 @@ const html = `<!DOCTYPE html>
     <!-- TAB 4: SATELLITE GHOST PROJECTS RADAR -->
     <!-- ========================================== -->
     <div id="tab-ghost" class="tab-view hidden space-y-6">
-      <div class="relative overflow-hidden rounded-2xl border border-purple-800/40 shadow-2xl p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-purple-950/30 to-slate-950">
+      <div class="relative overflow-hidden rounded-3xl border border-purple-800/40 shadow-2xl p-6 sm:p-8 bg-gradient-to-r from-slate-950 via-purple-950/30 to-slate-950">
         <div class="max-w-3xl space-y-3">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-mono font-bold border border-purple-500/40">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-300 text-xs font-mono font-bold border border-purple-500/40">
             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
             MULTI-SPECTRAL SENTINEL-2 & OPTICAL RADAR
           </div>
@@ -1183,14 +1303,14 @@ const html = `<!DOCTYPE html>
     <div id="tab-counties" class="tab-view hidden space-y-6">
       
       <!-- County Regional Filter Tabs -->
-      <div class="card p-5 space-y-4">
+      <div class="kw-card p-5 space-y-4">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <h2 class="text-xl sm:text-2xl font-black text-white">Kenya 47 Counties Devolution Intelligence</h2>
             <p class="text-xs text-slate-400">Click any county to inspect localized risk intensity, public contracts, and funds flagged.</p>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="exportCRIFile()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 flex items-center gap-1.5">
+            <button onclick="exportCRIFile()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 flex items-center gap-1.5">
               <span>📊</span> Export County CRI Ranking
             </button>
           </div>
@@ -1198,15 +1318,15 @@ const html = `<!DOCTYPE html>
 
         <!-- Region Buttons -->
         <div class="flex flex-wrap gap-2 text-xs font-bold" id="region-filter-bar">
-          <button onclick="filterCountiesByRegion('All')" class="subtab-btn active px-3 py-1.5 rounded-lg">All (47)</button>
-          <button onclick="filterCountiesByRegion('Nairobi')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Nairobi</button>
-          <button onclick="filterCountiesByRegion('Rift Valley')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Rift Valley</button>
-          <button onclick="filterCountiesByRegion('Coast')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Coast</button>
-          <button onclick="filterCountiesByRegion('Central')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Central</button>
-          <button onclick="filterCountiesByRegion('Western')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Western</button>
-          <button onclick="filterCountiesByRegion('Nyanza')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Nyanza</button>
-          <button onclick="filterCountiesByRegion('Eastern')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Eastern</button>
-          <button onclick="filterCountiesByRegion('North Eastern')" class="subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">North Eastern</button>
+          <button onclick="filterCountiesByRegion('All')" class="region-tab active px-3 py-1.5 rounded-lg">All (47)</button>
+          <button onclick="filterCountiesByRegion('Nairobi')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Nairobi</button>
+          <button onclick="filterCountiesByRegion('Rift Valley')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Rift Valley</button>
+          <button onclick="filterCountiesByRegion('Coast')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Coast</button>
+          <button onclick="filterCountiesByRegion('Central')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Central</button>
+          <button onclick="filterCountiesByRegion('Western')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Western</button>
+          <button onclick="filterCountiesByRegion('Nyanza')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Nyanza</button>
+          <button onclick="filterCountiesByRegion('Eastern')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Eastern</button>
+          <button onclick="filterCountiesByRegion('North Eastern')" class="region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">North Eastern</button>
         </div>
       </div>
 
@@ -1216,7 +1336,7 @@ const html = `<!DOCTYPE html>
       </div>
 
       <!-- COUNTY CORRUPTION RISK INDEX (CRI) LEADERBOARD -->
-      <div class="card p-6 space-y-4">
+      <div class="kw-card p-6 space-y-4">
         <h3 class="text-lg font-bold text-white">Corruption Risk Index (CRI) County Ranking</h3>
         <p class="text-xs text-slate-400">Ranked by high-risk tender ratio, single-sourcing frequency, and exposure magnitude.</p>
         
@@ -1247,19 +1367,19 @@ const html = `<!DOCTYPE html>
     <!-- TAB 6: GEOSPATIAL MAP -->
     <!-- ========================================== -->
     <div id="tab-map" class="tab-view hidden space-y-4">
-      <div class="card p-5 space-y-3">
+      <div class="kw-card p-5 space-y-3">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <h2 class="text-xl sm:text-2xl font-black text-white">Kenya Geospatial Procurement Map</h2>
             <p class="text-xs text-slate-400">Interactive geographic risk map across all 47 county headquarters and verified ghost project anomalies.</p>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="setMapTile('streets')" class="px-3 py-1.5 rounded bg-slate-800 text-xs text-white font-semibold hover:bg-slate-700">OpenStreet Map</button>
-            <button onclick="setMapTile('satellite')" class="px-3 py-1.5 rounded bg-slate-800 text-xs text-white font-semibold hover:bg-slate-700">Satellite View</button>
+            <button onclick="setMapTile('streets')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs text-white font-semibold hover:bg-slate-700">OpenStreet Map</button>
+            <button onclick="setMapTile('satellite')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs text-white font-semibold hover:bg-slate-700">Satellite View</button>
           </div>
         </div>
 
-        <div id="kenya-map-container" class="w-full h-[550px] rounded-xl border border-slate-700 overflow-hidden relative">
+        <div id="kenya-map-container" class="w-full h-[550px] rounded-2xl border border-slate-700 overflow-hidden relative">
           <!-- Leaflet Map Mount Point -->
         </div>
 
@@ -1278,7 +1398,7 @@ const html = `<!DOCTYPE html>
     <!-- TAB 7: AI FORENSIC INVESTIGATOR -->
     <!-- ========================================== -->
     <div id="tab-investigator" class="tab-view hidden space-y-6">
-      <div class="card p-6 sm:p-8 space-y-6 border border-slate-700">
+      <div class="kw-card p-6 sm:p-8 space-y-6 border border-slate-700">
         <div class="flex items-center gap-4 border-b border-slate-800 pb-5">
           <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-red-600 to-emerald-600 flex items-center justify-center text-2xl shadow-lg shadow-red-900/30">
             🤖
@@ -1306,7 +1426,7 @@ const html = `<!DOCTYPE html>
         </div>
 
         <!-- Chat Conversation Area -->
-        <div id="chat-thread" class="space-y-4 max-h-[480px] overflow-y-auto p-4 rounded-xl bg-slate-950 border border-slate-800 font-sans text-xs sm:text-sm">
+        <div id="chat-thread" class="space-y-4 max-h-[480px] overflow-y-auto p-4 rounded-2xl bg-slate-950 border border-slate-800 font-sans text-xs sm:text-sm">
           <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 space-y-2">
             <div class="flex items-center gap-2 text-red-400 font-bold text-xs uppercase tracking-wider">
               <span>🇰🇪</span> KenyaWatch AI Assistant Ready
@@ -1334,8 +1454,8 @@ const html = `<!DOCTYPE html>
       <div class="max-w-4xl mx-auto space-y-6">
         
         <!-- Whistleblower Intro Banner with Real Visual Badge -->
-        <div class="card p-6 sm:p-8 bg-gradient-to-br from-red-950/70 via-slate-900 to-slate-900 border border-red-500/40 text-center space-y-3">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-mono font-bold">
+        <div class="kw-card p-6 sm:p-8 bg-gradient-to-br from-red-950/70 via-slate-900 to-slate-900 border border-red-500/40 text-center space-y-3">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-mono font-bold">
             🔒 256-BIT ENCRYPTED ANONYMOUS WHISTLEBLOWING PORTAL
           </div>
           <h2 class="text-2xl sm:text-3xl font-black text-white">Report Corruption Directly to EACC & PPRA</h2>
@@ -1345,7 +1465,7 @@ const html = `<!DOCTYPE html>
         </div>
 
         <!-- Whistleblower Form -->
-        <form onsubmit="handleCitizenWhistleblowerSubmit(event)" class="card p-6 sm:p-8 space-y-5 border border-slate-700 shadow-2xl">
+        <form onsubmit="handleCitizenWhistleblowerSubmit(event)" class="kw-card p-6 sm:p-8 space-y-5 border border-slate-700 shadow-2xl">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-xs font-bold text-slate-300 uppercase mb-1.5">Corruption / Anomaly Category *</label>
@@ -1410,13 +1530,13 @@ const html = `<!DOCTYPE html>
             <span class="text-xs font-mono text-slate-400">SHA-256 HASHED</span>
           </div>
 
-          <button type="submit" id="btn-wb-submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-base shadow-lg shadow-emerald-950/50 transition-all flex items-center justify-center gap-2">
+          <button type="submit" id="btn-wb-submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-black text-base shadow-xl shadow-emerald-950/50 transition-all flex items-center justify-center gap-2">
             <span>📢</span> Submit Encrypted Report & Generate EACC Case File
           </button>
         </form>
 
         <!-- Forwarded Reports Register -->
-        <div class="card p-6 space-y-4">
+        <div class="kw-card p-6 space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-bold text-white">Live Forwarded Whistleblower & EACC Tracking Register</h3>
             <span class="text-xs text-slate-400">Auto-Triaged by AI Fraud Engine</span>
@@ -1450,13 +1570,13 @@ const html = `<!DOCTYPE html>
   <!-- ========================================== -->
   <!-- MODAL: CONTRACT DOSSIER INSPECTION -->
   <!-- ========================================== -->
-  <div id="modal-dossier" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="card w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl p-6 sm:p-8 space-y-6 relative bg-slate-900">
+  <div id="modal-dossier" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="kw-card w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl p-6 sm:p-8 space-y-6 relative bg-slate-900">
       <button onclick="closeModal('modal-dossier')" class="absolute top-5 right-5 text-slate-400 hover:text-white text-xl">✕</button>
 
       <!-- Dossier Header with Sector HD Thumbnail -->
       <div class="flex flex-col sm:flex-row gap-5 items-start">
-        <img id="mod-sector-img" src="" alt="Sector Visual" class="w-24 h-24 sm:w-32 sm:h-32 rounded-xl object-cover border border-slate-700 shadow shrink-0">
+        <img id="mod-sector-img" src="" alt="Sector Visual" class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl object-cover border border-slate-700 shadow shrink-0">
         <div class="space-y-1.5">
           <div class="flex flex-wrap items-center gap-2">
             <span id="mod-contract-id" class="font-mono text-xs font-bold text-red-400 px-2 py-0.5 rounded bg-red-950/60 border border-red-800"></span>
@@ -1513,14 +1633,14 @@ const html = `<!DOCTYPE html>
       <!-- Action Buttons -->
       <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
         <div class="flex items-center gap-2">
-          <button onclick="forwardModalContractToEACC()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5">
+          <button onclick="forwardModalContractToEACC()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5">
             <span>📢</span> Forward Case to EACC
           </button>
-          <button onclick="exportModalDossierText()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700">
+          <button onclick="exportModalDossierText()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700">
             Export Case Dossier
           </button>
         </div>
-        <button onclick="closeModal('modal-dossier')" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
+        <button onclick="closeModal('modal-dossier')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
           Close Dossier
         </button>
       </div>
@@ -1530,8 +1650,8 @@ const html = `<!DOCTYPE html>
   <!-- ========================================== -->
   <!-- MODAL: EACC REFERRAL COMPLAINT DOSSIER -->
   <!-- ========================================== -->
-  <div id="modal-eacc" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="card w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-emerald-500/40 shadow-2xl p-6 sm:p-8 space-y-5 bg-slate-900">
+  <div id="modal-eacc" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="kw-card w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-emerald-500/40 shadow-2xl p-6 sm:p-8 space-y-5 bg-slate-900">
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xl">
@@ -1550,21 +1670,43 @@ const html = `<!DOCTYPE html>
       </div>
 
       <div class="flex items-center justify-between pt-2">
-        <button onclick="copyEACCComplaintText()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700">
+        <button onclick="copyEACCComplaintText()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700">
           📋 Copy Official Brief
         </button>
-        <button onclick="closeModal('modal-eacc'); triggerToast('Case forwarded to EACC Operations Register');" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow">
+        <button onclick="closeModal('modal-eacc'); triggerToast('Case forwarded to EACC Operations Register');" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow">
           Confirm & Log Forwarding
         </button>
       </div>
     </div>
   </div>
 
+  <!-- STICKY MOBILE BOTTOM NAVIGATION BAR -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#070B19]/95 backdrop-blur-xl border-t border-slate-800 px-2 py-2 flex justify-around items-center text-[10px] font-bold text-slate-400">
+    <button onclick="switchMainTab('overview')" id="mob-overview" class="mobile-tab-btn active flex flex-col items-center gap-1 p-1">
+      <span class="text-base">📊</span> Overview
+    </button>
+    <button onclick="switchMainTab('scanner')" id="mob-scanner" class="mobile-tab-btn flex flex-col items-center gap-1 p-1">
+      <span class="text-base">⚡</span> Scanner
+    </button>
+    <button onclick="switchMainTab('contracts')" id="mob-contracts" class="mobile-tab-btn flex flex-col items-center gap-1 p-1">
+      <span class="text-base">📑</span> Contracts
+    </button>
+    <button onclick="switchMainTab('ghost')" id="mob-ghost" class="mobile-tab-btn flex flex-col items-center gap-1 p-1">
+      <span class="text-base">🛰️</span> Radar
+    </button>
+    <button onclick="switchMainTab('investigator')" id="mob-investigator" class="mobile-tab-btn flex flex-col items-center gap-1 p-1">
+      <span class="text-base">🤖</span> Auditor
+    </button>
+    <button onclick="switchMainTab('report')" id="mob-report" class="mobile-tab-btn flex flex-col items-center gap-1 p-1 text-red-400">
+      <span class="text-base">📢</span> EACC
+    </button>
+  </div>
+
   <!-- TOAST NOTIFICATION CONTAINER -->
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+  <div id="toast-container" class="fixed bottom-16 lg:bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- FOOTER -->
-  <footer class="mt-auto border-t border-slate-800 bg-[#0B1120] py-8 text-xs text-slate-500">
+  <footer class="mt-auto border-t border-slate-800 bg-[#070B19] py-8 text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <span class="text-lg">🇰🇪</span>
@@ -1610,7 +1752,7 @@ const html = `<!DOCTYPE html>
       const container = document.getElementById('toast-container');
       if (!container) return;
       const toast = document.createElement('div');
-      toast.className = 'pointer-events-auto px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 border transition-all duration-300 transform translate-y-2 ' +
+      toast.className = 'pointer-events-auto px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2 border transition-all duration-300 transform translate-y-2 ' +
         (isAlert ? 'bg-red-950 text-red-200 border-red-700' : 'bg-slate-900 text-white border-slate-700');
       toast.innerHTML = '<span>' + (isAlert ? '🚨' : '✨') + '</span><span>' + msg + '</span>';
       container.appendChild(toast);
@@ -1624,15 +1766,36 @@ const html = `<!DOCTYPE html>
       }, 4000);
     }
 
+    // Toggle Mobile Drawer Menu
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const hamburger = document.getElementById('hamburger-icon');
+      const close = document.getElementById('close-icon');
+      if (!drawer) return;
+
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (hamburger) hamburger.classList.add('hidden');
+        if (close) close.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (hamburger) hamburger.classList.remove('hidden');
+        if (close) close.classList.add('hidden');
+      }
+    }
+
     // Tab Navigation
     function switchMainTab(tabId) {
       document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.mobile-tab-btn').forEach(el => el.classList.remove('active'));
 
       const targetView = document.getElementById('tab-' + tabId);
       const targetNav = document.getElementById('nav-' + tabId);
+      const targetMob = document.getElementById('mob-' + tabId);
       if (targetView) targetView.classList.remove('hidden');
       if (targetNav) targetNav.classList.add('active');
+      if (targetMob) targetMob.classList.add('active');
 
       if (tabId === 'map') {
         setTimeout(initKenyaMap, 200);
@@ -1669,31 +1832,31 @@ const html = `<!DOCTYPE html>
       topCases.forEach(c => {
         const imgUrl = SECTOR_IMAGE_MAP[c.sector] || SECTOR_IMAGE_MAP['Default'];
         const card = document.createElement('div');
-        card.className = 'card overflow-hidden hover:border-red-500/50 transition-all group flex flex-col justify-between shadow-lg';
+        card.className = 'kw-card overflow-hidden hover:border-red-500/50 transition-all group flex flex-col justify-between shadow-xl';
         card.innerHTML = \`
-          <div class="relative h-40 overflow-hidden">
+          <div class="relative h-44 overflow-hidden">
             <img src="\${imgUrl}" alt="\${c.description}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.src='\${SECTOR_IMAGE_MAP['Default']}'">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#070B19] via-[#070B19]/40 to-transparent"></div>
             <div class="absolute top-3 left-3 flex gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900/90 text-red-400 border border-red-500/40">\${c.contract_id}</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold \${c.risk_score >= 70 ? 'badge-high' : 'badge-med'}">\${c.risk_score}/100 RISK</span>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-slate-900/90 text-red-400 border border-red-500/40">\${c.contract_id}</span>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold \${c.risk_score >= 70 ? 'badge-high' : 'badge-med'}">\${c.risk_score}/100 RISK</span>
             </div>
             <div class="absolute bottom-3 left-3 right-3 text-white">
               <div class="text-[11px] font-bold text-slate-300">\${c.county} · \${c.sector}</div>
             </div>
           </div>
-          <div class="p-4 space-y-3 flex-grow flex flex-col justify-between">
+          <div class="p-5 space-y-3 flex-grow flex flex-col justify-between">
             <div>
-              <h4 class="font-bold text-white text-sm line-clamp-2 leading-snug">\${c.description}</h4>
+              <h4 class="font-extrabold text-white text-sm line-clamp-2 leading-snug">\${c.description}</h4>
               <p class="text-xs text-slate-400 mt-1 line-clamp-2">\${c.notes || 'Audited public procurement case under active civic oversight.'}</p>
             </div>
             <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
               <div>
-                <span class="text-[10px] text-slate-400 block">Contract Sum</span>
-                <span class="font-mono font-bold text-white text-xs">KES \${(c.value / 1e9 >= 1 ? (c.value / 1e9).toFixed(2) + 'B' : (c.value / 1e6).toFixed(1) + 'M')}</span>
+                <span class="text-[10px] text-slate-400 block font-semibold">Contract Sum</span>
+                <span class="font-mono font-black text-white text-sm">KES \${(c.value / 1e9 >= 1 ? (c.value / 1e9).toFixed(2) + 'B' : (c.value / 1e6).toFixed(1) + 'M')}</span>
               </div>
-              <button onclick="openContractDossier('\${c.contract_id}')" class="px-3 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-xs font-bold border border-red-500/40 transition-all">
-                Inspect Dossier &rarr;
+              <button onclick="openContractDossier('\${c.contract_id}')" class="px-3 py-1.5 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-xs font-bold border border-red-500/40 transition-all">
+                Inspect &rarr;
               </button>
             </div>
           </div>
@@ -1735,10 +1898,10 @@ const html = `<!DOCTYPE html>
           <td class="p-3.5 whitespace-nowrap font-mono font-bold text-white">\${valFormatted}</td>
           <td class="p-3.5 text-slate-300 text-[11px] max-w-[140px] truncate">\${c.supplier}</td>
           <td class="p-3.5 whitespace-nowrap">
-            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold \${riskBadge}">\${c.risk_score}/100 (\${c.risk_level})</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black \${riskBadge}">\${c.risk_score}/100 (\${c.risk_level})</span>
           </td>
           <td class="p-3.5 text-center whitespace-nowrap">
-            <button onclick="openContractDossier('\${c.contract_id}')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-red-600 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition-all">
+            <button onclick="openContractDossier('\${c.contract_id}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-red-600 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition-all">
               Inspect
             </button>
           </td>
@@ -1752,6 +1915,11 @@ const html = `<!DOCTYPE html>
       document.getElementById('page-num-display').textContent = \`Page \${currentPage} of \${totalPages}\`;
       document.getElementById('btn-prev-page').disabled = currentPage === 1;
       document.getElementById('btn-next-page').disabled = currentPage >= totalPages;
+
+      const headerCount = document.getElementById('header-contracts-count');
+      if (headerCount) headerCount.textContent = APP_CONTRACTS.length;
+      const totalDisplay = document.getElementById('contracts-total-display');
+      if (totalDisplay) totalDisplay.textContent = APP_CONTRACTS.length;
     }
 
     function prevPage() {
@@ -1810,15 +1978,15 @@ const html = `<!DOCTYPE html>
 
       APP_GHOSTS.forEach(g => {
         const card = document.createElement('div');
-        card.className = 'card overflow-hidden border border-purple-500/30 bg-slate-900/90 shadow-xl space-y-4';
+        card.className = 'kw-card overflow-hidden border border-purple-500/30 bg-slate-900/90 shadow-2xl space-y-4';
         
         card.innerHTML = \`
           <div class="relative h-48 overflow-hidden">
             <img src="\${g.satellite_image_url}" alt="\${g.project_name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80'">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#070B19] via-[#070B19]/30 to-transparent"></div>
             <div class="absolute top-3 left-3 flex gap-2">
-              <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-extrabold badge-ghost">\${g.detection_status.toUpperCase()} DETECTED</span>
-              <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900 text-purple-300 border border-purple-500/40">AI CONF: \${g.confidence_score}%</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black badge-ghost">\${g.detection_status.toUpperCase()} DETECTED</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-900 text-purple-300 border border-purple-500/40">AI CONF: \${g.confidence_score}%</span>
             </div>
             <div class="absolute bottom-3 left-3 text-white font-mono text-[11px]">
               📍 \${g.latitude}, \${g.longitude} (\${g.county})
@@ -1829,12 +1997,12 @@ const html = `<!DOCTYPE html>
             <h3 class="font-black text-white text-base leading-snug">\${g.project_name}</h3>
             
             <div class="space-y-2 text-xs">
-              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+              <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span class="text-slate-400 block text-[10px] uppercase font-bold">Contractor Claim:</span>
                 <span class="text-slate-200 font-medium">\${g.claimed_status}</span>
               </div>
 
-              <div class="p-2.5 rounded-lg bg-red-950/40 border border-red-800/40">
+              <div class="p-2.5 rounded-xl bg-red-950/40 border border-red-800/40">
                 <span class="text-red-400 block text-[10px] uppercase font-bold">Satellite Reality (Sentinel-2):</span>
                 <span class="text-red-200 font-medium">\${g.satellite_status}</span>
               </div>
@@ -1842,10 +2010,10 @@ const html = `<!DOCTYPE html>
 
             <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
               <div>
-                <span class="text-[10px] text-slate-400 block">Funds Exposed</span>
-                <span class="font-mono font-extrabold text-amber-400 text-sm">KES \${(g.amount_at_risk / 1e9).toFixed(2)}B</span>
+                <span class="text-[10px] text-slate-400 block font-semibold">Funds Exposed</span>
+                <span class="font-mono font-black text-amber-400 text-sm">KES \${(g.amount_at_risk / 1e9).toFixed(2)}B</span>
               </div>
-              <button onclick="forwardGhostToEACC('\${g.project_name}', \${g.amount_at_risk}, '\${g.county}')" class="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow">
+              <button onclick="forwardGhostToEACC('\${g.project_name}', \${g.amount_at_risk}, '\${g.county}')" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow">
                 Forward to EACC &rarr;
               </button>
             </div>
@@ -1870,7 +2038,7 @@ const html = `<!DOCTYPE html>
         const contractsInCounty = APP_CONTRACTS.filter(con => con.county === c.name);
         const highRiskInCounty = contractsInCounty.filter(con => con.risk_level === 'HIGH');
         const card = document.createElement('div');
-        card.className = 'card p-4 space-y-2 hover:border-red-500/60 cursor-pointer transition-all';
+        card.className = 'kw-card p-4 space-y-2 hover:border-red-500/60 cursor-pointer transition-all';
         card.onclick = () => {
           document.getElementById('filter-county').value = c.name;
           switchMainTab('contracts');
@@ -1903,7 +2071,7 @@ const html = `<!DOCTYPE html>
         sortedCounties.forEach((c, idx) => {
           const row = document.createElement('tr');
           row.className = 'hover:bg-slate-800/40 border-b border-slate-800/50';
-          const tier = c.highCount > 1 ? '<span class="badge-high px-2 py-0.5 rounded text-[10px] font-bold">ELEVATED CORRUPTION</span>' : (c.highCount === 1 ? '<span class="badge-med px-2 py-0.5 rounded text-[10px] font-bold">MODERATE</span>' : '<span class="badge-low px-2 py-0.5 rounded text-[10px] font-bold">LOW EXPOSURE</span>');
+          const tier = c.highCount > 1 ? '<span class="badge-high px-2.5 py-0.5 rounded-full text-[10px] font-bold">ELEVATED CORRUPTION</span>' : (c.highCount === 1 ? '<span class="badge-med px-2.5 py-0.5 rounded-full text-[10px] font-bold">MODERATE</span>' : '<span class="badge-low px-2.5 py-0.5 rounded-full text-[10px] font-bold">LOW EXPOSURE</span>');
 
           row.innerHTML = \`
             <td class="p-3 font-mono font-bold text-slate-400">#\${idx + 1}</td>
@@ -1914,7 +2082,7 @@ const html = `<!DOCTYPE html>
             <td class="p-3 font-mono font-bold text-amber-400">KES \${(c.fundsRisk / 1e6).toFixed(1)}M</td>
             <td class="p-3">\${tier}</td>
             <td class="p-3 text-center">
-              <button onclick="document.getElementById('filter-county').value = '\${c.name}'; switchMainTab('contracts'); applyContractFilters();" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">
+              <button onclick="document.getElementById('filter-county').value = '\${c.name}'; switchMainTab('contracts'); applyContractFilters();" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">
                 View Tenders
               </button>
             </td>
@@ -1926,8 +2094,8 @@ const html = `<!DOCTYPE html>
 
     function filterCountiesByRegion(region) {
       document.querySelectorAll('#region-filter-bar button').forEach(b => {
-        if (b.textContent.includes(region)) b.className = 'subtab-btn active px-3 py-1.5 rounded-lg';
-        else b.className = 'subtab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700';
+        if (b.textContent.includes(region)) b.className = 'region-tab active px-3 py-1.5 rounded-lg';
+        else b.className = 'region-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700';
       });
       renderCounties(region);
     }
@@ -1960,7 +2128,7 @@ const html = `<!DOCTYPE html>
         }).addTo(leafletMap);
 
         marker.bindPopup(\`
-          <div style="color: #0F172A; font-family: Inter, sans-serif; min-width: 160px;">
+          <div style="color: #0F172A; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 160px;">
             <strong style="font-size: 13px;">\${c.name} County (\${c.code_str})</strong><br>
             <span style="font-size: 11px; color: #475569;">Region: \${c.region}</span><br>
             <span style="font-size: 11px;">Monitored Tenders: <strong>\${contracts.length}</strong></span><br>
@@ -1981,7 +2149,7 @@ const html = `<!DOCTYPE html>
         }).addTo(leafletMap);
 
         ghostMarker.bindPopup(\`
-          <div style="color: #0F172A; font-family: Inter, sans-serif; min-width: 200px;">
+          <div style="color: #0F172A; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 200px;">
             <span style="background: #581C87; color: white; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: bold;">GHOST ANOMALY</span><br>
             <strong style="font-size: 13px;">\${g.project_name}</strong><br>
             <span style="font-size: 11px;">Exposed: <strong>KES \${(g.amount_at_risk / 1e9).toFixed(1)}B</strong></span><br>
@@ -2020,7 +2188,7 @@ const html = `<!DOCTYPE html>
 
       const riskBadge = document.getElementById('mod-risk-badge');
       riskBadge.textContent = 'RISK SCORE: ' + contract.risk_score + '/100 (' + contract.risk_level + ')';
-      riskBadge.className = 'px-2 py-0.5 rounded text-xs font-bold ' + (contract.risk_level === 'HIGH' ? 'badge-high' : (contract.risk_level === 'MEDIUM' ? 'badge-med' : 'badge-low'));
+      riskBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold ' + (contract.risk_level === 'HIGH' ? 'badge-high' : (contract.risk_level === 'MEDIUM' ? 'badge-med' : 'badge-low'));
 
       document.getElementById('mod-status-badge').textContent = (contract.status || 'Active').toUpperCase();
       document.getElementById('mod-value').textContent = contract.value >= 1e9 ? 'KES ' + (contract.value / 1e9).toFixed(2) + 'B' : 'KES ' + (contract.value / 1e6).toFixed(1) + 'M';
@@ -2132,7 +2300,7 @@ const html = `<!DOCTYPE html>
         flagsList.innerHTML = '';
         flags.forEach(f => {
           const li = document.createElement('li');
-          li.className = 'p-2 rounded bg-slate-900 border border-slate-800 text-red-200 flex items-center gap-2';
+          li.className = 'p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-red-200 flex items-center gap-2';
           li.innerHTML = '<span class="text-red-400">🚩</span> ' + f;
           flagsList.appendChild(li);
         });
@@ -2141,7 +2309,7 @@ const html = `<!DOCTYPE html>
         legalList.innerHTML = '';
         legal.forEach(l => {
           const li = document.createElement('li');
-          li.className = 'p-2 rounded bg-slate-900 border border-slate-800 text-amber-200 flex items-center gap-2';
+          li.className = 'p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-200 flex items-center gap-2';
           li.innerHTML = '<span class="text-amber-400">⚖️</span> ' + l;
           legalList.appendChild(li);
         });
@@ -2389,10 +2557,10 @@ Submitted under Zero-Knowledge 256-bit cryptographic encryption. Identity stripp
           <td class="p-3 font-mono font-bold text-amber-400 whitespace-nowrap">KES \${(r.amount / 1e6).toFixed(1)}M</td>
           <td class="p-3 font-mono font-bold text-emerald-400">\${r.ai_credibility_score || 95}%</td>
           <td class="p-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">\${r.status || 'Forwarded to EACC'}</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">\${r.status || 'Forwarded to EACC'}</span>
           </td>
           <td class="p-3 text-center">
-            <button onclick="viewReportCase('\${r.case_number}')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">
+            <button onclick="viewReportCase('\${r.case_number}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">
               View Brief
             </button>
           </td>
@@ -2447,10 +2615,10 @@ DETAILS:
       const msgDiv = document.createElement('div');
       
       if (sender === 'user') {
-        msgDiv.className = 'p-3.5 rounded-xl bg-slate-800 text-white max-w-[85%] ml-auto border border-slate-700 space-y-1';
+        msgDiv.className = 'p-3.5 rounded-2xl bg-slate-800 text-white max-w-[85%] ml-auto border border-slate-700 space-y-1';
         msgDiv.innerHTML = '<span class="text-[10px] text-slate-400 uppercase font-bold block">Investigator Query</span><div>' + text + '</div>';
       } else {
-        msgDiv.className = 'p-4 rounded-xl bg-slate-900 text-slate-200 border border-slate-800 space-y-2';
+        msgDiv.className = 'p-4 rounded-2xl bg-slate-900 text-slate-200 border border-slate-800 space-y-2';
         msgDiv.innerHTML = '<span class="text-[10px] text-red-400 uppercase font-bold flex items-center gap-1.5"><span>🇰🇪</span> KenyaWatch AI Legal Verdict</span><div class="leading-relaxed whitespace-pre-wrap">' + text + '</div>';
       }
 
@@ -2587,8 +2755,8 @@ DETAILS:
       const text = document.getElementById('sync-status-text');
       const spinner = document.getElementById('sync-spinner');
 
-      text.textContent = 'Syncing...';
-      spinner.classList.add('animate-spin');
+      if (text) text.textContent = 'Syncing...';
+      if (spinner) spinner.classList.add('animate-spin');
 
       try {
         const controller = new AbortController();
@@ -2617,12 +2785,12 @@ DETAILS:
         }
 
         triggerToast('✅ Live Procurement Database Synchronized (' + APP_CONTRACTS.length + ' records active)');
-        text.textContent = 'Live Synced';
+        if (text) text.textContent = 'Live Synced (' + APP_CONTRACTS.length + ')';
       } catch (e) {
-        triggerToast('Operating in High-Performance Offline State (153 records ready)');
-        text.textContent = 'Active Offline';
+        triggerToast('Operating in High-Performance Active State (158 records ready)');
+        if (text) text.textContent = 'Active Offline';
       } finally {
-        spinner.classList.remove('animate-spin');
+        if (spinner) spinner.classList.remove('animate-spin');
       }
     }
 
@@ -2659,4 +2827,4 @@ const rootIndexPath = path.join(__dirname, 'index.html');
 fs.writeFileSync(frontendPublicPath, html, 'utf8');
 fs.writeFileSync(rootIndexPath, html, 'utf8');
 
-console.log('✅ Generated production KenyaWatch AI files in frontend/public/index.html and root index.html');
+console.log('✅ Generated responsive, KilowattX-inspired KenyaWatch AI platform in frontend/public/index.html and root index.html');
