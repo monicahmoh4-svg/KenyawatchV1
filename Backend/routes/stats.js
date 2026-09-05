@@ -1,11 +1,10 @@
-// GET /api/stats/by-county — per-county contract + risk breakdown, used by the
-// County Explorer on the landing page. Returns every county (even those with
-// zero contracts) so the map/heatmap is always complete across all 47.
+const router = require('express').Router();
+const { pool } = require('../db/index');
+const { COUNTIES } = require('../data/counties');
+
+// GET /api/stats/by-county — Returns every county (even those with zero contracts)
 router.get('/by-county', async (_req, res) => {
   try {
-    const { COUNTIES } = require('../data/counties');
-    
-    // First get actual stats from database
     const { rows } = await pool.query(`
       SELECT county,
              COUNT(*)::INT AS contracts,
@@ -17,25 +16,20 @@ router.get('/by-county', async (_req, res) => {
       GROUP BY county
     `);
     
-    // Create a map of actual data
     const dataMap = {};
-    rows.forEach(row => {
-      dataMap[row.county] = row;
-    });
+    rows.forEach(row => { dataMap[row.county] = row; });
     
-    // Return ALL 47 counties, filling in zeros for those without data
+    // Guarantee all 47 counties are present
     const completeData = COUNTIES.map(county => {
-      const actual = dataMap[county.name] || {
+      return dataMap[county.name] || {
         county: county.name,
         contracts: 0,
         high_risk: 0,
         medium_risk: 0,
         funds_at_risk: 0
       };
-      return actual;
     });
     
-    // Sort by high_risk DESC, then contracts DESC
     completeData.sort((a, b) => {
       if (b.high_risk !== a.high_risk) return b.high_risk - a.high_risk;
       return b.contracts - a.contracts;
@@ -48,7 +42,7 @@ router.get('/by-county', async (_req, res) => {
   }
 });
 
-// GET /api/stats — powers the Overview dashboard and the Admin panel.
+// GET /api/stats — Powers the Overview dashboard
 router.get('/', async (_req, res) => {
   try {
     const [totals, flagged, ghosts, reports30d, fundsAtRisk, byCounty, byDataType] = await Promise.all([
@@ -78,3 +72,5 @@ router.get('/', async (_req, res) => {
     res.status(500).json({ success: false, error: e.message });
   }
 });
+
+module.exports = router;
