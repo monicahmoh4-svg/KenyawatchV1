@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
     const enriched = (rows || []).map(r => ({
       ...r,
       satellite_image_url: r.satellite_image_url || getSatelliteUrl(r.latitude, r.longitude),
-      satellite_compare_url: r.satellite_compare_url || 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=1200&q=80',
+      satellite_compare_url: r.satellite_compare_url || 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
     }));
     res.json({ success: true, data: enriched });
   } catch (e) {
