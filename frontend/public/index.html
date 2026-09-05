@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="KenyaWatch AI — an independent civic-tech platform exposing corruption in Kenyan public procurement. AI-scored contracts across all 47 counties, satellite ghost-project verification, and anonymous citizen reporting.">
-<meta name="theme-color" content="#0b1220">
+<meta name="description" content="KenyaWatch AI — An independent civic-tech platform exposing corruption in Kenyan public procurement through AI-powered analysis, satellite verification, and anonymous citizen reporting across all 47 counties.">
+<meta name="theme-color" content="#0066FF">
 <title>KenyaWatch AI — Procurement Intelligence Platform</title>
 
 <meta name="kenyawatch-api-base" content="https://kenyawatch-ai-backend.onrender.com">
@@ -15,381 +15,1157 @@
     theme: { 
       extend: { 
         colors: { 
-          navy: { 900:'#0b1220', 800:'#111a2e', 700:'#182541', 600:'#1f2f4d' },
-          brand: { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 500:'#059669', 600:'#047857', 700:'#065f46' }
+          primary: { 
+            50: '#EFF6FF', 
+            100: '#DBEAFE', 
+            200: '#BFDBFE', 
+            300: '#93C5FD', 
+            400: '#60A5FA', 
+            500: '#3B82F6', 
+            600: '#2563EB', 
+            700: '#1D4ED8', 
+            800: '#1E40AF', 
+            900: '#1E3A8A',
+            950: '#172554'
+          },
+          accent: {
+            50: '#F0F9FF',
+            100: '#E0F2FE',
+            500: '#0EA5E9',
+            600: '#0284C7'
+          }
         },
-        fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Space Grotesk', 'Inter', 'sans-serif'] }
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          display: ['Space Grotesk', 'Inter', 'sans-serif'],
+        },
+        animation: {
+          'fade-in': 'fadeIn 0.6s ease-out forwards',
+          'slide-up': 'slideUp 0.6s ease-out forwards',
+          'float': 'float 6s ease-in-out infinite',
+          'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        }
       }
     }
   }
 </script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <style>
-  :root { --brand:#059669; --brand-dark:#047857; --navy:#0b1220; }
-  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
-  .tab-content { display: none; animation: slideIn .4s cubic-bezier(0.4, 0, 0.2, 1); }
-  .tab-content.active { display: block; }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(16px);} to { opacity: 1; transform: translateY(0);} }
-  .nav-link.active { background-color: rgba(5,150,105,.12); color: #047857; font-weight: 600; }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #f1f5f9; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-  .flag-strip { background: linear-gradient(90deg,#000 0 25%,#fff 25% 27%,#BB0000 27% 52%,#fff 52% 54%,#006600 54% 100%); height: 4px; }
-  .kw-badge-doc { color:#7c2d12; background:#ffedd5; border-color:#fed7aa; }
-  .kw-badge-ref { color:#334155; background:#f1f5f9; border-color:#e2e8f0; }
-  .kw-badge-live { color:#075985; background:#e0f2fe; border-color:#bae6fd; }
-  .kw-badge-scan { color:#581c87; background:#f3e8ff; border-color:#e9d5ff; }
-  .skeleton { background: linear-gradient(90deg,#eef1f4 25%,#e4e8ec 37%,#eef1f4 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
-  @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0 50%} }
-  .hero-bg { 
-    background: linear-gradient(135deg, rgba(11,18,32,0.92) 0%, rgba(17,26,46,0.88) 50%, rgba(6,95,70,0.85) 100%),
-                url('https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?q=80&w=2000&auto=format&fit=crop');
-    background-size: cover; background-position: center; background-attachment: fixed;
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { 
+    font-family: 'Inter', sans-serif; 
+    background: #FAFBFC; 
+    color: #0F172A;
+    overflow-x: hidden;
   }
-  .hero-grid { background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px); background-size: 44px 44px; }
-  .float-slow { animation: floaty 7s ease-in-out infinite; }
-  .float-slower { animation: floaty 10s ease-in-out infinite; }
-  @keyframes floaty { 0%,100%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-12px) rotate(1deg);} }
-  .pulse-ring { animation: pulseRing 2.6s ease-out infinite; }
-  @keyframes pulseRing { 0%{ box-shadow: 0 0 0 0 rgba(5,150,105,.5);} 70%{ box-shadow: 0 0 0 16px rgba(5,150,105,0);} 100%{ box-shadow: 0 0 0 0 rgba(5,150,105,0);} }
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-  .reveal.in { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: .1s; } .reveal-delay-2 { transition-delay: .2s; } .reveal-delay-3 { transition-delay: .3s; }
-  .grad-text { background: linear-gradient(90deg,#34d399,#a7f3d0,#6ee7b7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .card-hover { transition: all .3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -12px rgba(2,44,34,.25); }
-  .county-chip { transition: all .2s ease; cursor: pointer; }
-  .county-chip:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
-  .heatmap-0{background:#f8fafc;color:#64748b;border-color:#e2e8f0} 
-  .heatmap-1{background:#d1fae5;color:#065f46;border-color:#a7f3d0}
-  .heatmap-2{background:#a7f3d0;color:#065f46;border-color:#6ee7b7} 
-  .heatmap-3{background:#6ee7b7;color:#064e3b;border-color:#34d399}
-  .heatmap-4{background:#fde68a;color:#78350f;border-color:#fcd34d} 
-  .heatmap-5{background:#fca5a5;color:#7f1d1d;border-color:#f87171}
-  .marquee { display:flex; gap:3rem; animation: marquee 35s linear infinite; width:max-content; }
-  @keyframes marquee { from{ transform: translateX(0);} to{ transform: translateX(-50%);} }
-  .stat-card { position: relative; overflow: hidden; }
-  .stat-card::after { content:''; position:absolute; inset:0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.6) 50%, transparent 70%); transform: translateX(-120%); animation: sheen 6s ease-in-out infinite; }
-  @keyframes sheen { 0%,60%{ transform: translateX(-120%);} 100%{ transform: translateX(120%);} }
-  .modal-backdrop { background: rgba(11,18,32,.7); backdrop-filter: blur(8px); }
-  .toast { animation: toastIn .3s ease-out; }
-  @keyframes toastIn { from{ opacity:0; transform: translateY(12px) scale(0.95);} to{ opacity:1; transform: translateY(0) scale(1);} }
+  
+  /* Smooth scrolling */
+  html { scroll-behavior: smooth; }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #F1F5F9; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3B82F6, #1D4ED8); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #2563EB, #1E40AF); }
+  
+  /* Tab transitions */
+  .tab-content { display: none; animation: fadeInUp 0.5s ease-out; }
+  .tab-content.active { display: block; }
+  @keyframes fadeInUp { 
+    from { opacity: 0; transform: translateY(20px); } 
+    to { opacity: 1; transform: translateY(0); } 
+  }
+  
+  /* Navigation */
+  .nav-link { position: relative; transition: all 0.3s ease; }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #3B82F6, #0EA5E9);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+  .nav-link.active { color: #2563EB; font-weight: 600; }
+  
+  /* Hero gradient mesh */
+  .hero-gradient {
+    background: 
+      radial-gradient(at 20% 30%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 20%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, rgba(37, 99, 235, 0.1) 0px, transparent 50%),
+      linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+  }
+  
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 50%, #3B82F6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.25);
+  }
+  
+  /* Button shine effect */
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+  .btn-shine:hover::before { left: 100%; }
+  
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(2deg); }
+  }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-float-delayed { animation: float 6s ease-in-out infinite; animation-delay: 2s; }
+  
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* County heatmap */
+  .county-chip {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .county-chip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+  }
+  .county-chip:hover::before { left: 100%; }
+  .county-chip:hover { transform: translateY(-4px) scale(1.02); }
+  
+  .heatmap-0 { background: linear-gradient(135deg, #F8FAFC, #F1F5F9); color: #64748B; border: 1px solid #E2E8F0; }
+  .heatmap-1 { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); color: #1E40AF; border: 1px solid #93C5FD; }
+  .heatmap-2 { background: linear-gradient(135deg, #BFDBFE, #93C5FD); color: #1E40AF; border: 1px solid #60A5FA; }
+  .heatmap-3 { background: linear-gradient(135deg, #93C5FD, #60A5FA); color: #1E3A8A; border: 1px solid #3B82F6; }
+  .heatmap-4 { background: linear-gradient(135deg, #FDE68A, #FCD34D); color: #78350F; border: 1px solid #F59E0B; }
+  .heatmap-5 { background: linear-gradient(135deg, #FCA5A5, #F87171); color: #7F1D1D; border: 1px solid #EF4444; }
+  
+  /* Data type badges */
+  .badge-doc { background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #92400E; border: 1px solid #FCD34D; }
+  .badge-ref { background: linear-gradient(135deg, #F1F5F9, #E2E8F0); color: #475569; border: 1px solid #CBD5E1; }
+  .badge-live { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); color: #1E40AF; border: 1px solid #93C5FD; }
+  .badge-scan { background: linear-gradient(135deg, #E0E7FF, #C7D2FE); color: #3730A3; border: 1px solid #A5B4FC; }
+  
+  /* Marquee */
+  .marquee-container { overflow: hidden; }
+  .marquee {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 40s linear infinite;
+    width: max-content;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  
+  /* Stat card shine */
+  .stat-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.8) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: shine 8s ease-in-out infinite;
+  }
+  @keyframes shine {
+    0%, 60% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* Modal */
+  .modal-backdrop {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Toast */
+  .toast {
+    animation: toastSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes toastSlide {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  /* Image overlay */
+  .img-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+  .img-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.8) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .img-overlay:hover::after { opacity: 1; }
+  
+  /* Pulse ring */
+  .pulse-ring {
+    animation: pulseRing 2s ease-out infinite;
+  }
+  @keyframes pulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+  }
+  
+  /* Loading skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+  @keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  /* Gradient border */
+  .gradient-border {
+    position: relative;
+    background: white;
+    border-radius: 1rem;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, #3B82F6, #0EA5E9, #3B82F6);
+    border-radius: 1rem;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .gradient-border:hover::before { opacity: 1; }
+  
+  /* Hero image parallax */
+  .parallax-bg {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-<div class="flag-strip"></div>
-
-<header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('v-overview')">
-        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow-lg pulse-ring">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+<!-- Navigation -->
+<header class="fixed top-0 left-0 right-0 z-50 glass shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="showTab('v-overview')">
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-primary-600 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-primary-500/50 transition-all duration-300 pulse-ring">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
         </div>
         <div>
-          <h1 class="text-lg font-black tracking-tight text-slate-900 leading-none font-display">KenyaWatch <span class="text-brand-600">AI</span></h1>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold -mt-0.5">Procurement Intelligence · 47 Counties</p>
+          <h1 class="text-xl font-black tracking-tight text-slate-900 leading-none font-display">
+            Kenya<span class="gradient-text">Watch</span> <span class="text-primary-600">AI</span>
+          </h1>
+          <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-semibold mt-0.5">Procurement Intelligence</p>
         </div>
       </div>
-      <nav class="hidden lg:flex items-center gap-1">
-        <button onclick="showTab('v-overview')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-overview">Overview</button>
-        <button onclick="showTab('v-procurement')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-procurement">Contracts</button>
-        <button onclick="showTab('v-ghost')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-ghost">Ghost Projects</button>
-        <button onclick="showTab('v-report')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-report">Report</button>
-        <button onclick="showTab('v-ai')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-ai">AI Investigator</button>
-        <button onclick="showTab('v-sync')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-sync">Sync Data</button>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-2">
+        <button onclick="showTab('v-overview')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" data-tab="v-overview">Overview</button>
+        <button onclick="showTab('v-procurement')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" data-tab="v-procurement">Contracts</button>
+        <button onclick="showTab('v-ghost')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" data-tab="v-ghost">Ghost Projects</button>
+        <button onclick="showTab('v-report')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" data-tab="v-report">Report</button>
+        <button onclick="showTab('v-ai')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" data-tab="v-ai">AI Investigator</button>
+        <button onclick="showTab('v-sync')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:text-primary-600 transition-colors" data-tab="v-sync">Sync Data</button>
+        <button onclick="showTab('v-report')" class="ml-4 px-5 py-2.5 bg-gradient-to-r from-primary-600 to-accent-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-primary-500/30 transition-all btn-shine">
+          Report Fraud
+        </button>
       </nav>
+
+      <!-- Mobile Menu Button -->
       <button class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
-        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
       </button>
     </div>
-    <div id="mobile-nav" class="hidden lg:hidden pb-4 flex flex-col gap-1 border-t border-slate-100 pt-3">
-      <button onclick="showTab('v-overview'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-overview">Overview</button>
-      <button onclick="showTab('v-procurement'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-procurement">Contracts</button>
-      <button onclick="showTab('v-ghost'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-ghost">Ghost Projects</button>
-      <button onclick="showTab('v-report'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-report">Report</button>
-      <button onclick="showTab('v-ai'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-ai">AI Investigator</button>
-      <button onclick="showTab('v-sync'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-sync">Sync Data</button>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-nav" class="hidden lg:hidden pb-6 flex flex-col gap-2 border-t border-slate-200 pt-4">
+      <button onclick="showTab('v-overview'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-600 transition-all" data-tab="v-overview">🏠 Overview</button>
+      <button onclick="showTab('v-procurement'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-600 transition-all" data-tab="v-procurement">📋 Contracts</button>
+      <button onclick="showTab('v-ghost'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-600 transition-all" data-tab="v-ghost">👻 Ghost Projects</button>
+      <button onclick="showTab('v-report'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-600 transition-all" data-tab="v-report">🚨 Report</button>
+      <button onclick="showTab('v-ai'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-600 transition-all" data-tab="v-ai">🤖 AI Investigator</button>
+      <button onclick="showTab('v-sync'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-600 transition-all" data-tab="v-sync">🔄 Sync Data</button>
     </div>
   </div>
 </header>
 
-<div id="conn-banner" class="hidden bg-red-600 text-white text-sm text-center py-2.5 px-4 font-medium shadow-md">
-  ⚠️ Can't reach the backend API. Check the API URL configured in this page's <code class="bg-red-700 px-1.5 py-0.5 rounded text-xs">&lt;meta name="kenyawatch-api-base"&gt;</code> tag.
+<!-- Connection Banner -->
+<div id="conn-banner" class="hidden fixed top-20 left-0 right-0 z-40 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm text-center py-3 px-4 font-medium shadow-lg">
+  ⚠️ Can't reach the backend API. Please check your connection.
 </div>
 
-<main class="flex-grow max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+<main class="flex-grow pt-20">
 
-  <!-- OVERVIEW / LANDING -->
-  <div id="v-overview" class="tab-content active space-y-16">
-    <section class="hero-bg relative overflow-hidden rounded-3xl text-white shadow-2xl border border-white/10">
-      <div class="hero-grid absolute inset-0 opacity-40"></div>
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl float-slow"></div>
-      <div class="absolute bottom-0 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl float-slower"></div>
-      <div class="relative z-10 px-6 py-16 md:px-14 md:py-24 lg:py-28">
-        <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 mb-6 backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 🇰🇪 Real-Time Intelligence · All 47 Counties
-          </div>
-          <h2 class="font-display text-4xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">Exposing Corruption.<br><span class="grad-text">Protecting Public Funds.</span></h2>
-          <p class="text-slate-200 text-lg md:text-xl mb-10 leading-relaxed max-w-xl">AI-scored analysis of government procurement, satellite verification of "ghost" projects, and anonymous citizen reporting.</p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <button onclick="showTab('v-procurement')" class="px-8 py-4 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-1 flex items-center justify-center gap-2">Explore Contracts</button>
-            <button onclick="showTab('v-report')" class="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 hover:-translate-y-1 flex items-center justify-center gap-2">Report Fraud</button>
-            <button onclick="scrollToCounty()" class="px-8 py-4 bg-transparent text-emerald-200 font-bold rounded-xl hover:bg-white/5 transition-all border border-emerald-400/40 hover:-translate-y-1 flex items-center justify-center gap-2">County Explorer</button>
-          </div>
-        </div>
+  <!-- ==================== OVERVIEW / LANDING ==================== -->
+  <div id="v-overview" class="tab-content active">
+    
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[90vh] flex items-center hero-gradient overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1611348524140-53c9a25263d6?q=80&w=2000&auto=format&fit=crop" 
+             alt="Nairobi Skyline" 
+             class="w-full h-full object-cover opacity-20">
+        <div class="absolute inset-0 bg-gradient-to-br from-white via-white/90 to-primary-50/50"></div>
       </div>
-      <div class="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2 flex-col gap-4 z-10">
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-5 float-slow shadow-xl">
-          <div class="text-3xl font-black text-emerald-300" id="hero-flagged">--</div>
-          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold mt-1">High-Risk Contracts</div>
-        </div>
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-5 float-slower shadow-xl">
-          <div class="text-3xl font-black text-red-300" id="hero-ghost">--</div>
-          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold mt-1">Ghost Projects</div>
-        </div>
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-5 float-slow shadow-xl">
-          <div class="text-3xl font-black text-amber-300" id="hero-funds">KES --</div>
-          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold mt-1">Funds at Risk</div>
+      
+      <!-- Floating Elements -->
+      <div class="absolute top-32 right-20 w-72 h-72 bg-primary-400/20 rounded-full blur-3xl animate-float"></div>
+      <div class="absolute bottom-20 left-10 w-96 h-96 bg-accent-400/15 rounded-full blur-3xl animate-float-delayed"></div>
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <!-- Left Content -->
+          <div class="space-y-8">
+            <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-primary-200 rounded-full px-5 py-2 text-sm font-semibold text-primary-700 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+              🇰🇪 Real-Time Intelligence · All 47 Counties
+            </div>
+            
+            <h2 class="font-display text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] text-slate-900">
+              Exposing Corruption.<br>
+              <span class="gradient-text">Protecting Public Funds.</span>
+            </h2>
+            
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
+              AI-powered analysis of government procurement, satellite verification of "ghost" projects, and anonymous citizen reporting — searchable across all 47 Kenyan counties.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button onclick="showTab('v-procurement')" class="group px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold rounded-2xl hover:shadow-2xl hover:shadow-primary-500/40 transition-all btn-shine flex items-center justify-center gap-3">
+                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                Explore Contracts
+              </button>
+              <button onclick="showTab('v-report')" class="px-8 py-4 bg-white text-primary-700 font-bold rounded-2xl border-2 border-primary-200 hover:border-primary-400 hover:shadow-xl transition-all flex items-center justify-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                Report Fraud
+              </button>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="flex items-center gap-6 pt-4">
+              <div class="flex items-center gap-2">
+                <div class="flex -space-x-2">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 border-2 border-white"></div>
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 border-2 border-white"></div>
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 border-2 border-white"></div>
+                </div>
+                <span class="text-sm text-slate-600 font-medium">Trusted by 10,000+ citizens</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Content - Stats Cards -->
+          <div class="hidden lg:grid grid-cols-2 gap-6">
+            <div class="glass rounded-3xl p-8 shadow-2xl card-hover animate-float">
+              <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <span class="text-3xl">🚩</span>
+              </div>
+              <div class="text-4xl font-black text-red-600 mb-2" id="hero-flagged">--</div>
+              <div class="text-sm text-slate-600 font-semibold">High-Risk Contracts</div>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 shadow-2xl card-hover animate-float-delayed">
+              <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <span class="text-3xl">👻</span>
+              </div>
+              <div class="text-4xl font-black text-purple-600 mb-2" id="hero-ghost">--</div>
+              <div class="text-sm text-slate-600 font-semibold">Ghost Projects</div>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 shadow-2xl card-hover animate-float col-span-2">
+              <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <span class="text-3xl">💰</span>
+              </div>
+              <div class="text-4xl font-black text-primary-600 mb-2" id="hero-funds">KES --</div>
+              <div class="text-sm text-slate-600 font-semibold">Public Funds at Risk</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="reveal">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm py-4 overflow-hidden">
+    <!-- TRUST MARQUEE -->
+    <section class="bg-white border-y border-slate-200 py-6">
+      <div class="marquee-container">
         <div class="marquee text-sm font-semibold text-slate-600">
-          <span class="flex items-center gap-2">🇰🇪 All 47 Counties Covered</span><span class="text-emerald-500">●</span>
-          <span class="flex items-center gap-2">🛰️ Satellite Ghost-Project Verification</span><span class="text-emerald-500">●</span>
-          <span class="flex items-center gap-2">🤖 AI Risk Scoring Engine</span><span class="text-emerald-500">●</span>
-          <span class="flex items-center gap-2">🔒 100% Anonymous Reporting</span><span class="text-emerald-500">●</span>
-          <span class="flex items-center gap-2">🇰🇪 All 47 Counties Covered</span><span class="text-emerald-500">●</span>
-          <span class="flex items-center gap-2">🛰️ Satellite Ghost-Project Verification</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🇰🇪 All 47 Counties Covered</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🛰️ Satellite Verification</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🤖 AI Risk Scoring</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🔒 100% Anonymous</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">📊 OCDS Compliant</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🇰🇪 All 47 Counties Covered</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🛰️ Satellite Verification</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🤖 AI Risk Scoring</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">🔒 100% Anonymous</span>
+          <span class="text-primary-500">●</span>
+          <span class="flex items-center gap-2">📊 OCDS Compliant</span>
+          <span class="text-primary-500">●</span>
         </div>
       </div>
     </section>
 
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal">
-        <div class="flex items-center justify-between mb-3"><span class="text-2xl">🚩</span><span class="text-[10px] font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full border border-red-100">HIGH RISK</span></div>
-        <div class="text-3xl md:text-4xl font-black text-red-600 mb-1" id="dash-flagged">--</div>
-        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
-      </div>
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-1">
-        <div class="flex items-center justify-between mb-3"><span class="text-2xl">👻</span><span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">DETECTED</span></div>
-        <div class="text-3xl md:text-4xl font-black text-purple-600 mb-1" id="dash-ghost">--</div>
-        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Ghost Projects</div>
-      </div>
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-2">
-        <div class="flex items-center justify-between mb-3"><span class="text-2xl">📢</span><span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">30 DAYS</span></div>
-        <div class="text-3xl md:text-4xl font-black text-blue-600 mb-1" id="dash-reports">--</div>
-        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Citizen Reports</div>
-      </div>
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-3">
-        <div class="flex items-center justify-between mb-3"><span class="text-2xl">💰</span><span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">AT RISK</span></div>
-        <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-1" id="dash-funds">KES --</div>
-        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Funds at Risk</div>
+    <!-- STATS SECTION -->
+    <section class="py-20 bg-gradient-to-b from-white to-primary-50/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="stat-card bg-white p-8 rounded-3xl border border-slate-200 shadow-xl card-hover reveal">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-2xl">🚩</span>
+              </div>
+              <span class="text-xs font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full border border-red-100">HIGH RISK</span>
+            </div>
+            <div class="text-4xl font-black text-red-600 mb-2" id="dash-flagged">--</div>
+            <div class="text-sm text-slate-600 font-semibold">High-Risk Contracts</div>
+          </div>
+          
+          <div class="stat-card bg-white p-8 rounded-3xl border border-slate-200 shadow-xl card-hover reveal">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-2xl">👻</span>
+              </div>
+              <span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-100">DETECTED</span>
+            </div>
+            <div class="text-4xl font-black text-purple-600 mb-2" id="dash-ghost">--</div>
+            <div class="text-sm text-slate-600 font-semibold">Ghost Projects</div>
+          </div>
+          
+          <div class="stat-card bg-white p-8 rounded-3xl border border-slate-200 shadow-xl card-hover reveal">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-2xl">📢</span>
+              </div>
+              <span class="text-xs font-bold text-primary-600 bg-primary-50 px-3 py-1 rounded-full border border-primary-100">30 DAYS</span>
+            </div>
+            <div class="text-4xl font-black text-primary-600 mb-2" id="dash-reports">--</div>
+            <div class="text-sm text-slate-600 font-semibold">Citizen Reports</div>
+          </div>
+          
+          <div class="stat-card bg-white p-8 rounded-3xl border border-slate-200 shadow-xl card-hover reveal">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-2xl">💰</span>
+              </div>
+              <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">AT RISK</span>
+            </div>
+            <div class="text-4xl font-black text-emerald-600 mb-2" id="dash-funds">KES --</div>
+            <div class="text-sm text-slate-600 font-semibold">Funds at Risk</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="county-explorer" class="reveal">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+    <!-- HOW IT WORKS -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+          <span class="inline-block px-4 py-2 bg-primary-50 text-primary-700 text-sm font-bold rounded-full mb-4">HOW IT WORKS</span>
+          <h3 class="font-display text-4xl md:text-5xl font-black text-slate-900 mb-4">From Raw Contracts to Citizen Power</h3>
+          <p class="text-lg text-slate-600">A transparent, four-step pipeline turns public procurement data into actionable intelligence.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="relative reveal">
+            <div class="bg-gradient-to-br from-primary-50 to-white p-8 rounded-3xl border border-primary-100 card-hover h-full">
+              <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg">📥</div>
+              <div class="absolute top-6 right-6 text-6xl font-black text-primary-100">01</div>
+              <h4 class="font-bold text-slate-900 mb-3 text-xl">1. Ingest</h4>
+              <p class="text-slate-600 leading-relaxed">Pull machine-readable records from the Open Contracting Data Standard (OCDS) feed, plus documented public-interest cases.</p>
+            </div>
+          </div>
+          
+          <div class="relative reveal">
+            <div class="bg-gradient-to-br from-accent-50 to-white p-8 rounded-3xl border border-accent-100 card-hover h-full">
+              <div class="w-16 h-16 bg-gradient-to-br from-accent-500 to-accent-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg">🧠</div>
+              <div class="absolute top-6 right-6 text-6xl font-black text-accent-100">02</div>
+              <h4 class="font-bold text-slate-900 mb-3 text-xl">2. Score</h4>
+              <p class="text-slate-600 leading-relaxed">A transparent rules engine scores every contract for risk — bid type, value, supplier timing, and vague scope.</p>
+            </div>
+          </div>
+          
+          <div class="relative reveal">
+            <div class="bg-gradient-to-br from-purple-50 to-white p-8 rounded-3xl border border-purple-100 card-hover h-full">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg">🛰️</div>
+              <div class="absolute top-6 right-6 text-6xl font-black text-purple-100">03</div>
+              <h4 class="font-bold text-slate-900 mb-3 text-xl">3. Verify</h4>
+              <p class="text-slate-600 leading-relaxed">Cross-check claimed project completion against live satellite imagery to expose "ghost" projects.</p>
+            </div>
+          </div>
+          
+          <div class="relative reveal">
+            <div class="bg-gradient-to-br from-red-50 to-white p-8 rounded-3xl border border-red-100 card-hover h-full">
+              <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg">🔔</div>
+              <div class="absolute top-6 right-6 text-6xl font-black text-red-100">04</div>
+              <h4 class="font-bold text-slate-900 mb-3 text-xl">4. Act</h4>
+              <p class="text-slate-600 leading-relaxed">Citizens report anonymously, AI triages credibility, and cases route to EACC, PPRA, or the DPP.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUNTY EXPLORER -->
+    <section id="county-explorer" class="py-20 bg-gradient-to-b from-primary-50/30 to-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 reveal">
+          <div>
+            <span class="inline-block px-4 py-2 bg-primary-50 text-primary-700 text-sm font-bold rounded-full mb-4">COUNTY EXPLORER</span>
+            <h3 class="font-display text-4xl md:text-5xl font-black text-slate-900 mb-3">Risk Across All 47 Counties</h3>
+            <p class="text-lg text-slate-600">Click any county to explore its contracts. Color intensity indicates high-risk contract density.</p>
+          </div>
+          <div class="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl border border-slate-200 shadow-sm">
+            <span class="text-sm text-slate-600 font-medium">Risk Level:</span>
+            <div class="flex gap-1.5">
+              <span class="w-6 h-6 rounded heatmap-0 border"></span>
+              <span class="w-6 h-6 rounded heatmap-1 border"></span>
+              <span class="w-6 h-6 rounded heatmap-2 border"></span>
+              <span class="w-6 h-6 rounded heatmap-3 border"></span>
+              <span class="w-6 h-6 rounded heatmap-4 border"></span>
+              <span class="w-6 h-6 rounded heatmap-5 border"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div class="col-span-full text-center py-16 text-slate-400 bg-white rounded-3xl border border-slate-200 border-dashed">
+            <div class="animate-pulse flex flex-col items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-slate-200"></div>
+              <span class="text-lg font-medium">Loading all 47 counties...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHARTS SECTION -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-gradient-to-br from-white to-primary-50/30 p-8 rounded-3xl border border-slate-200 shadow-xl reveal">
+            <h3 class="font-bold text-slate-900 mb-2 text-2xl">Risk Level Distribution</h3>
+            <p class="text-slate-600 mb-6">Share of contracts by AI risk score band.</p>
+            <div class="h-80 flex items-center justify-center"><canvas id="risk-chart"></canvas></div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-white to-primary-50/30 p-8 rounded-3xl border border-slate-200 shadow-xl reveal">
+            <h3 class="font-bold text-slate-900 mb-2 text-2xl">Top Flagged Contracts</h3>
+            <p class="text-slate-600 mb-6">Highest-risk contracts in the database.</p>
+            <div id="top-flagged" class="space-y-3">
+              <div class="animate-pulse space-y-3">
+                <div class="h-20 bg-slate-100 rounded-2xl"></div>
+                <div class="h-20 bg-slate-100 rounded-2xl"></div>
+                <div class="h-20 bg-slate-100 rounded-2xl"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <div class="bg-gradient-to-br from-white to-primary-50/30 p-8 rounded-3xl border border-slate-200 shadow-xl reveal">
+            <h3 class="font-bold text-slate-900 mb-2 text-2xl">Contracts by Sector</h3>
+            <p class="text-slate-600 mb-6">Where procurement activity concentrates.</p>
+            <div class="h-80 flex items-center justify-center"><canvas id="sector-chart"></canvas></div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-white to-primary-50/30 p-8 rounded-3xl border border-slate-200 shadow-xl reveal">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="font-bold text-slate-900 text-2xl">Latest Ghost Projects</h3>
+                <p class="text-slate-600">Satellite-verified anomalies.</p>
+              </div>
+              <button onclick="showTab('v-ghost')" class="text-sm font-bold text-primary-600 hover:text-primary-700 flex items-center gap-1 hover:gap-2 transition-all">
+                View all <span>→</span>
+              </button>
+            </div>
+            <div id="ghost-preview" class="space-y-3">
+              <div class="animate-pulse space-y-3">
+                <div class="h-24 bg-slate-100 rounded-2xl"></div>
+                <div class="h-24 bg-slate-100 rounded-2xl"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORT CTA -->
+    <section class="py-20 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 relative overflow-hidden">
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1577563908411-5077b6dc3ff6?q=80&w=2000&auto=format&fit=crop" 
+             alt="Kenya Landscape" 
+             class="w-full h-full object-cover opacity-10">
+      </div>
+      <div class="absolute top-0 right-0 w-96 h-96 bg-accent-500/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary-400/20 rounded-full blur-3xl"></div>
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 reveal">
+          <div class="text-white max-w-2xl">
+            <h3 class="font-display text-4xl md:text-5xl font-black mb-4">Seen Something? Speak Up.</h3>
+            <p class="text-primary-100 text-lg leading-relaxed">Your identity is fully protected. Reports are anonymous by default and AI-triage routes them to the right authority.</p>
+          </div>
+          <button onclick="showTab('v-report')" class="px-10 py-5 bg-white text-primary-700 font-black rounded-2xl hover:shadow-2xl hover:shadow-white/20 transition-all btn-shine whitespace-nowrap flex items-center gap-3 text-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            Submit a Report
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA HONESTY -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-br from-amber-50 to-white p-10 rounded-3xl border border-amber-200 shadow-xl reveal">
+          <div class="flex items-start gap-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 shadow-lg">🛡️</div>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-3 text-2xl">Data Honesty, Always</h3>
+              <p class="text-slate-700 leading-relaxed mb-4">Every contract carries a <b>data type</b> indicating its source and reliability:</p>
+              <div class="flex flex-wrap gap-3">
+                <span class="px-4 py-2 rounded-full text-sm font-bold border badge-doc">📄 Documented</span>
+                <span class="px-4 py-2 rounded-full text-sm font-bold border badge-live">🔄 Live Sync</span>
+                <span class="px-4 py-2 rounded-full text-sm font-bold border badge-ref">📊 Reference</span>
+                <span class="px-4 py-2 rounded-full text-sm font-bold border badge-scan">🤖 Manual Scan</span>
+              </div>
+              <p class="text-slate-600 mt-4">Kenya's PPIP is progressively adopting full OCDS compliance. We're transparent about the gap — see the <button onclick="showTab('v-about')" class="text-primary-600 font-semibold hover:underline">Sources</button> tab.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== PROCUREMENT ==================== -->
+  <div id="v-procurement" class="tab-content">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
         <div>
-          <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-2">County Explorer</p>
-          <h3 class="font-display text-3xl md:text-4xl font-black text-slate-900">Risk across all 47 counties</h3>
-          <p class="text-slate-500 mt-2 text-lg">Click any county to jump straight into its contracts.</p>
+          <h2 class="text-4xl font-bold text-slate-900 font-display">Procurement Database</h2>
+          <p class="text-slate-600 text-lg mt-2">Browse, filter, and analyze government contracts across all 47 counties.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="exportCSV()" class="px-6 py-3 bg-white border-2 border-slate-200 hover:border-primary-400 text-slate-700 font-semibold rounded-xl transition-all text-sm flex items-center gap-2 shadow-sm hover:shadow-md">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            Export CSV
+          </button>
+          <button onclick="openModal('scan-modal')" class="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl transition-all text-sm flex items-center gap-2 shadow-lg hover:shadow-primary-500/30 btn-shine">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Scan New Contract
+          </button>
         </div>
       </div>
-      <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        <div class="col-span-full text-center py-12 text-slate-400 bg-white rounded-xl border border-slate-200 border-dashed">
-          <div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading counties...</span></div>
-        </div>
-      </div>
-    </section>
-  </div>
 
-  <!-- PROCUREMENT -->
-  <div id="v-procurement" class="tab-content space-y-6">
-    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-      <div>
-        <h2 class="text-2xl font-bold text-slate-900 font-display">Procurement Database</h2>
-        <p class="text-slate-500 text-sm mt-1">Browse, filter, and sync government contracts across all 47 counties.</p>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <button onclick="exportCSV()" class="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">Export CSV</button>
-        <button onclick="openModal('scan-modal')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm hover:shadow-md">Scan New Contract</button>
-      </div>
-    </div>
-
-    <!-- RESTORED SORTING FEATURES -->
-    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap gap-4 items-center">
-      <div class="relative flex-grow lg:flex-grow-0 lg:w-80">
-        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        <input type="text" id="search-contracts" placeholder="Search ID, supplier, entity..." class="bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 w-full focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm transition-all" onkeyup="debounceLoadC()">
-      </div>
-      <div class="flex-grow lg:flex-grow-0"><select id="filter-county" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer hover:border-brand-300 transition-colors" onchange="loadC()"><option value="All">All Counties (47)</option></select></div>
-      <div class="flex-grow lg:flex-grow-0"><select id="filter-sector" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer hover:border-brand-300 transition-colors" onchange="loadC()"><option value="All">All Sectors</option></select></div>
-      <div class="flex-grow lg:flex-grow-0"><select id="filter-year" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer hover:border-brand-300 transition-colors" onchange="loadC()"><option value="All">All Years</option></select></div>
-      <div class="flex-grow lg:flex-grow-0"><select id="filter-risk" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer hover:border-brand-300 transition-colors" onchange="loadC()"><option value="All">All Risk Levels</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></div>
-      <div class="flex-grow lg:flex-grow-0"><select id="filter-datatype" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer hover:border-brand-300 transition-colors" onchange="loadC()"><option value="All">All Data Types</option><option value="documented">Documented</option><option value="live_sync">Live Sync</option><option value="reference">Reference</option><option value="manual_scan">Manually Scanned</option></select></div>
-      <button onclick="resetFilters()" class="ml-auto px-5 py-3 text-xs font-bold text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all flex items-center gap-2">Reset</button>
-    </div>
-
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-            <tr><th class="p-4 font-semibold">Contract ID</th><th class="p-4 font-semibold">Description</th><th class="p-4 font-semibold">County</th><th class="p-4 font-semibold">Sector</th><th class="p-4 font-semibold">Year</th><th class="p-4 font-semibold">Value (KES)</th><th class="p-4 font-semibold">Supplier</th><th class="p-4 font-semibold">Risk</th><th class="p-4 font-semibold">Source</th></tr>
-          </thead>
-          <tbody id="contracts-table" class="divide-y divide-slate-100">
-            <tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading database...</span></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="p-4 border-t border-slate-200 flex flex-wrap justify-between items-center gap-3 bg-slate-50">
-        <span class="text-xs text-slate-500 font-medium" id="pagination-info">Showing 0 results</span>
-        <div class="flex items-center gap-2">
-          <button onclick="prevPage()" id="btn-prev" class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">← Previous</button>
-          <span class="text-xs text-slate-600 font-medium px-2" id="page-indicator">Page 1</span>
-          <button onclick="nextPage()" id="btn-next" class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Next →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- GHOST PROJECTS -->
-  <div id="v-ghost" class="tab-content space-y-6">
-    <div><h2 class="text-2xl font-bold text-slate-900 font-display">Ghost Projects</h2><p class="text-slate-500 text-sm mt-1">Satellite-verified anomalies where claimed completion doesn't match reality.</p></div>
-    <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200 border-dashed">Loading ghost projects...</div>
-    </div>
-  </div>
-
-  <!-- REPORT -->
-  <div id="v-report" class="tab-content space-y-6">
-    <div class="max-w-2xl mx-auto">
-      <div class="text-center mb-8"><h2 class="text-2xl font-bold text-slate-900 font-display">Submit an Anonymous Report</h2><p class="text-slate-500 text-sm mt-2">Your identity is protected. All reports are encrypted and AI-triaged.</p></div>
-      <form onsubmit="submitReport(event)" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Report Type *</label>
-            <select name="type" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
-              <option value="bid_rigging">Bid Rigging / Collusion</option><option value="ghost_project">Ghost Project</option><option value="inflated_pricing">Inflated Pricing</option><option value="bribery">Bribery / Kickbacks</option><option value="other">Other</option>
+      <!-- FILTERS -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xl mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="lg:col-span-3">
+            <div class="relative">
+              <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <input type="text" id="search-contracts" placeholder="Search by ID, supplier, entity, or description..." class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-12 pr-4 py-3.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition-all" onkeyup="debounceLoadC()">
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">County</label>
+            <select id="filter-county" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 cursor-pointer hover:border-primary-300 transition-all" onchange="loadC()">
+              <option value="All">All Counties (47)</option>
             </select>
           </div>
-          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County *</label>
-            <select name="county" id="report-county" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"><option value="">— Select County —</option></select>
+          
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Sector</label>
+            <select id="filter-sector" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 cursor-pointer hover:border-primary-300 transition-all" onchange="loadC()">
+              <option value="All">All Sectors</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Year</label>
+            <select id="filter-year" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 cursor-pointer hover:border-primary-300 transition-all" onchange="loadC()">
+              <option value="All">All Years</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Risk Level</label>
+            <select id="filter-risk" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 cursor-pointer hover:border-primary-300 transition-all" onchange="loadC()">
+              <option value="All">All Risk Levels</option>
+              <option>HIGH</option>
+              <option>MEDIUM</option>
+              <option>LOW</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Data Type</label>
+            <select id="filter-datatype" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 cursor-pointer hover:border-primary-300 transition-all" onchange="loadC()">
+              <option value="All">All Data Types</option>
+              <option value="documented">Documented</option>
+              <option value="live_sync">Live Sync</option>
+              <option value="reference">Reference</option>
+              <option value="manual_scan">Manually Scanned</option>
+            </select>
+          </div>
+          
+          <div class="flex items-end">
+            <button onclick="resetFilters()" class="w-full px-6 py-3 text-sm font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Reset Filters
+            </button>
           </div>
         </div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Sector</label>
-          <select name="sector" id="report-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"><option value="">— Select Sector (Optional) —</option></select>
+      </div>
+
+      <!-- DATA TABLE -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-gradient-to-r from-primary-50 to-accent-50 text-slate-700 uppercase text-xs tracking-wider border-b-2 border-primary-100">
+              <tr>
+                <th class="p-5 font-bold">Contract ID</th>
+                <th class="p-5 font-bold">Description</th>
+                <th class="p-5 font-bold">County</th>
+                <th class="p-5 font-bold">Sector</th>
+                <th class="p-5 font-bold">Year</th>
+                <th class="p-5 font-bold">Value (KES)</th>
+                <th class="p-5 font-bold">Supplier</th>
+                <th class="p-5 font-bold">Risk</th>
+                <th class="p-5 font-bold">Source</th>
+              </tr>
+            </thead>
+            <tbody id="contracts-table" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="9" class="p-16 text-center text-slate-500">
+                  <div class="animate-pulse flex flex-col items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-200"></div>
+                    <span class="text-lg font-medium">Loading database...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Description of Incident *</label>
-          <textarea name="description" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500" placeholder="Provide as much detail as possible..."></textarea>
+        
+        <!-- PAGINATION -->
+        <div class="p-6 border-t-2 border-slate-100 flex flex-wrap justify-between items-center gap-4 bg-gradient-to-r from-slate-50 to-white">
+          <span class="text-sm text-slate-600 font-semibold" id="pagination-info">Showing 0 results</span>
+          <div class="flex items-center gap-3">
+            <button onclick="prevPage()" id="btn-prev" class="px-5 py-2.5 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold hover:border-primary-400 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all">← Previous</button>
+            <span class="text-sm text-slate-700 font-bold px-3" id="page-indicator">Page 1</span>
+            <button onclick="nextPage()" id="btn-next" class="px-5 py-2.5 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold hover:border-primary-400 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all">Next →</button>
+          </div>
         </div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Estimated Amount (KES)</label>
-          <input type="number" name="amount" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500" placeholder="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GHOST PROJECTS ==================== -->
+  <div id="v-ghost" class="tab-content">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="mb-10">
+        <h2 class="text-4xl font-bold text-slate-900 font-display">Ghost Projects</h2>
+        <p class="text-slate-600 text-lg mt-2">Satellite-verified anomalies where claimed completion doesn't match reality.</p>
+      </div>
+      <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="col-span-full text-center py-16 text-slate-500 bg-white rounded-3xl border border-slate-200 border-dashed">
+          <div class="animate-pulse flex flex-col items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-slate-200"></div>
+            <span class="text-lg font-medium">Loading ghost projects...</span>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== REPORT ==================== -->
+  <div id="v-report" class="tab-content">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="text-center mb-10">
+        <h2 class="text-4xl font-bold text-slate-900 font-display">Submit an Anonymous Report</h2>
+        <p class="text-slate-600 text-lg mt-3">Your identity is protected. All reports are encrypted and AI-triaged.</p>
+      </div>
+      
+      <form onsubmit="submitReport(event)" class="bg-white p-10 rounded-3xl border border-slate-200 shadow-2xl space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Report Type *</label>
+            <select name="type" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+              <option value="bid_rigging">Bid Rigging / Collusion</option>
+              <option value="ghost_project">Ghost Project</option>
+              <option value="inflated_pricing">Inflated Pricing</option>
+              <option value="bribery">Bribery / Kickbacks</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">County *</label>
+            <select name="county" id="report-county" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+              <option value="">— Select County —</option>
+            </select>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Sector</label>
+          <select name="sector" id="report-sector" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+            <option value="">— Select Sector (Optional) —</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Description of Incident *</label>
+          <textarea name="description" required rows="5" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all resize-none" placeholder="Provide as much detail as possible (dates, names, amounts, locations)..."></textarea>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Estimated Amount (KES)</label>
+          <input type="number" name="amount" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all" placeholder="0">
+        </div>
+        
         <div class="flex items-center gap-3 pt-2">
-          <input type="checkbox" name="anonymous" id="anon-check" checked class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
-          <label for="anon-check" class="text-sm text-slate-700 font-medium">Keep my report 100% anonymous (Recommended)</label>
+          <input type="checkbox" name="anonymous" id="anon-check" checked class="w-5 h-5 text-primary-600 rounded border-slate-300 focus:ring-primary-500">
+          <label for="anon-check" class="text-sm text-slate-700 font-semibold">Keep my report 100% anonymous (Recommended)</label>
         </div>
-        <button type="submit" class="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">Submit Securely</button>
+        
+        <button type="submit" class="w-full py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl transition-all shadow-xl hover:shadow-red-500/30 btn-shine flex items-center justify-center gap-3 text-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+          Submit Securely
+        </button>
       </form>
     </div>
   </div>
 
-  <!-- AI INVESTIGATOR -->
-  <div id="v-ai" class="tab-content space-y-6">
-    <div class="max-w-4xl mx-auto h-[calc(100vh-200px)] flex flex-col">
-      <div class="text-center mb-6"><h2 class="text-2xl font-bold text-slate-900 font-display">AI Investigator</h2><p class="text-slate-500 text-sm mt-1">Ask questions about high-risk contracts, ghost projects, or specific counties.</p></div>
-      <div class="flex-grow bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
-        <div id="chat-history" class="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/50">
-          <div class="flex gap-3"><div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm"><p class="text-sm text-slate-800 leading-relaxed">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>
+  <!-- ==================== AI INVESTIGATOR ==================== -->
+  <div id="v-ai" class="tab-content">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="text-center mb-8">
+        <h2 class="text-4xl font-bold text-slate-900 font-display">AI Investigator</h2>
+        <p class="text-slate-600 text-lg mt-2">Ask questions about high-risk contracts, ghost projects, or specific counties.</p>
+      </div>
+      
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col" style="height: calc(100vh - 280px);">
+        <div id="chat-history" class="flex-grow overflow-y-auto p-8 space-y-6 bg-gradient-to-b from-primary-50/30 to-white">
+          <div class="flex gap-4">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-lg">AI</div>
+            <div class="bg-white p-5 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm">
+              <p class="text-slate-800 leading-relaxed">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p>
+            </div>
+          </div>
         </div>
-        <form onsubmit="sendAI(event)" class="p-4 bg-white border-t border-slate-200 flex gap-3">
-          <button type="button" onclick="clearChat()" class="px-4 py-2.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg text-sm font-semibold transition-colors" title="Clear chat">Clear</button>
-          <input type="text" id="ai-input" placeholder="e.g., 'Show me high-risk contracts in Nairobi'" class="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all">
-          <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-colors shadow-sm flex items-center gap-2">Send</button>
+        
+        <form onsubmit="sendAI(event)" class="p-6 bg-white border-t-2 border-slate-100 flex gap-3">
+          <button type="button" onclick="clearChat()" class="px-5 py-3 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all" title="Clear chat">Clear</button>
+          <input type="text" id="ai-input" placeholder="e.g., 'Show me high-risk contracts in Nairobi'" class="flex-grow bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+          <button type="submit" class="px-7 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-primary-500/30 btn-shine flex items-center gap-2">
+            Send
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+          </button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- SYNC DATA -->
-  <div id="v-sync" class="tab-content space-y-6">
-    <div class="max-w-2xl mx-auto">
-      <h2 class="text-2xl font-bold text-slate-900 font-display mb-2">Sync Live OCDS Data</h2>
-      <p class="text-slate-500 text-sm mb-8">Pull live official procurement records from the Open Contracting Data Standard feed.</p>
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-        <div class="grid grid-cols-2 gap-5">
-          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Year</label>
-            <select id="sync-year" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option></select>
+  <!-- ==================== SYNC DATA ==================== -->
+  <div id="v-sync" class="tab-content">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h2 class="text-4xl font-bold text-slate-900 font-display mb-3">Sync Live OCDS Data</h2>
+      <p class="text-slate-600 text-lg mb-10">Pull live official procurement records from the Open Contracting Data Standard feed.</p>
+      
+      <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-2xl space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Year</label>
+            <select id="sync-year" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+            </select>
           </div>
-          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County (Optional)</label>
-            <select id="sync-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"><option value="All">All Counties</option></select>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">County (Optional)</label>
+            <select id="sync-county" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+              <option value="All">All Counties</option>
+            </select>
           </div>
         </div>
-        <button onclick="startSync()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">Start Background Sync</button>
-        <div id="sync-status" class="pt-4 border-t border-slate-100"><span class="text-slate-500 text-sm">No sync history yet.</span></div>
+        
+        <button onclick="startSync()" class="w-full py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/30 btn-shine flex items-center justify-center gap-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+          Start Background Sync
+        </button>
+        
+        <div id="sync-status" class="pt-6 border-t-2 border-slate-100">
+          <span class="text-slate-500 text-sm">No sync history yet.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SOURCES ==================== -->
+  <div id="v-about" class="tab-content">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h2 class="text-4xl font-bold text-slate-900 font-display mb-8">Data Sources & Methodology</h2>
+      <div class="space-y-6">
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+          <div class="flex items-start gap-5">
+            <span class="px-4 py-2 rounded-full text-sm font-bold border badge-doc flex-shrink-0">📄 DOCUMENTED</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-2 text-xl">Documented Cases</h3>
+              <p class="text-slate-600 leading-relaxed">Real, source-cited procurement cases gathered from public records, investigative journalism, and official audit reports. These carry the highest confidence.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+          <div class="flex items-start gap-5">
+            <span class="px-4 py-2 rounded-full text-sm font-bold border badge-live flex-shrink-0">🔄 LIVE SYNC</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-2 text-xl">Live OCDS Sync</h3>
+              <p class="text-slate-600 leading-relaxed">Machine-readable records pulled directly from the Open Contracting Data Standard (OCDS) feed where available. Kenya's PPIP is progressively adopting this standard.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+          <div class="flex items-start gap-5">
+            <span class="px-4 py-2 rounded-full text-sm font-bold border badge-ref flex-shrink-0">📊 REFERENCE</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-2 text-xl">Reference Baseline</h3>
+              <p class="text-slate-600 leading-relaxed">Representative sample contracts generated to ensure every county and sector has a baseline for UI testing and risk-scoring demonstration. Clearly labeled as such.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+          <div class="flex items-start gap-5">
+            <span class="px-4 py-2 rounded-full text-sm font-bold border badge-scan flex-shrink-0">🤖 MANUAL SCAN</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-2 text-xl">Manual AI Scans</h3>
+              <p class="text-slate-600 leading-relaxed">Contracts manually submitted by users or investigators through the "Scan New Contract" feature, processed through our risk engine in real-time.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
 </main>
 
-<footer class="bg-navy-900 text-slate-400 py-8 mt-12 border-t border-slate-800">
-  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-    <p>© 2026 KenyaWatch AI. Independent civic-tech platform.</p>
-    <div class="flex gap-6"><a href="#" class="hover:text-white transition-colors">Privacy</a><a href="#" class="hover:text-white transition-colors">Terms</a><a href="#" class="hover:text-white transition-colors">API Docs</a></div>
+<!-- Footer -->
+<footer class="bg-gradient-to-br from-slate-900 via-slate-800 to-primary-900 text-slate-400 py-12 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-white font-bold">KenyaWatch AI</p>
+          <p class="text-xs">Independent civic-tech platform</p>
+        </div>
+      </div>
+      <p class="text-sm">© 2026 KenyaWatch AI. All rights reserved.</p>
+      <div class="flex gap-6 text-sm">
+        <a href="#" class="hover:text-white transition-colors">Privacy</a>
+        <a href="#" class="hover:text-white transition-colors">Terms</a>
+        <a href="#" class="hover:text-white transition-colors">API Docs</a>
+      </div>
+    </div>
   </div>
 </footer>
 
-<!-- MODALS -->
+<!-- ==================== MODALS ==================== -->
+
+<!-- Scan Modal -->
 <div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-2xl">
-      <h3 class="text-xl font-bold text-slate-900 font-display">Scan New Contract</h3>
-      <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none hover:bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors">&times;</button>
+  <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div class="p-8 border-b-2 border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-3xl">
+      <h3 class="text-2xl font-bold text-slate-900 font-display">Scan New Contract</h3>
+      <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-3xl leading-none hover:bg-slate-100 w-10 h-10 rounded-xl flex items-center justify-center transition-all">&times;</button>
     </div>
-    <div class="p-6 space-y-4">
-      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
-      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Supplier *</label><input type="text" id="scan-supplier" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
-      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Description</label><textarea id="scan-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
-      <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">County</label><select id="scan-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sector</label><select id="scan-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></select></div>
+    <div class="p-8 space-y-5">
+      <div>
+        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Contract ID *</label>
+        <input type="text" id="scan-id" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Supplier *</label>
+        <input type="text" id="scan-supplier" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Description</label>
+        <textarea id="scan-desc" rows="3" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all resize-none"></textarea>
       </div>
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Value (KES) *</label><input type="number" id="scan-value" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Award Date</label><input type="date" id="scan-date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">County</label>
+          <select id="scan-county" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"></select>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Sector</label>
+          <select id="scan-sector" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"></select>
+        </div>
       </div>
-      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Bid Type</label><select id="scan-bid" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"><option value="open">Open</option><option value="restricted">Restricted</option><option value="single_source">Single Source</option></select></div>
-      <button onclick="runScan()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition-all shadow-sm mt-2">🤖 Run AI Scan</button>
-      <div id="scan-result" class="hidden mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Value (KES) *</label>
+          <input type="number" id="scan-value" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Award Date</label>
+          <input type="date" id="scan-date" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Bid Type</label>
+        <select id="scan-bid" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+          <option value="open">Open</option>
+          <option value="restricted">Restricted</option>
+          <option value="single_source">Single Source</option>
+        </select>
+      </div>
+      <button onclick="runScan()" class="w-full py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/30 btn-shine mt-2">🤖 Run AI Scan</button>
+      <div id="scan-result" class="hidden mt-4 p-5 bg-primary-50 rounded-2xl border-2 border-primary-200 text-sm"></div>
     </div>
   </div>
 </div>
 
+<!-- Contract Detail Modal -->
 <div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-2xl">
-      <h3 class="text-xl font-bold text-slate-900 font-display">Contract Detail</h3>
-      <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none hover:bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors">&times;</button>
+  <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+    <div class="p-8 border-b-2 border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-3xl">
+      <h3 class="text-2xl font-bold text-slate-900 font-display">Contract Detail</h3>
+      <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-3xl leading-none hover:bg-slate-100 w-10 h-10 rounded-xl flex items-center justify-center transition-all">&times;</button>
     </div>
-    <div id="detail-body" class="p-6 space-y-4 text-sm text-slate-700">
-      <div class="animate-pulse space-y-3"><div class="h-6 bg-slate-100 rounded w-1/3"></div><div class="h-4 bg-slate-100 rounded w-full"></div><div class="h-4 bg-slate-100 rounded w-2/3"></div></div>
+    <div id="detail-body" class="p-8 space-y-6 text-slate-700">
+      <div class="animate-pulse space-y-4">
+        <div class="h-8 bg-slate-100 rounded-xl w-1/3"></div>
+        <div class="h-5 bg-slate-100 rounded-xl w-full"></div>
+        <div class="h-5 bg-slate-100 rounded-xl w-2/3"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-navy-900 text-white px-6 py-4 rounded-xl shadow-2xl text-sm font-semibold toast flex items-center gap-3 border border-slate-700"></div>
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-gradient-to-r from-slate-900 to-primary-900 text-white px-7 py-5 rounded-2xl shadow-2xl text-sm font-semibold toast flex items-center gap-3 border border-primary-700"></div>
 
 <script>
+  // ── Backend URL resolution ────────────────────────────────────────────────
   const API_BASE = (() => {
     const qp = new URLSearchParams(location.search).get('api');
     if (qp) return qp.replace(/\/$/, '');
@@ -413,10 +1189,10 @@
   }
 
   function dataTypeBadge(t) {
-    if (t === 'documented') return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-doc">DOCUMENTED</span>`;
-    if (t === 'live_sync') return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-live">LIVE SYNC</span>`;
-    if (t === 'manual_scan') return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-scan">SCANNED</span>`;
-    return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-ref">REFERENCE</span>`;
+    if (t === 'documented') return `<span class="px-3 py-1.5 rounded-full text-[10px] font-bold border badge-doc">📄 DOCUMENTED</span>`;
+    if (t === 'live_sync') return `<span class="px-3 py-1.5 rounded-full text-[10px] font-bold border badge-live">🔄 LIVE SYNC</span>`;
+    if (t === 'manual_scan') return `<span class="px-3 py-1.5 rounded-full text-[10px] font-bold border badge-scan">🤖 SCANNED</span>`;
+    return `<span class="px-3 py-1.5 rounded-full text-[10px] font-bold border badge-ref">📊 REFERENCE</span>`;
   }
 
   let debounceTimer;
@@ -443,7 +1219,7 @@
 
   function showToast(msg, isError = false) {
     const t = document.getElementById('toast');
-    t.innerHTML = isError ? `<span class="text-red-400">⚠️</span> ${msg}` : `<span class="text-emerald-400">✅</span> ${msg}`;
+    t.innerHTML = isError ? `<span class="text-red-400 text-xl">⚠️</span> <span>${msg}</span>` : `<span class="text-emerald-400 text-xl">✅</span> <span>${msg}</span>`;
     t.classList.remove('hidden');
     clearTimeout(t._timer);
     t._timer = setTimeout(() => t.classList.add('hidden'), 4000);
@@ -457,6 +1233,7 @@
     } catch (e) { showConnError(true); throw e; }
   }
 
+  // ── Meta ──────────────────────────────────────────────────────────────────
   async function loadMeta() {
     try {
       const res = await apiFetch('/api/contracts/meta');
@@ -482,6 +1259,7 @@
     } catch (e) { console.error("Meta load failed", e); }
   }
 
+  // ── Animated counter ──────────────────────────────────────────────────────
   function animateCount(el, target, prefix = '', suffix = '') {
     if (!el) return;
     const dur = 1200, start = performance.now();
@@ -494,6 +1272,7 @@
     requestAnimationFrame(step);
   }
 
+  // ── Dashboard ─────────────────────────────────────────────────────────────
   async function loadDash() {
     try {
       const res = await apiFetch('/api/stats');
@@ -515,6 +1294,7 @@
     loadGhostPreview();
   }
 
+  // ── County Explorer ───────────────────────────────────────────────────────
   async function loadCountyExplorer() {
     const grid = document.getElementById('county-grid');
     try {
@@ -524,23 +1304,32 @@
       if (data.success && Array.isArray(data.data)) {
         data.data.forEach(c => { map[c.county] = c; });
       }
+      
       const countiesToRender = META.counties.length > 0 ? META.counties : [];
       const maxHigh = Math.max(1, ...Object.values(map).map(c => c.high_risk || 0));
+      
       grid.innerHTML = '';
       countiesToRender.forEach(c => {
         const row = map[c.name] || { contracts: 0, high_risk: 0, funds_at_risk: 0 };
         const heat = row.high_risk === 0 ? 0 : Math.min(5, 1 + Math.round((row.high_risk / maxHigh) * 4));
         const el = document.createElement('button');
-        el.className = `county-chip heatmap-${heat} rounded-xl px-4 py-3.5 text-left border shadow-sm flex flex-col justify-between h-full`;
-        el.innerHTML = `<div class="font-bold text-sm truncate mb-1">${c.name}</div><div class="text-[11px] opacity-80 font-medium">${row.contracts} contracts · <span class="font-bold">${row.high_risk}</span> high-risk</div>`;
-        el.onclick = () => { document.getElementById('filter-county').value = c.name; showTab('v-procurement'); loadC(); };
+        el.className = `county-chip heatmap-${heat} rounded-2xl px-5 py-4 text-left shadow-sm flex flex-col justify-between h-full`;
+        el.innerHTML = `
+          <div class="font-bold text-sm truncate mb-1">${c.name}</div>
+          <div class="text-[11px] opacity-80 font-medium">${row.contracts} contracts · <span class="font-bold">${row.high_risk}</span> high-risk</div>`;
+        el.onclick = () => { 
+          document.getElementById('filter-county').value = c.name; 
+          showTab('v-procurement'); 
+          loadC(); 
+        };
         grid.appendChild(el);
       });
     } catch (e) {
-      grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-600 bg-red-50 rounded-xl border border-red-100">Failed to load counties.</div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-12 text-red-600 bg-red-50 rounded-2xl border-2 border-red-200">Failed to load counties. Please check your connection.</div>';
     }
   }
 
+  // ── Charts ────────────────────────────────────────────────────────────────
   async function loadCharts() {
     try {
       const res = await apiFetch('/api/contracts?limit=500');
@@ -549,40 +1338,121 @@
       const rows = data.data;
       const riskCounts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
       const sectorCounts = {};
-      rows.forEach(c => { if (riskCounts[c.risk_level] !== undefined) riskCounts[c.risk_level]++; sectorCounts[c.sector || 'Other'] = (sectorCounts[c.sector || 'Other'] || 0) + 1; });
+      rows.forEach(c => { 
+        if (riskCounts[c.risk_level] !== undefined) riskCounts[c.risk_level]++; 
+        sectorCounts[c.sector || 'Other'] = (sectorCounts[c.sector || 'Other'] || 0) + 1; 
+      });
 
       const riskCtx = document.getElementById('risk-chart');
       if (riskCtx) {
         if (riskChart) riskChart.destroy();
-        riskChart = new Chart(riskCtx, { type: 'doughnut', data: { labels: ['HIGH', 'MEDIUM', 'LOW'], datasets: [{ data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], backgroundColor: ['#dc2626', '#f59e0b', '#10b981'], borderWidth: 0, hoverOffset: 8 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } } } });
+        riskChart = new Chart(riskCtx, {
+          type: 'doughnut',
+          data: { 
+            labels: ['HIGH', 'MEDIUM', 'LOW'], 
+            datasets: [{ 
+              data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], 
+              backgroundColor: ['#EF4444', '#F59E0B', '#10B981'], 
+              borderWidth: 0, 
+              hoverOffset: 12 
+            }] 
+          },
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { 
+              legend: { 
+                position: 'bottom', 
+                labels: { usePointStyle: true, padding: 20, font: { size: 12, weight: '600' } } 
+              } 
+            } 
+          }
+        });
       }
+      
       const secCtx = document.getElementById('sector-chart');
       if (secCtx) {
         const sorted = Object.entries(sectorCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
         if (sectorChart) sectorChart.destroy();
-        sectorChart = new Chart(secCtx, { type: 'bar', data: { labels: sorted.map(s => s[0]), datasets: [{ label: 'Contracts', data: sorted.map(s => s[1]), backgroundColor: '#059669', borderRadius: 6, barThickness: 20 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } } });
+        sectorChart = new Chart(secCtx, {
+          type: 'bar',
+          data: { 
+            labels: sorted.map(s => s[0]), 
+            datasets: [{ 
+              label: 'Contracts', 
+              data: sorted.map(s => s[1]), 
+              backgroundColor: 'rgba(59, 130, 246, 0.8)',
+              borderColor: '#3B82F6',
+              borderWidth: 2,
+              borderRadius: 8,
+              barThickness: 24
+            }] 
+          },
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+              y: { beginAtZero: true, ticks: { precision: 0, font: { weight: '600' } }, grid: { color: '#F1F5F9' } }, 
+              x: { grid: { display: false }, ticks: { font: { size: 11, weight: '500' } } } 
+            } 
+          }
+        });
       }
     } catch (e) { /* noop */ }
   }
 
+  // ── Top flagged ───────────────────────────────────────────────────────────
   async function loadTopFlagged() {
     const box = document.getElementById('top-flagged');
     try {
       const res = await apiFetch('/api/contracts?risk_level=HIGH&limit=5');
       const data = await res.json();
-      if (!data.success || !data.data.length) { box.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">No high-risk contracts found.</p>'; return; }
-      box.innerHTML = data.data.map(c => `<div class="flex items-center justify-between gap-3 p-4 rounded-xl border border-slate-100 hover:bg-slate-50 hover:border-brand-200 cursor-pointer transition-all group" onclick="showDetail('${c.contract_id}')"><div class="min-w-0 flex-1"><div class="font-mono text-[11px] text-slate-400 truncate mb-0.5">${c.contract_id}</div><div class="text-sm font-semibold text-slate-800 truncate group-hover:text-brand-700 transition-colors">${escapeHtml(c.description)}</div><div class="text-xs text-slate-500 mt-1">${c.county || '—'} · ${c.sector || '—'}</div></div><div class="text-right flex-shrink-0"><div class="text-sm font-black text-red-600">${c.risk_score}</div><div class="text-[10px] text-slate-400 uppercase font-semibold">risk</div></div></div>`).join('');
-    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm text-center py-4">Failed to load.</div>'; }
+      if (!data.success || !data.data.length) { 
+        box.innerHTML = '<p class="text-slate-400 text-sm text-center py-6">No high-risk contracts found.</p>'; 
+        return; 
+      }
+      box.innerHTML = data.data.map(c => `
+        <div class="flex items-center justify-between gap-4 p-5 rounded-2xl border-2 border-slate-100 hover:border-primary-300 hover:bg-primary-50/30 cursor-pointer transition-all group" onclick="showDetail('${c.contract_id}')">
+          <div class="min-w-0 flex-1">
+            <div class="font-mono text-[11px] text-slate-400 truncate mb-1 font-semibold">${c.contract_id}</div>
+            <div class="text-sm font-bold text-slate-800 truncate group-hover:text-primary-700 transition-colors">${escapeHtml(c.description)}</div>
+            <div class="text-xs text-slate-500 mt-1 font-medium">${c.county || '—'} · ${c.sector || '—'}</div>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="text-xl font-black text-red-600">${c.risk_score}</div>
+            <div class="text-[10px] text-slate-400 uppercase font-bold">risk</div>
+          </div>
+        </div>`).join('');
+    } catch (e) { 
+      box.innerHTML = '<div class="text-red-500 text-sm text-center py-6">Failed to load.</div>'; 
+    }
   }
 
+  // ── Ghost preview ─────────────────────────────────────────────────────────
   async function loadGhostPreview() {
     const box = document.getElementById('ghost-preview');
     try {
       const res = await apiFetch('/api/ghost-projects');
       const data = await res.json();
-      if (!data.success || !data.data.length) { box.innerHTML = '<div class="text-slate-400 text-sm text-center py-4">No ghost projects detected.</div>'; return; }
-      box.innerHTML = data.data.slice(0, 4).map(g => `<div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer" onclick="showTab('v-ghost')"><div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200 relative"><img src="${g.satellite_image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=200&auto=format&fit=crop'}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=200&auto=format&fit=crop'"></div><div class="min-w-0 flex-1"><div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(g.project_name)}</div><div class="text-xs text-slate-500 mt-0.5">${g.county} · KES ${formatMoney(g.amount_at_risk)}</div></div><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'}">${g.detection_status.toUpperCase()}</span></div>`).join('');
-    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm text-center py-4">Failed to load.</div>'; }
+      if (!data.success || !data.data.length) { 
+        box.innerHTML = '<div class="text-slate-400 text-sm text-center py-6">No ghost projects detected.</div>'; 
+        return; 
+      }
+      box.innerHTML = data.data.slice(0, 4).map(g => `
+        <div class="flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-100 hover:border-primary-300 hover:bg-primary-50/30 transition-all cursor-pointer" onclick="showTab('v-ghost')">
+          <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-slate-200 relative shadow-lg">
+            <img src="${g.satellite_image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=200&auto=format&fit=crop'}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=200&auto=format&fit=crop'">
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-bold text-slate-800 truncate">${escapeHtml(g.project_name)}</div>
+            <div class="text-xs text-slate-500 mt-1 font-medium">${g.county} · KES ${formatMoney(g.amount_at_risk)}</div>
+          </div>
+          <span class="px-3 py-1.5 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border-2 border-red-200':'bg-amber-100 text-amber-700 border-2 border-amber-200'}">${g.detection_status.toUpperCase()}</span>
+        </div>`).join('');
+    } catch (e) { 
+      box.innerHTML = '<div class="text-red-500 text-sm text-center py-6">Failed to load.</div>'; 
+    }
   }
 
   function scrollToCounty() {
@@ -590,11 +1460,20 @@
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  // ── Reveal on scroll ──────────────────────────────────────────────────────
   function initReveal() {
-    const io = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.1 });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { 
+        if (e.isIntersecting) { 
+          e.target.classList.add('active'); 
+          io.unobserve(e.target); 
+        } 
+      });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
+  // ── Contracts table ───────────────────────────────────────────────────────
   function resetFilters() {
     document.getElementById('search-contracts').value = '';
     document.getElementById('filter-county').value = 'All';
@@ -617,9 +1496,13 @@
     const risk = document.getElementById('filter-risk').value;
     const dataType = document.getElementById('filter-datatype').value;
 
-    const params = new URLSearchParams({ search, county, sector, year, risk_level: risk, data_type: dataType, limit: PAGE_SIZE, page: currentPage });
+    const params = new URLSearchParams({
+      search, county, sector, year, risk_level: risk, data_type: dataType,
+      limit: PAGE_SIZE, page: currentPage,
+    });
+
     const tbody = document.getElementById('contracts-table');
-    tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Querying database...</span></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="p-16 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-4"><div class="w-12 h-12 rounded-full bg-slate-200"></div><span class="text-lg font-medium">Querying database...</span></div></td></tr>';
 
     try {
       const res = await apiFetch('/api/contracts?' + params.toString());
@@ -629,26 +1512,36 @@
         lastTotal = data.total || data.data.length;
         document.getElementById('pagination-info').textContent = `Showing ${(currentPage-1)*PAGE_SIZE+1}–${Math.min(currentPage*PAGE_SIZE, lastTotal)} of ${lastTotal} contracts`;
         document.getElementById('page-indicator').textContent = `Page ${currentPage}`;
+        
         document.getElementById('btn-prev').disabled = currentPage === 1;
         document.getElementById('btn-next').disabled = (currentPage * PAGE_SIZE) >= lastTotal;
 
         data.data.forEach(c => {
           const riskColor = c.risk_level === 'HIGH' ? 'text-red-700 bg-red-50 border-red-200' : (c.risk_level === 'MEDIUM' ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200');
           const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-50 transition-colors cursor-pointer border-b border-slate-50 last:border-0';
+          tr.className = 'hover:bg-primary-50/30 transition-all cursor-pointer';
           tr.onclick = () => showDetail(c.contract_id);
-          tr.innerHTML = `<td class="p-4 font-mono text-xs text-slate-600 font-medium">${c.contract_id}</td><td class="p-4 text-slate-900 font-medium max-w-xs truncate" title="${escapeHtml(c.description)}">${escapeHtml(c.description)}</td><td class="p-4 text-slate-700">${c.county || '—'}</td><td class="p-4 text-slate-700">${c.sector || '—'}</td><td class="p-4 text-slate-700">${c.year || '—'}</td><td class="p-4 font-semibold text-slate-900">${formatMoney(c.value)}</td><td class="p-4 text-slate-700 max-w-[150px] truncate" title="${escapeHtml(c.supplier||'')}">${escapeHtml(c.supplier||'—')}</td><td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold border ${riskColor}">${c.risk_level} (${c.risk_score})</span></td><td class="p-4">${dataTypeBadge(c.data_type)}</td>`;
+          tr.innerHTML = `
+            <td class="p-5 font-mono text-xs text-slate-600 font-semibold">${c.contract_id}</td>
+            <td class="p-5 text-slate-900 font-semibold max-w-xs truncate" title="${escapeHtml(c.description)}">${escapeHtml(c.description)}</td>
+            <td class="p-5 text-slate-700 font-medium">${c.county || '—'}</td>
+            <td class="p-5 text-slate-700 font-medium">${c.sector || '—'}</td>
+            <td class="p-5 text-slate-700 font-medium">${c.year || '—'}</td>
+            <td class="p-5 font-bold text-slate-900">${formatMoney(c.value)}</td>
+            <td class="p-5 text-slate-700 font-medium max-w-[150px] truncate" title="${escapeHtml(c.supplier||'')}">${escapeHtml(c.supplier||'—')}</td>
+            <td class="p-5"><span class="px-3 py-1.5 rounded-full text-xs font-bold border-2 ${riskColor}">${c.risk_level} (${c.risk_score})</span></td>
+            <td class="p-5">${dataTypeBadge(c.data_type)}</td>`;
           tbody.appendChild(tr);
         });
       } else {
-        tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500 bg-slate-50/50">No contracts found matching filters.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="p-16 text-center text-slate-500 bg-slate-50/50">No contracts found matching filters.</td></tr>';
         document.getElementById('pagination-info').textContent = '0 results';
         document.getElementById('btn-prev').disabled = true;
         document.getElementById('btn-next').disabled = true;
         lastTotal = 0;
       }
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-red-600 bg-red-50 rounded-xl border border-red-100 m-4">Connection failed. Verify the backend URL.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" class="p-16 text-center text-red-600 bg-red-50 rounded-2xl border-2 border-red-200 m-4">Connection failed. Verify the backend URL configured on this page.</td></tr>`;
     }
   }
 
@@ -656,41 +1549,48 @@
 
   async function showDetail(contractId) {
     const body = document.getElementById('detail-body');
-    body.innerHTML = '<div class="flex flex-col items-center justify-center py-12 text-slate-500"><svg class="animate-spin w-8 h-8 text-brand-600 mb-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-sm font-medium">Loading contract details...</span></div>';
+    body.innerHTML = '<div class="flex flex-col items-center justify-center py-16 text-slate-500"><svg class="animate-spin w-12 h-12 text-primary-600 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="text-lg font-medium">Loading contract details...</span></div>';
     openModal('detail-modal');
     try {
       const res = await apiFetch('/api/contracts/' + encodeURIComponent(contractId));
       const data = await res.json();
-      if (!data.success) { body.innerHTML = '<div class="text-center py-12 text-red-600"><svg class="w-12 h-12 mx-auto mb-3 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><p class="font-semibold">Contract not found.</p></div>'; return; }
+      if (!data.success) { 
+        body.innerHTML = '<div class="text-center py-16 text-red-600"><svg class="w-16 h-16 mx-auto mb-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><p class="font-bold text-xl">Contract not found.</p></div>'; 
+        return; 
+      }
       const c = data.data;
       let flags = [];
       try { flags = typeof c.flags === 'string' ? JSON.parse(c.flags) : (c.flags || []); } catch (e) {}
+      
       const riskColor = c.risk_level === 'HIGH' ? 'text-red-700 bg-red-50 border-red-200' : (c.risk_level === 'MEDIUM' ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200');
       
       body.innerHTML = `
-        <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-5 border-b border-slate-100">
-          <div><p class="font-mono text-xs text-slate-500 mb-1.5 font-semibold tracking-wide">${c.contract_id}</p><h4 class="text-xl font-bold text-slate-900 leading-tight">${escapeHtml(c.description)}</h4></div>
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b-2 border-slate-100">
+          <div>
+            <p class="font-mono text-xs text-slate-500 mb-2 font-semibold tracking-wide">${c.contract_id}</p>
+            <h4 class="text-2xl font-bold text-slate-900 leading-tight">${escapeHtml(c.description)}</h4>
+          </div>
           ${dataTypeBadge(c.data_type)}
         </div>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-5 pt-4">
-          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">County</p><p class="font-semibold text-slate-800">${c.county || '—'}</p></div>
-          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Sector</p><p class="font-semibold text-slate-800">${c.sector || '—'}</p></div>
-          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Value</p><p class="font-semibold text-slate-800">KES ${Number(c.value || 0).toLocaleString()}</p></div>
-          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Awarded</p><p class="font-semibold text-slate-800">${c.awarded_date || '—'}</p></div>
-          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Bid Type</p><p class="font-semibold text-slate-800 capitalize">${(c.bid_type || '—').replace('_', ' ')}</p></div>
-          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Status</p><p class="font-semibold text-slate-800 capitalize">${c.status || 'active'}</p></div>
-          <div class="col-span-2"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Supplier</p><p class="font-semibold text-slate-800">${escapeHtml(c.supplier||'—')}</p></div>
-          <div class="col-span-2"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Procuring Entity</p><p class="font-semibold text-slate-800">${escapeHtml(c.procuring_entity||'—')}</p></div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 pt-4">
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">County</p><p class="font-bold text-slate-800 text-lg">${c.county || '—'}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Sector</p><p class="font-bold text-slate-800 text-lg">${c.sector || '—'}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Value</p><p class="font-bold text-slate-800 text-lg">KES ${Number(c.value || 0).toLocaleString()}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Awarded</p><p class="font-bold text-slate-800 text-lg">${c.awarded_date || '—'}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Bid Type</p><p class="font-bold text-slate-800 text-lg capitalize">${(c.bid_type || '—').replace('_', ' ')}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Status</p><p class="font-bold text-slate-800 text-lg capitalize">${c.status || 'active'}</p></div>
+          <div class="col-span-2"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Supplier</p><p class="font-bold text-slate-800 text-lg">${escapeHtml(c.supplier||'—')}</p></div>
+          <div class="col-span-2"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Procuring Entity</p><p class="font-bold text-slate-800 text-lg">${escapeHtml(c.procuring_entity||'—')}</p></div>
         </div>
-        <div class="pt-5 border-t border-slate-100">
-          <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-3">Risk Assessment — <span class="${riskColor} px-2.5 py-1 rounded-lg text-xs font-bold border">${c.risk_score}/100 (${c.risk_level})</span></p>
-          ${flags.length > 0 ? `<ul class="list-disc pl-5 space-y-2 text-slate-700 text-sm">${flags.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>` : '<p class="text-slate-500 italic text-sm bg-slate-50 p-3 rounded-lg border border-slate-100">No specific risk flags generated for this contract.</p>'}
+        <div class="pt-6 border-t-2 border-slate-100">
+          <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-4">Risk Assessment — <span class="${riskColor} px-4 py-2 rounded-xl text-sm font-bold border-2">${c.risk_score}/100 (${c.risk_level})</span></p>
+          ${flags.length > 0 ? `<ul class="list-disc pl-6 space-y-2 text-slate-700">${flags.map(f => `<li class="leading-relaxed">${escapeHtml(f)}</li>`).join('')}</ul>` : '<p class="text-slate-500 italic text-sm bg-slate-50 p-4 rounded-xl border-2 border-slate-100">No specific risk flags generated for this contract.</p>'}
         </div>
-        ${c.notes ? `<div class="pt-5 border-t border-slate-100"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1.5">Notes</p><p class="text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100 leading-relaxed">${escapeHtml(c.notes)}</p></div>` : ''}
-        ${c.source_url ? `<div class="pt-5 border-t border-slate-100"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1.5">Source</p><a href="${c.source_url}" target="_blank" rel="noopener" class="text-brand-600 hover:text-brand-700 hover:underline font-semibold flex items-center gap-1.5 text-sm">${escapeHtml(c.source_name || c.source_url)} <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></div>` : ''}
+        ${c.notes ? `<div class="pt-6 border-t-2 border-slate-100"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-2">Notes</p><p class="text-slate-700 bg-slate-50 p-5 rounded-xl border-2 border-slate-100 leading-relaxed">${escapeHtml(c.notes)}</p></div>` : ''}
+        ${c.source_url ? `<div class="pt-6 border-t-2 border-slate-100"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-2">Source</p><a href="${c.source_url}" target="_blank" rel="noopener" class="text-primary-600 hover:text-primary-700 hover:underline font-bold flex items-center gap-2 text-sm">${escapeHtml(c.source_name || c.source_url)} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></div>` : ''}
       `;
     } catch (e) { 
-      body.innerHTML = '<div class="text-center py-12 text-red-600"><svg class="w-12 h-12 mx-auto mb-3 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><p class="font-semibold">Failed to load contract details.</p><p class="text-sm text-slate-500 mt-1">Please check your connection and try again.</p></div>'; 
+      body.innerHTML = '<div class="text-center py-16 text-red-600"><svg class="w-16 h-16 mx-auto mb-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><p class="font-bold text-xl">Failed to load contract details.</p><p class="text-sm text-slate-500 mt-2">Please check your connection and try again.</p></div>'; 
     }
   }
 
@@ -708,7 +1608,7 @@
 
   async function loadGhost() {
     const grid = document.getElementById('ghost-grid');
-    grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading ghost projects...</span></div></div>';
+    grid.innerHTML = '<div class="col-span-full text-center py-16 text-slate-500"><div class="animate-pulse flex flex-col items-center gap-4"><div class="w-12 h-12 rounded-full bg-slate-200"></div><span class="text-lg font-medium">Loading ghost projects...</span></div></div>';
     try {
       const res = await apiFetch('/api/ghost-projects');
       const data = await res.json();
@@ -716,34 +1616,34 @@
       if (data.success && data.data.length > 0) {
         data.data.forEach(g => {
           const el = document.createElement('div');
-          el.className = 'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden card-hover flex flex-col';
+          el.className = 'bg-white rounded-3xl border-2 border-slate-200 shadow-xl overflow-hidden card-hover flex flex-col';
           el.innerHTML = `
-            <div class="h-56 bg-slate-200 relative group">
+            <div class="h-64 bg-slate-200 relative group">
               <img src="${g.satellite_image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop'}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop'">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'} backdrop-blur-sm">${g.detection_status.toUpperCase()}</div>
-              <div class="absolute top-3 left-3">${dataTypeBadge(g.data_type)}</div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="absolute top-4 right-4 px-4 py-2 rounded-full text-xs font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border-2 border-red-200':'bg-amber-100 text-amber-700 border-2 border-amber-200'} backdrop-blur-sm">${g.detection_status.toUpperCase()}</div>
+              <div class="absolute top-4 left-4">${dataTypeBadge(g.data_type)}</div>
             </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <h3 class="font-bold text-slate-900 text-lg mb-1">${escapeHtml(g.project_name)}</h3>
-              <p class="text-xs text-slate-500 mb-3 flex items-center gap-1">📍 ${g.county} County</p>
-              <div class="bg-slate-50 rounded-lg p-3 mb-4 border border-slate-100 flex-grow">
-                <p class="text-xs text-slate-600 mb-1"><span class="font-semibold">Claimed:</span> ${escapeHtml(g.claimed_status||'—')}</p>
-                <p class="text-xs text-slate-600"><span class="font-semibold">Satellite:</span> ${escapeHtml(g.satellite_status||'—')}</p>
+            <div class="p-7 flex flex-col flex-grow">
+              <h3 class="font-bold text-slate-900 text-xl mb-2">${escapeHtml(g.project_name)}</h3>
+              <p class="text-sm text-slate-500 mb-4 flex items-center gap-2 font-medium">📍 ${g.county} County</p>
+              <div class="bg-gradient-to-br from-slate-50 to-primary-50/30 rounded-2xl p-5 mb-5 border-2 border-slate-100 flex-grow">
+                <p class="text-sm text-slate-700 mb-2"><span class="font-bold">Claimed:</span> ${escapeHtml(g.claimed_status||'—')}</p>
+                <p class="text-sm text-slate-700"><span class="font-bold">Satellite:</span> ${escapeHtml(g.satellite_status||'—')}</p>
               </div>
-              <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-auto">
-                <span class="text-red-600 font-black text-lg">KES ${formatMoney(g.amount_at_risk)}</span>
-                <span class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded">${g.confidence_score}% confidence</span>
+              <div class="flex justify-between items-center pt-5 border-t-2 border-slate-100 mt-auto">
+                <span class="text-red-600 font-black text-xl">KES ${formatMoney(g.amount_at_risk)}</span>
+                <span class="text-xs text-slate-600 font-bold bg-slate-100 px-3 py-1.5 rounded-lg">${g.confidence_score}% confidence</span>
               </div>
-              ${g.source_url ? `<a href="${g.source_url}" target="_blank" rel="noopener" class="block mt-4 text-xs text-brand-600 hover:text-brand-700 hover:underline font-semibold flex items-center gap-1">View Source <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>` : ''}
+              ${g.source_url ? `<a href="${g.source_url}" target="_blank" rel="noopener" class="block mt-5 text-sm text-primary-600 hover:text-primary-700 hover:underline font-bold flex items-center gap-2">View Source <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>` : ''}
             </div>`;
           grid.appendChild(el);
         });
       } else {
-        grid.innerHTML = '<div class="col-span-full text-center py-16 text-slate-500 bg-white rounded-2xl border border-slate-200 border-dashed">No ghost projects detected in the database.</div>';
+        grid.innerHTML = '<div class="col-span-full text-center py-20 text-slate-500 bg-white rounded-3xl border-2 border-slate-200 border-dashed">No ghost projects detected in the database.</div>';
       }
     } catch (e) {
-      grid.innerHTML = '<div class="col-span-full text-center py-16 text-red-600 bg-red-50 rounded-2xl border border-red-100">Failed to load ghost projects.</div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-600 bg-red-50 rounded-3xl border-2 border-red-200">Failed to load ghost projects.</div>';
     }
   }
 
@@ -752,7 +1652,7 @@
     const form = e.target;
     const btn = form.querySelector('button[type="submit"]');
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Submitting...'; 
+    btn.innerHTML = '<svg class="animate-spin w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Submitting...'; 
     btn.disabled = true;
     try {
       const res = await apiFetch('/api/reports', {
@@ -763,15 +1663,22 @@
         }),
       });
       const data = await res.json();
-      if (data.success) { showToast('✅ Report submitted securely. Case number: ' + data.data.case_number); form.reset(); } 
-      else { showToast('Error: ' + data.error, true); }
-    } catch (err) { showToast('Network error — please try again.', true); }
-    btn.innerHTML = originalText; btn.disabled = false;
+      if (data.success) { 
+        showToast('✅ Report submitted securely. Case number: ' + data.data.case_number); 
+        form.reset(); 
+      } else { 
+        showToast('Error: ' + data.error, true); 
+      }
+    } catch (err) { 
+      showToast('Network error — please try again.', true); 
+    }
+    btn.innerHTML = originalText; 
+    btn.disabled = false;
   }
 
   function clearChat() {
     const history = document.getElementById('chat-history');
-    history.innerHTML = `<div class="flex gap-3"><div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm"><p class="text-sm text-slate-800 leading-relaxed">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`;
+    history.innerHTML = `<div class="flex gap-4"><div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-lg">AI</div><div class="bg-white p-5 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm"><p class="text-slate-800 leading-relaxed">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`;
   }
 
   async function sendAI(e) {
@@ -779,27 +1686,33 @@
     const input = document.getElementById('ai-input');
     const msg = input.value.trim(); if (!msg) return;
     const history = document.getElementById('chat-history');
+    
     const userDiv = document.createElement('div');
-    userDiv.className = 'flex gap-3 flex-row-reverse';
-    userDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-slate-300 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">You</div><div class="bg-brand-50 border border-brand-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800 shadow-sm">${escapeHtml(msg)}</div>`;
+    userDiv.className = 'flex gap-4 flex-row-reverse';
+    userDiv.innerHTML = `<div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-lg">You</div><div class="bg-gradient-to-br from-primary-50 to-accent-50 border-2 border-primary-200 p-5 rounded-2xl rounded-tr-none max-w-[85%] text-slate-800 shadow-sm">${escapeHtml(msg)}</div>`;
     history.appendChild(userDiv);
     input.value = '';
+    
     const loadDiv = document.createElement('div');
     loadDiv.id = 'ai-loading';
-    loadDiv.className = 'flex gap-3';
-    loadDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-sm text-slate-500 flex items-center gap-2"><div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div><div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div></div>`;
+    loadDiv.className = 'flex gap-4';
+    loadDiv.innerHTML = `<div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-lg">AI</div><div class="bg-white p-5 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-2"><div class="w-2.5 h-2.5 bg-primary-400 rounded-full animate-bounce"></div><div class="w-2.5 h-2.5 bg-primary-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div><div class="w-2.5 h-2.5 bg-primary-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div></div>`;
     history.appendChild(loadDiv);
     history.scrollTop = history.scrollHeight;
+    
     try {
       const res = await apiFetch('/api/ai/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: msg }) });
       const data = await res.json();
       document.getElementById('ai-loading')?.remove();
       const aiDiv = document.createElement('div');
-      aiDiv.className = 'flex gap-3';
-      aiDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${escapeHtml(data.reply)}</div>`;
+      aiDiv.className = 'flex gap-4';
+      aiDiv.innerHTML = `<div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-lg">AI</div><div class="bg-white p-5 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${escapeHtml(data.reply)}</div>`;
       history.appendChild(aiDiv);
       history.scrollTop = history.scrollHeight;
-    } catch (err) { document.getElementById('ai-loading')?.remove(); showToast('Failed to reach AI service.', true); }
+    } catch (err) { 
+      document.getElementById('ai-loading')?.remove(); 
+      showToast('Failed to reach AI service.', true);
+    }
   }
 
   async function runScan() {
@@ -807,9 +1720,11 @@
     const supplier = document.getElementById('scan-supplier').value;
     const value = document.getElementById('scan-value').value;
     if (!id || !supplier || !value) { showToast('Please fill in all required fields (*)', true); return; }
+    
     const resultDiv = document.getElementById('scan-result');
     resultDiv.classList.remove('hidden');
-    resultDiv.innerHTML = '<span class="text-blue-600 animate-pulse flex items-center gap-2"><svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Analysing contract risk...</span>';
+    resultDiv.innerHTML = '<span class="text-primary-600 animate-pulse flex items-center gap-2"><svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Analysing contract risk...</span>';
+    
     try {
       const res = await apiFetch('/api/contracts/scan', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -826,24 +1741,37 @@
         let flags = [];
         try { flags = typeof c.flags === 'string' ? JSON.parse(c.flags) : c.flags; } catch (e) {}
         const color = c.risk_level==='HIGH'?'text-red-600':(c.risk_level==='MEDIUM'?'text-amber-600':'text-emerald-600');
-        resultDiv.innerHTML = `<div class="font-bold text-lg ${color} mb-2">Risk Score: ${c.risk_score}/100 (${c.risk_level})</div>${flags.length > 0 ? `<ul class="list-disc pl-5 space-y-1 text-slate-700">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>` : '<p class="text-slate-600">No specific risk flags detected.</p>'}`;
+        resultDiv.innerHTML = `
+          <div class="font-bold text-xl ${color} mb-3">Risk Score: ${c.risk_score}/100 (${c.risk_level})</div>
+          ${flags.length > 0 ? `<ul class="list-disc pl-6 space-y-1.5 text-slate-700">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>` : '<p class="text-slate-600">No specific risk flags detected.</p>'}
+        `;
         showToast('✅ Contract scanned and saved successfully');
         currentPage = 1; loadC();
-      } else { resultDiv.innerHTML = `<span class="text-red-600 font-medium">Error: ${escapeHtml(data.error)}</span>`; }
-    } catch (e) { resultDiv.innerHTML = '<span class="text-red-600 font-medium">Network error. Please try again.</span>'; }
+      } else { 
+        resultDiv.innerHTML = `<span class="text-red-600 font-medium">Error: ${escapeHtml(data.error)}</span>`; 
+      }
+    } catch (e) { 
+      resultDiv.innerHTML = '<span class="text-red-600 font-medium">Network error. Please try again.</span>'; 
+    }
   }
 
   async function startSync() {
     const year = document.getElementById('sync-year').value;
     const county = document.getElementById('sync-county').value;
     const statusDiv = document.getElementById('sync-status');
-    statusDiv.innerHTML = '<span class="text-blue-600 animate-pulse flex items-center gap-2"><svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Starting background sync...</span>';
+    statusDiv.innerHTML = '<span class="text-primary-600 animate-pulse flex items-center gap-2"><svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Starting background sync...</span>';
     try {
       const res = await apiFetch('/api/sync/ocds', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ year: parseInt(year, 10), county }) });
       const data = await res.json();
-      if (data.success) { statusDiv.innerHTML = `<div class="text-emerald-700 font-bold py-2 flex items-center gap-2">✅ ${data.message}</div>`; setTimeout(loadSyncStatus, 4000); } 
-      else { statusDiv.innerHTML = `<span class="text-red-600 font-medium">❌ ${escapeHtml(data.error)}</span>`; }
-    } catch (e) { statusDiv.innerHTML = '<span class="text-red-600 font-medium">❌ Network error.</span>'; }
+      if (data.success) { 
+        statusDiv.innerHTML = `<div class="text-emerald-700 font-bold py-3 flex items-center gap-2">✅ ${data.message}</div>`; 
+        setTimeout(loadSyncStatus, 4000); 
+      } else { 
+        statusDiv.innerHTML = `<span class="text-red-600 font-medium">❌ ${escapeHtml(data.error)}</span>`; 
+      }
+    } catch (e) { 
+      statusDiv.innerHTML = '<span class="text-red-600 font-medium">❌ Network error.</span>'; 
+    }
   }
 
   async function loadSyncStatus() {
@@ -852,11 +1780,22 @@
       const res = await apiFetch('/api/sync/status');
       const data = await res.json();
       if (data.success && data.data.length > 0) {
-        statusDiv.innerHTML = '<div class="space-y-2">' + data.data.map(log => `<div class="flex justify-between items-center py-3 px-4 bg-slate-50 rounded-lg border border-slate-100"><span class="font-medium text-slate-900 text-sm">${log.year}${log.county ? ' · ' + log.county : ''} —<span class="${log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-blue-600')} font-bold uppercase text-xs ml-2">${log.status}</span></span><span class="text-xs text-slate-500 font-medium">${log.records || 0} records${log.error_msg ? ' · ' + escapeHtml(log.error_msg) : ''}</span></div>`).join('') + '</div>';
-      } else { statusDiv.innerHTML = '<span class="text-slate-500 text-sm">No sync history yet.</span>'; }
-    } catch (e) { statusDiv.innerHTML = '<span class="text-red-600 text-sm">Failed to load status.</span>'; }
+        statusDiv.innerHTML = '<div class="space-y-3">' + data.data.map(log => `
+          <div class="flex justify-between items-center py-4 px-5 bg-gradient-to-r from-slate-50 to-primary-50/30 rounded-xl border-2 border-slate-100">
+            <span class="font-semibold text-slate-900">${log.year}${log.county ? ' · ' + log.county : ''} —
+              <span class="${log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-primary-600')} font-bold uppercase text-xs ml-2">${log.status}</span>
+            </span>
+            <span class="text-sm text-slate-600 font-medium">${log.records || 0} records${log.error_msg ? ' · ' + escapeHtml(log.error_msg) : ''}</span>
+          </div>`).join('') + '</div>';
+      } else { 
+        statusDiv.innerHTML = '<span class="text-slate-500 text-sm">No sync history yet.</span>'; 
+      }
+    } catch (e) { 
+      statusDiv.innerHTML = '<span class="text-red-600 text-sm">Failed to load status.</span>'; 
+    }
   }
 
+  // ── Init ──────────────────────────────────────────────────────────────────
   (async function init() {
     await loadMeta();
     initReveal();
