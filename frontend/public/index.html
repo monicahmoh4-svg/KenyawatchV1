@@ -7,83 +7,105 @@
 <meta name="theme-color" content="#0b1220">
 <title>KenyaWatch AI — Procurement Intelligence Platform</title>
 
-<!--
-  ============================================================================
-  BACKEND URL CONFIGURATION
-  ============================================================================
-  This is the ONE place you need to edit to point the frontend at your
-  backend. Set it to your deployed Render (or other) backend URL, with NO
-  trailing slash. Every API call in this app reads from this single value.
-  ============================================================================
--->
+<!-- ============================================================================ -->
+<!-- BACKEND URL CONFIGURATION: Edit the content below to point to your Render URL -->
+<!-- ============================================================================ -->
 <meta name="kenyawatch-api-base" content="https://kenyawatch-ai-backend.onrender.com">
 
 <script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config = { theme: { extend: { colors: {
-  navy: { 900:'#0b1220', 800:'#111a2e', 700:'#182541', 600:'#1f2f4d' },
-  brand: { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 500:'#059669', 600:'#047857', 700:'#065f46' }
-}}}}</script>
+<script>
+  tailwind.config = { 
+    theme: { 
+      extend: { 
+        colors: { 
+          navy: { 900:'#0b1220', 800:'#111a2e', 700:'#182541', 600:'#1f2f4d' },
+          brand: { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 500:'#059669', 600:'#047857', 700:'#065f46' }
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          display: ['Space Grotesk', 'Inter', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
 <style>
   :root { --brand:#059669; --brand-dark:#047857; --navy:#0b1220; }
-  body { font-family: 'Inter', sans-serif; background-color: #f6f7f9; color: #0f172a; }
-  .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; }
-
-  .tab-content { display: none; animation: fadeIn .35s ease-out; }
+  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+  
+  .tab-content { display: none; animation: slideIn .4s cubic-bezier(0.4, 0, 0.2, 1); }
   .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(16px);} to { opacity: 1; transform: translateY(0);} }
 
-  .nav-link.active { background-color: rgba(5,150,105,.12); color: #047857; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  .nav-link.active { background-color: rgba(5,150,105,.12); color: #047857; font-weight: 600; }
+  
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  
   .flag-strip { background: linear-gradient(90deg,#000 0 25%,#fff 25% 27%,#BB0000 27% 52%,#fff 52% 54%,#006600 54% 100%); height: 4px; }
 
   .kw-badge-doc { color:#7c2d12; background:#ffedd5; border-color:#fed7aa; }
   .kw-badge-ref { color:#334155; background:#f1f5f9; border-color:#e2e8f0; }
   .kw-badge-live { color:#075985; background:#e0f2fe; border-color:#bae6fd; }
+  .kw-badge-scan { color:#581c87; background:#f3e8ff; border-color:#e9d5ff; }
 
   .skeleton { background: linear-gradient(90deg,#eef1f4 25%,#e4e8ec 37%,#eef1f4 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
   @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0 50%} }
 
-  /* ---- Hero animations ---- */
-  .hero-bg { background:
-    radial-gradient(1200px 600px at 15% -10%, rgba(5,150,105,.35), transparent 60%),
-    radial-gradient(1000px 500px at 90% 10%, rgba(6,95,70,.45), transparent 55%),
-    linear-gradient(135deg,#0b1220 0%,#111a2e 45%,#065f46 100%); }
-  .hero-grid { background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 44px 44px; }
+  /* ---- Hero & Animations ---- */
+  .hero-bg { 
+    background: linear-gradient(135deg, rgba(11,18,32,0.92) 0%, rgba(17,26,46,0.88) 50%, rgba(6,95,70,0.85) 100%),
+                url('https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?q=80&w=2000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  .hero-grid { background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px); background-size: 44px 44px; }
+  
   .float-slow { animation: floaty 7s ease-in-out infinite; }
   .float-slower { animation: floaty 10s ease-in-out infinite; }
-  @keyframes floaty { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-14px);} }
+  @keyframes floaty { 0%,100%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-12px) rotate(1deg);} }
+  
   .pulse-ring { animation: pulseRing 2.6s ease-out infinite; }
-  @keyframes pulseRing { 0%{ box-shadow: 0 0 0 0 rgba(5,150,105,.5);} 70%{ box-shadow: 0 0 0 18px rgba(5,150,105,0);} 100%{ box-shadow: 0 0 0 0 rgba(5,150,105,0);} }
+  @keyframes pulseRing { 0%{ box-shadow: 0 0 0 0 rgba(5,150,105,.5);} 70%{ box-shadow: 0 0 0 16px rgba(5,150,105,0);} 100%{ box-shadow: 0 0 0 0 rgba(5,150,105,0);} }
 
-  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: .1s; } .reveal-delay-2 { transition-delay: .2s; } .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-1 { transition-delay: .1s; } 
+  .reveal-delay-2 { transition-delay: .2s; } 
+  .reveal-delay-3 { transition-delay: .3s; }
 
   .grad-text { background: linear-gradient(90deg,#34d399,#a7f3d0,#6ee7b7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .card-hover { transition: transform .3s ease, box-shadow .3s ease; }
-  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgba(2,44,34,.35); }
+  
+  .card-hover { transition: all .3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -12px rgba(2,44,34,.25); }
 
   .county-chip { transition: all .2s ease; cursor: pointer; }
-  .county-chip:hover { transform: translateY(-2px); }
-  .heatmap-0{background:#eef2f7;color:#64748b} .heatmap-1{background:#d1fae5;color:#065f46}
-  .heatmap-2{background:#a7f3d0;color:#065f46} .heatmap-3{background:#6ee7b7;color:#064e3b}
-  .heatmap-4{background:#fde68a;color:#78350f} .heatmap-5{background:#fca5a5;color:#7f1d1d}
+  .county-chip:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
+  .heatmap-0{background:#f8fafc;color:#64748b;border-color:#e2e8f0} 
+  .heatmap-1{background:#d1fae5;color:#065f46;border-color:#a7f3d0}
+  .heatmap-2{background:#a7f3d0;color:#065f46;border-color:#6ee7b7} 
+  .heatmap-3{background:#6ee7b7;color:#064e3b;border-color:#34d399}
+  .heatmap-4{background:#fde68a;color:#78350f;border-color:#fcd34d} 
+  .heatmap-5{background:#fca5a5;color:#7f1d1d;border-color:#f87171}
 
-  .marquee { display:flex; gap:2.5rem; animation: marquee 30s linear infinite; width:max-content; }
+  .marquee { display:flex; gap:3rem; animation: marquee 35s linear infinite; width:max-content; }
   @keyframes marquee { from{ transform: translateX(0);} to{ transform: translateX(-50%);} }
 
   .stat-card { position: relative; overflow: hidden; }
-  .stat-card::after { content:''; position:absolute; inset:0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.5) 50%, transparent 70%); transform: translateX(-120%); animation: sheen 5s ease-in-out infinite; }
+  .stat-card::after { content:''; position:absolute; inset:0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.6) 50%, transparent 70%); transform: translateX(-120%); animation: sheen 6s ease-in-out infinite; }
   @keyframes sheen { 0%,60%{ transform: translateX(-120%);} 100%{ transform: translateX(120%);} }
 
-  .modal-backdrop { background: rgba(11,18,32,.6); backdrop-filter: blur(6px); }
+  .modal-backdrop { background: rgba(11,18,32,.7); backdrop-filter: blur(8px); }
   .toast { animation: toastIn .3s ease-out; }
-  @keyframes toastIn { from{ opacity:0; transform: translateY(12px);} to{ opacity:1; transform: translateY(0);} }
+  @keyframes toastIn { from{ opacity:0; transform: translateY(12px) scale(0.95);} to{ opacity:1; transform: translateY(0) scale(1);} }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -91,11 +113,11 @@
 <div class="flag-strip"></div>
 
 <!-- Top Bar -->
-<header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+<header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-sm">
   <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('v-overview')">
-        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow pulse-ring">
+        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow-lg pulse-ring">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
         </div>
         <div>
@@ -114,87 +136,96 @@
         <button onclick="showTab('v-about')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-about">Sources</button>
       </nav>
 
-      <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-slate-100" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+      <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
         <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
     </div>
-    <div id="mobile-nav" class="hidden lg:hidden pb-3 flex flex-col gap-1">
-      <button onclick="showTab('v-overview')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-overview">Overview</button>
-      <button onclick="showTab('v-procurement')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-procurement">Contracts</button>
-      <button onclick="showTab('v-ghost')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-ghost">Ghost Projects</button>
-      <button onclick="showTab('v-report')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-report">Report</button>
-      <button onclick="showTab('v-ai')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-ai">AI Investigator</button>
-      <button onclick="showTab('v-sync')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-sync">Sync Data</button>
-      <button onclick="showTab('v-about')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-about">Sources</button>
+    <div id="mobile-nav" class="hidden lg:hidden pb-4 flex flex-col gap-1 border-t border-slate-100 pt-3">
+      <button onclick="showTab('v-overview'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-overview">Overview</button>
+      <button onclick="showTab('v-procurement'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-procurement">Contracts</button>
+      <button onclick="showTab('v-ghost'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-ghost">Ghost Projects</button>
+      <button onclick="showTab('v-report'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-report">Report</button>
+      <button onclick="showTab('v-ai'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-ai">AI Investigator</button>
+      <button onclick="showTab('v-sync'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-sync">Sync Data</button>
+      <button onclick="showTab('v-about'); document.getElementById('mobile-nav').classList.add('hidden')" class="nav-link text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50" data-tab="v-about">Sources</button>
     </div>
   </div>
 </header>
 
-<!-- Connection banner (shown only if backend unreachable) -->
-<div id="conn-banner" class="hidden bg-red-600 text-white text-sm text-center py-2 px-4">
-  ⚠️ Can't reach the backend API. Check the API URL configured in this page's <code>&lt;meta name="kenyawatch-api-base"&gt;</code> tag.
+<!-- Connection banner -->
+<div id="conn-banner" class="hidden bg-red-600 text-white text-sm text-center py-2.5 px-4 font-medium shadow-md">
+  ⚠️ Can't reach the backend API. Check the API URL configured in this page's <code class="bg-red-700 px-1.5 py-0.5 rounded text-xs">&lt;meta name="kenyawatch-api-base"&gt;</code> tag.
 </div>
 
 <main class="flex-grow max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
   <!-- ===================== OVERVIEW / LANDING ===================== -->
-  <div id="v-overview" class="tab-content active space-y-14">
+  <div id="v-overview" class="tab-content active space-y-16">
 
     <!-- HERO -->
-    <section class="hero-bg relative overflow-hidden rounded-3xl text-white shadow-2xl">
-      <div class="hero-grid absolute inset-0 opacity-60"></div>
+    <section class="hero-bg relative overflow-hidden rounded-3xl text-white shadow-2xl border border-white/10">
+      <div class="hero-grid absolute inset-0 opacity-40"></div>
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl float-slow"></div>
       <div class="absolute bottom-0 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl float-slower"></div>
-      <div class="relative z-10 px-6 py-14 md:px-14 md:py-20 lg:py-24">
+      <div class="relative z-10 px-6 py-16 md:px-14 md:py-24 lg:py-28">
         <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 mb-6 backdrop-blur">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 mb-6 backdrop-blur-md">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             🇰🇪 Real-Time Intelligence · All 47 Counties
           </div>
-          <h2 class="font-display text-4xl md:text-6xl font-black mb-5 tracking-tight leading-[1.05]">
+          <h2 class="font-display text-4xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">
             Exposing Corruption.<br><span class="grad-text">Protecting Public Funds.</span>
           </h2>
-          <p class="text-slate-200 text-lg md:text-xl mb-8 leading-relaxed max-w-xl">
+          <p class="text-slate-200 text-lg md:text-xl mb-10 leading-relaxed max-w-xl">
             AI-scored analysis of government procurement, satellite verification of "ghost" projects, and anonymous citizen reporting — searchable by county and year.
           </p>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <button onclick="showTab('v-procurement')" class="px-7 py-3.5 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">🔍 Explore Contracts</button>
-            <button onclick="showTab('v-report')" class="px-7 py-3.5 bg-white/10 backdrop-blur text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 hover:-translate-y-0.5">🚨 Report Fraud</button>
-            <button onclick="scrollToCounty()" class="px-7 py-3.5 bg-transparent text-emerald-200 font-bold rounded-xl hover:bg-white/5 transition-all border border-emerald-400/40">🗺️ County Explorer</button>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button onclick="showTab('v-procurement')" class="px-8 py-4 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-1 flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              Explore Contracts
+            </button>
+            <button onclick="showTab('v-report')" class="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 hover:-translate-y-1 flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              Report Fraud
+            </button>
+            <button onclick="scrollToCounty()" class="px-8 py-4 bg-transparent text-emerald-200 font-bold rounded-xl hover:bg-white/5 transition-all border border-emerald-400/40 hover:-translate-y-1 flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              County Explorer
+            </button>
           </div>
         </div>
       </div>
       <!-- floating stat chips -->
       <div class="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2 flex-col gap-4 z-10">
-        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slow">
-          <div class="text-2xl font-black text-emerald-300" id="hero-flagged">--</div>
-          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-5 float-slow shadow-xl">
+          <div class="text-3xl font-black text-emerald-300" id="hero-flagged">--</div>
+          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold mt-1">High-Risk Contracts</div>
         </div>
-        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slower">
-          <div class="text-2xl font-black text-red-300" id="hero-ghost">--</div>
-          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Ghost Projects</div>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-5 float-slower shadow-xl">
+          <div class="text-3xl font-black text-red-300" id="hero-ghost">--</div>
+          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold mt-1">Ghost Projects</div>
         </div>
-        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slow">
-          <div class="text-2xl font-black text-amber-300" id="hero-funds">KES --</div>
-          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Funds at Risk</div>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-5 float-slow shadow-xl">
+          <div class="text-3xl font-black text-amber-300" id="hero-funds">KES --</div>
+          <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold mt-1">Funds at Risk</div>
         </div>
       </div>
     </section>
 
     <!-- TRUST STRIP -->
     <section class="reveal">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm py-5 overflow-hidden">
-        <div class="marquee text-sm font-semibold text-slate-500">
-          <span>🇰🇪 All 47 Counties</span><span class="text-emerald-600">●</span>
-          <span>🛰️ Satellite Ghost-Project Verification</span><span class="text-emerald-600">●</span>
-          <span>🤖 AI Risk Scoring Engine</span><span class="text-emerald-600">●</span>
-          <span>🔒 100% Anonymous Reporting</span><span class="text-emerald-600">●</span>
-          <span>📊 Open Contracting Data Standard (OCDS)</span><span class="text-emerald-600">●</span>
-          <span>🇰🇪 All 47 Counties</span><span class="text-emerald-600">●</span>
-          <span>🛰️ AI Ghost-Project Verification</span><span class="text-emerald-600">●</span>
-          <span>🤖 AI-Driven Risk Scoring</span><span class="text-emerald-600">●</span>
-          <span>🔒 Anonymous Reporting</span><span class="text-emerald-600">●</span>
-          <span>📊 OCDS Live Sync</span><span class="text-emerald-600">●</span>
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm py-4 overflow-hidden">
+        <div class="marquee text-sm font-semibold text-slate-600">
+          <span class="flex items-center gap-2">🇰🇪 All 47 Counties Covered</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🛰️ Satellite Ghost-Project Verification</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🤖 AI Risk Scoring Engine</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🔒 100% Anonymous Reporting</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">📊 Open Contracting Data Standard (OCDS)</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🇰🇪 All 47 Counties Covered</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🛰️ AI Ghost-Project Verification</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🤖 AI-Driven Risk Scoring</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">🔒 Anonymous Reporting</span><span class="text-emerald-500">●</span>
+          <span class="flex items-center gap-2">📊 OCDS Live Sync</span><span class="text-emerald-500">●</span>
         </div>
       </div>
     </section>
@@ -202,22 +233,22 @@
     <!-- STAT CARDS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
       <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">🚩</span><span class="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">HIGH RISK</span></div>
+        <div class="flex items-center justify-between mb-3"><span class="text-2xl">🚩</span><span class="text-[10px] font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full border border-red-100">HIGH RISK</span></div>
         <div class="text-3xl md:text-4xl font-black text-red-600 mb-1" id="dash-flagged">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
       </div>
       <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-1">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">👻</span><span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">DETECTED</span></div>
+        <div class="flex items-center justify-between mb-3"><span class="text-2xl">👻</span><span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">DETECTED</span></div>
         <div class="text-3xl md:text-4xl font-black text-purple-600 mb-1" id="dash-ghost">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Ghost Projects</div>
       </div>
       <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-2">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">📢</span><span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">30 DAYS</span></div>
+        <div class="flex items-center justify-between mb-3"><span class="text-2xl">📢</span><span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">30 DAYS</span></div>
         <div class="text-3xl md:text-4xl font-black text-blue-600 mb-1" id="dash-reports">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Citizen Reports</div>
       </div>
       <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-3">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">💰</span><span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">AT RISK</span></div>
+        <div class="flex items-center justify-between mb-3"><span class="text-2xl">💰</span><span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">AT RISK</span></div>
         <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-1" id="dash-funds">KES --</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Funds at Risk</div>
       </div>
@@ -225,68 +256,77 @@
 
     <!-- HOW IT WORKS -->
     <section class="reveal">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-2">How It Works</p>
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-3">How It Works</p>
         <h3 class="font-display text-3xl md:text-4xl font-black text-slate-900">From raw contracts to citizen power</h3>
-        <p class="text-slate-500 mt-3">A transparent, four-step pipeline turns public procurement data into actionable intelligence.</p>
+        <p class="text-slate-500 mt-4 text-lg">A transparent, four-step pipeline turns public procurement data into actionable intelligence.</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl mb-4">📥</div>
-          <h4 class="font-bold text-slate-900 mb-1">1. Ingest</h4>
-          <p class="text-sm text-slate-500">Pull machine-readable records from the Open Contracting Data Standard (OCDS) feed, plus documented public-interest cases.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-14 h-14 rounded-xl bg-emerald-100 flex items-center justify-center text-3xl mb-5">📥</div>
+          <h4 class="font-bold text-slate-900 mb-2 text-lg">1. Ingest</h4>
+          <p class="text-sm text-slate-500 leading-relaxed">Pull machine-readable records from the Open Contracting Data Standard (OCDS) feed, plus documented public-interest cases.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl mb-4">🧠</div>
-          <h4 class="font-bold text-slate-900 mb-1">2. Score</h4>
-          <p class="text-sm text-slate-500">A transparent rules engine scores every contract for risk — bid type, value, supplier timing, and vague scope.</p>
+        <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center text-3xl mb-5">🧠</div>
+          <h4 class="font-bold text-slate-900 mb-2 text-lg">2. Score</h4>
+          <p class="text-sm text-slate-500 leading-relaxed">A transparent rules engine scores every contract for risk — bid type, value, supplier timing, and vague scope.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl mb-4">🛰️</div>
-          <h4 class="font-bold text-slate-900 mb-1">3. Verify</h4>
-          <p class="text-sm text-slate-500">Cross-check claimed project completion against live satellite imagery to expose "ghost" projects.</p>
+        <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-14 h-14 rounded-xl bg-purple-100 flex items-center justify-center text-3xl mb-5">🛰️</div>
+          <h4 class="font-bold text-slate-900 mb-2 text-lg">3. Verify</h4>
+          <p class="text-sm text-slate-500 leading-relaxed">Cross-check claimed project completion against live satellite imagery to expose "ghost" projects.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl mb-4">🔔</div>
-          <h4 class="font-bold text-slate-900 mb-1">4. Act</h4>
-          <p class="text-sm text-slate-500">Citizens report anonymously, AI triages credibility, and cases route to EACC, PPRA, or the DPP.</p>
+        <div class="bg-white p-7 rounded-2xl border border-slate-200 shadow-sm card-hover">
+          <div class="w-14 h-14 rounded-xl bg-red-100 flex items-center justify-center text-3xl mb-5">🔔</div>
+          <h4 class="font-bold text-slate-900 mb-2 text-lg">4. Act</h4>
+          <p class="text-sm text-slate-500 leading-relaxed">Citizens report anonymously, AI triages credibility, and cases route to EACC, PPRA, or the DPP.</p>
         </div>
       </div>
     </section>
 
     <!-- COUNTY EXPLORER -->
     <section id="county-explorer" class="reveal">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-2">County Explorer</p>
           <h3 class="font-display text-3xl md:text-4xl font-black text-slate-900">Risk across all 47 counties</h3>
-          <p class="text-slate-500 mt-2 text-sm">Click any county to jump straight into its contracts. Color intensity = high-risk contract count.</p>
+          <p class="text-slate-500 mt-2 text-lg">Click any county to jump straight into its contracts. Color intensity = high-risk contract count.</p>
         </div>
-        <div class="flex items-center gap-2 text-xs text-slate-500">
+        <div class="flex items-center gap-2 text-xs text-slate-500 font-medium bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
           <span>Low</span>
           <div class="flex gap-1">
-            <span class="w-4 h-4 rounded heatmap-0"></span><span class="w-4 h-4 rounded heatmap-1"></span><span class="w-4 h-4 rounded heatmap-2"></span><span class="w-4 h-4 rounded heatmap-3"></span><span class="w-4 h-4 rounded heatmap-4"></span><span class="w-4 h-4 rounded heatmap-5"></span>
+            <span class="w-5 h-5 rounded heatmap-0 border"></span><span class="w-5 h-5 rounded heatmap-1 border"></span><span class="w-5 h-5 rounded heatmap-2 border"></span><span class="w-5 h-5 rounded heatmap-3 border"></span><span class="w-5 h-5 rounded heatmap-4 border"></span><span class="w-5 h-5 rounded heatmap-5 border"></span>
           </div>
           <span>High</span>
         </div>
       </div>
-      <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
-        <div class="col-span-full text-center py-10 text-slate-400 bg-white rounded-xl border border-slate-200">Loading counties...</div>
+      <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div class="col-span-full text-center py-12 text-slate-400 bg-white rounded-xl border border-slate-200 border-dashed">
+          <div class="animate-pulse flex flex-col items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+            <span>Loading counties...</span>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- CHARTS + TOP FLAGGED -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal">
-        <h3 class="font-bold text-slate-900 mb-1">Risk Level Distribution</h3>
-        <p class="text-sm text-slate-500 mb-4">Share of contracts by AI risk score band.</p>
-        <div class="h-64"><canvas id="risk-chart"></canvas></div>
+        <h3 class="font-bold text-slate-900 mb-1 text-lg">Risk Level Distribution</h3>
+        <p class="text-sm text-slate-500 mb-6">Share of contracts by AI risk score band.</p>
+        <div class="h-72 flex items-center justify-center"><canvas id="risk-chart"></canvas></div>
       </div>
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal reveal-delay-1">
-        <h3 class="font-bold text-slate-900 mb-1">Top Flagged Contracts</h3>
-        <p class="text-sm text-slate-500 mb-4">Highest-risk contracts in the database.</p>
+        <h3 class="font-bold text-slate-900 mb-1 text-lg">Top Flagged Contracts</h3>
+        <p class="text-sm text-slate-500 mb-6">Highest-risk contracts in the database.</p>
         <div id="top-flagged" class="space-y-3">
-          <div class="animate-pulse text-slate-400 text-sm">Loading...</div>
+          <div class="animate-pulse space-y-3">
+            <div class="h-16 bg-slate-100 rounded-xl"></div>
+            <div class="h-16 bg-slate-100 rounded-xl"></div>
+            <div class="h-16 bg-slate-100 rounded-xl"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -294,31 +334,38 @@
     <!-- SECTOR CHART + GHOST PREVIEW -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal">
-        <h3 class="font-bold text-slate-900 mb-1">Contracts by Sector</h3>
-        <p class="text-sm text-slate-500 mb-4">Where procurement activity concentrates.</p>
-        <div class="h-64"><canvas id="sector-chart"></canvas></div>
+        <h3 class="font-bold text-slate-900 mb-1 text-lg">Contracts by Sector</h3>
+        <p class="text-sm text-slate-500 mb-6">Where procurement activity concentrates.</p>
+        <div class="h-72 flex items-center justify-center"><canvas id="sector-chart"></canvas></div>
       </div>
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal reveal-delay-1">
-        <div class="flex items-center justify-between mb-4">
-          <div><h3 class="font-bold text-slate-900">Latest Ghost Projects</h3><p class="text-sm text-slate-500">Satellite-verified anomalies.</p></div>
-          <button onclick="showTab('v-ghost')" class="text-xs font-bold text-brand-600 hover:text-brand-700">View all →</button>
+        <div class="flex items-center justify-between mb-6">
+          <div><h3 class="font-bold text-slate-900 text-lg">Latest Ghost Projects</h3><p class="text-sm text-slate-500">Satellite-verified anomalies.</p></div>
+          <button onclick="showTab('v-ghost')" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1 hover:gap-2 transition-all">View all <span>→</span></button>
         </div>
         <div id="ghost-preview" class="space-y-3">
-          <div class="animate-pulse text-slate-400 text-sm">Loading...</div>
+          <div class="animate-pulse space-y-3">
+            <div class="h-20 bg-slate-100 rounded-xl"></div>
+            <div class="h-20 bg-slate-100 rounded-xl"></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- REPORT CTA -->
     <section class="reveal">
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-700 via-red-600 to-rose-700 text-white p-8 md:p-14 shadow-2xl">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1920&q=80')] bg-cover bg-center opacity-15"></div>
-        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-800 via-red-700 to-rose-800 text-white p-8 md:p-14 shadow-2xl">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-red-900/80 to-transparent"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div class="max-w-xl">
-            <h3 class="font-display text-3xl md:text-4xl font-black mb-3">Seen something? Speak up.</h3>
-            <p class="text-red-100 text-lg">Your identity is fully protected. Reports are anonymous by default and AI-triage routes them to the right authority.</p>
+            <h3 class="font-display text-3xl md:text-4xl font-black mb-4">Seen something? Speak up.</h3>
+            <p class="text-red-100 text-lg leading-relaxed">Your identity is fully protected. Reports are anonymous by default and AI-triage routes them to the right authority.</p>
           </div>
-          <button onclick="showTab('v-report')" class="px-8 py-4 bg-white text-red-700 font-black rounded-xl hover:bg-red-50 transition-all shadow-lg hover:-translate-y-0.5 whitespace-nowrap">🚨 Submit a Report</button>
+          <button onclick="showTab('v-report')" class="px-8 py-4 bg-white text-red-800 font-black rounded-xl hover:bg-red-50 transition-all shadow-xl hover:-translate-y-1 whitespace-nowrap flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            Submit a Report
+          </button>
         </div>
       </div>
     </section>
@@ -326,11 +373,11 @@
     <!-- DATA HONESTY -->
     <section class="reveal">
       <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl flex-shrink-0">🛡️</div>
+        <div class="flex items-start gap-5">
+          <div class="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center text-3xl flex-shrink-0">🛡️</div>
           <div>
-            <h3 class="font-bold text-slate-900 mb-1">Data honesty, always</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Every contract carries a <b>data type</b> — <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span> (source-cited real cases), <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span> (official OCDS feed), or <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span> (representative sample). Kenya's PPIP is still working toward full OCDS compliance, so we're transparent about the gap — see the <button onclick="showTab('v-about')" class="text-brand-600 font-semibold hover:underline">Sources</button> tab.</p>
+            <h3 class="font-bold text-slate-900 mb-2 text-lg">Data honesty, always</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Every contract carries a <b>data type</b> — <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-doc">Documented</span> (source-cited real cases), <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">Live Sync</span> (official OCDS feed), or <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-ref">Reference</span> (representative sample). Kenya's PPIP is still working toward full OCDS compliance, so we're transparent about the gap — see the <button onclick="showTab('v-about')" class="text-brand-600 font-semibold hover:underline">Sources</button> tab.</p>
           </div>
         </div>
       </div>
@@ -342,14 +389,14 @@
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
       <div>
         <h2 class="text-2xl font-bold text-slate-900 font-display">Procurement Database</h2>
-        <p class="text-slate-500 text-sm">Browse, filter, and sync government contracts across all 47 counties.</p>
+        <p class="text-slate-500 text-sm mt-1">Browse, filter, and sync government contracts across all 47 counties.</p>
       </div>
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-3">
         <button onclick="exportCSV()" class="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
           Export CSV
         </button>
-        <button onclick="openModal('scan-modal')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
+        <button onclick="openModal('scan-modal')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm hover:shadow-md">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           Scan New Contract
         </button>
@@ -358,28 +405,25 @@
 
     <!-- Filters Bar -->
     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-3 items-center">
-      <input type="text" id="search-contracts" placeholder="Search ID, supplier, entity, description..." class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 w-full lg:w-72 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm" onkeyup="debounceLoadC()">
-      <select id="filter-county" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Counties (47)</option>
-      </select>
-      <select id="filter-sector" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Sectors</option>
-      </select>
-      <select id="filter-year" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Years</option>
-      </select>
-      <select id="filter-risk" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
+      <div class="relative flex-grow lg:flex-grow-0 lg:w-72">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="search-contracts" placeholder="Search ID, supplier, entity..." class="bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-4 py-2.5 w-full focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm transition-all" onkeyup="debounceLoadC()">
+      </div>
+      <select id="filter-county" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()"></select>
+      <select id="filter-sector" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()"></select>
+      <select id="filter-year" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()"></select>
+      <select id="filter-risk" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
         <option value="All">All Risk Levels</option>
         <option>HIGH</option><option>MEDIUM</option><option>LOW</option>
       </select>
-      <select id="filter-datatype" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
+      <select id="filter-datatype" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" onchange="loadC()">
         <option value="All">All Data Types</option>
-        <option value="documented">Documented (cited)</option>
-        <option value="live_sync">Live Sync (OCDS)</option>
-        <option value="reference">Reference (sample)</option>
+        <option value="documented">Documented</option>
+        <option value="live_sync">Live Sync</option>
+        <option value="reference">Reference</option>
         <option value="manual_scan">Manually Scanned</option>
       </select>
-      <button onclick="resetFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 ml-auto">Reset filters</button>
+      <button onclick="resetFilters()" class="text-xs font-semibold text-slate-500 hover:text-red-600 ml-auto px-3 py-2 rounded-lg hover:bg-red-50 transition-colors">Reset filters</button>
     </div>
 
     <!-- Data Table -->
@@ -400,16 +444,17 @@
             </tr>
           </thead>
           <tbody id="contracts-table" class="divide-y divide-slate-100">
-            <tr><td colspan="9" class="p-12 text-center text-slate-500">Loading database...</td></tr>
+            <tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading database...</span></div></td></tr>
           </tbody>
         </table>
       </div>
+      <!-- FIXED PAGINATION -->
       <div class="p-4 border-t border-slate-200 flex flex-wrap justify-between items-center gap-3 bg-slate-50">
         <span class="text-xs text-slate-500 font-medium" id="pagination-info">Showing 0 results</span>
         <div class="flex items-center gap-2">
-          <button onclick="prevPage()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100">← Prev</button>
-          <span class="text-xs font-semibold text-slate-600" id="page-indicator">Page 1</span>
-          <button onclick="nextPage()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100">Next →</button>
+          <button onclick="prevPage()" id="btn-prev" class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">← Previous</button>
+          <span class="text-xs text-slate-600 font-medium px-2" id="page-indicator">Page 1</span>
+          <button onclick="nextPage()" id="btn-next" class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Next →</button>
         </div>
       </div>
     </div>
@@ -417,214 +462,236 @@
 
   <!-- ===================== GHOST PROJECTS ===================== -->
   <div id="v-ghost" class="tab-content space-y-6">
-    <div class="text-center max-w-3xl mx-auto mb-2">
-      <h2 class="text-2xl font-bold text-slate-900 font-display mb-2">🛰️ Ghost Project Detector</h2>
-      <p class="text-slate-500">Satellite imagery verification vs. government-reported completion status.</p>
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900 font-display">Ghost Projects</h2>
+      <p class="text-slate-500 text-sm mt-1">Satellite-verified anomalies where claimed completion doesn't match reality.</p>
     </div>
     <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200">Loading...</div>
+      <div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200 border-dashed">Loading ghost projects...</div>
     </div>
   </div>
 
   <!-- ===================== REPORT ===================== -->
-  <div id="v-report" class="tab-content max-w-2xl mx-auto space-y-6">
-    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="p-3 bg-red-100 rounded-full"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-        <div><h2 class="text-2xl font-bold text-slate-900 font-display">Submit a Report</h2><p class="text-slate-500 text-sm">Anonymous by default · AI-assisted triage</p></div>
+  <div id="v-report" class="tab-content space-y-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-slate-900 font-display">Submit an Anonymous Report</h2>
+        <p class="text-slate-500 text-sm mt-2">Your identity is protected. All reports are encrypted and AI-triaged.</p>
       </div>
-      <form id="report-form" onsubmit="submitReport(event)" class="space-y-5">
+      <form onsubmit="submitReport(event)" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Type *</label>
-            <select name="type" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-              <option value="">— Select —</option>
-              <option>Bribery</option><option>Ghost project</option><option>Procurement fraud</option>
-              <option>Embezzlement</option><option>Nepotism / favoritism</option><option>Other</option>
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Report Type *</label>
+            <select name="type" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="bid_rigging">Bid Rigging / Collusion</option>
+              <option value="ghost_project">Ghost Project</option>
+              <option value="inflated_pricing">Inflated Pricing</option>
+              <option value="bribery">Bribery / Kickbacks</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County *</label>
-            <select name="county" required id="report-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-              <option value="">— Select —</option>
+            <select name="county" id="report-county" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="">— Select County —</option>
             </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Sector (optional)</label>
-            <select name="sector" id="report-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-              <option value="">— Select —</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Approximate amount (KES, optional)</label>
-            <input type="number" name="amount" min="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
           </div>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Description *</label>
-          <textarea name="description" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 resize-none" placeholder="What happened, when, and who was involved? Avoid sharing personal identifying info if you wish to remain anonymous."></textarea>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Sector</label>
+          <select name="sector" id="report-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">— Select Sector (Optional) —</option>
+          </select>
         </div>
-        <label class="flex items-center gap-2 text-sm text-slate-600">
-          <input type="checkbox" name="anonymous" checked class="rounded border-slate-300"> Submit anonymously (recommended)
-        </label>
-        <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-sm">🔒 Submit Securely</button>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Description of Incident *</label>
+          <textarea name="description" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500" placeholder="Provide as much detail as possible (dates, names, amounts, locations)..."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Estimated Amount (KES)</label>
+          <input type="number" name="amount" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500" placeholder="0">
+        </div>
+        <div class="flex items-center gap-3 pt-2">
+          <input type="checkbox" name="anonymous" id="anon-check" checked class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+          <label for="anon-check" class="text-sm text-slate-700 font-medium">Keep my report 100% anonymous (Recommended)</label>
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          Submit Securely
+        </button>
       </form>
     </div>
   </div>
 
   <!-- ===================== AI INVESTIGATOR ===================== -->
-  <div id="v-ai" class="tab-content space-y-6 max-w-4xl mx-auto">
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
-      <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900 flex items-center gap-2">🤖 AI Investigator <span class="text-xs font-normal text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">Gemini 2.5 Flash</span></h3>
-        <button onclick="clearChat()" class="text-xs font-semibold text-slate-400 hover:text-slate-700">Clear</button>
+  <div id="v-ai" class="tab-content space-y-6">
+    <div class="max-w-4xl mx-auto h-[calc(100vh-200px)] flex flex-col">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-slate-900 font-display">AI Investigator</h2>
+        <p class="text-slate-500 text-sm mt-1">Ask questions about high-risk contracts, ghost projects, or specific counties.</p>
       </div>
-      <div id="chat-history" class="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
-        <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>
-      </div>
-      <div class="p-4 border-t border-slate-200 bg-slate-50">
-        <form onsubmit="sendAI(event)" class="flex gap-2">
-          <input type="text" id="ai-input" placeholder="Ask about contracts, fraud patterns, a county..." class="flex-1 bg-white border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm" required>
-          <button type="submit" class="px-6 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg transition-colors">Send</button>
+      <div class="flex-grow bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+        <div id="chat-history" class="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+          <div class="flex gap-3">
+            <div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-sm">AI</div>
+            <div class="bg-white p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm">
+              <p class="text-sm text-slate-800 leading-relaxed">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p>
+            </div>
+          </div>
+        </div>
+        <form onsubmit="sendAI(event)" class="p-4 bg-white border-t border-slate-200 flex gap-3">
+          <button type="button" onclick="clearChat()" class="px-4 py-2.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg text-sm font-semibold transition-colors" title="Clear chat">Clear</button>
+          <input type="text" id="ai-input" placeholder="e.g., 'Show me high-risk contracts in Nairobi'" class="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+          <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-colors shadow-sm flex items-center gap-2">
+            Send
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+          </button>
         </form>
       </div>
     </div>
   </div>
 
   <!-- ===================== SYNC DATA ===================== -->
-  <div id="v-sync" class="tab-content space-y-6 max-w-3xl mx-auto">
-    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-      <h2 class="text-2xl font-bold mb-2 text-slate-900 font-display">📥 Live Data Sync (OCDS)</h2>
-      <p class="text-slate-500 mb-6 text-sm">Pull the latest machine-readable procurement records from the Open Contracting Partnership's Kenya publication for a given year, optionally narrowed to one county.</p>
-      <div class="flex flex-wrap gap-4 items-end">
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Year</label>
-          <select id="sync-year" class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none">
-            <option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option>
-          </select>
+  <div id="v-sync" class="tab-content space-y-6">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-bold text-slate-900 font-display mb-2">Sync Live OCDS Data</h2>
+      <p class="text-slate-500 text-sm mb-8">Pull live official procurement records from the Open Contracting Data Standard feed for a specific year and county.</p>
+      
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+        <div class="grid grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Year</label>
+            <select id="sync-year" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+              <option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County (Optional)</label>
+            <select id="sync-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="All">All Counties</option>
+            </select>
+          </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County (optional)</label>
-          <select id="sync-county" class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none min-w-[180px]">
-            <option value="All">All Counties</option>
-          </select>
+        <button onclick="startSync()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          Start Background Sync
+        </button>
+        <div id="sync-status" class="pt-4 border-t border-slate-100">
+          <span class="text-slate-500 text-sm">No sync history yet.</span>
         </div>
-        <button onclick="startSync()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors text-sm shadow-sm">🔄 Start Sync</button>
-        <button onclick="loadSyncStatus()" class="px-6 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors text-sm shadow-sm">📊 Refresh Status</button>
       </div>
-      <div id="sync-status" class="mt-6 divide-y divide-slate-100 text-sm text-slate-600 min-h-[60px]">Click "Refresh Status" to load recent sync history.</div>
-      <p class="mt-6 text-xs text-slate-400 leading-relaxed">Note: Kenya's official procurement portal (PPIP) is not yet fully OCDS-compliant, so live sync results depend on what the upstream registry currently publishes for the selected year — it may return zero new records for some years. This does not affect the documented and reference records already in the database.</p>
     </div>
   </div>
 
-  <!-- ===================== ABOUT / SOURCES ===================== -->
-  <div id="v-about" class="tab-content max-w-3xl mx-auto space-y-6">
-    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-5">
-      <h2 class="text-2xl font-bold text-slate-900 font-display">Data & Methodology</h2>
-      <p class="text-slate-600 text-sm leading-relaxed">Every contract in this platform carries a <b>data type</b> so you always know what you're looking at:</p>
-      <div class="space-y-3">
-        <div class="p-4 rounded-lg border border-orange-200 bg-orange-50">
-          <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span>
-          <p class="text-sm text-slate-700 mt-2">Real, publicly reported cases sourced from Auditor-General reports, court/EACC proceedings, and mainstream investigative reporting. Each record links to its source.</p>
+  <!-- ===================== SOURCES / ABOUT ===================== -->
+  <div id="v-about" class="tab-content space-y-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold text-slate-900 font-display mb-6">Data Sources & Methodology</h2>
+      <div class="space-y-4">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-start gap-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold border kw-badge-doc flex-shrink-0 mt-1">DOCUMENTED</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-1">Documented Cases</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">Real, source-cited procurement cases gathered from public records, investigative journalism, and official audit reports. These carry the highest confidence.</p>
+            </div>
+          </div>
         </div>
-        <div class="p-4 rounded-lg border border-sky-200 bg-sky-50">
-          <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span>
-          <p class="text-sm text-slate-700 mt-2">Pulled directly from the Open Contracting Partnership's machine-readable Kenya feed via the "Sync Data" tab, using the official Open Contracting Data Standard (OCDS).</p>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-start gap-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold border kw-badge-live flex-shrink-0 mt-1">LIVE SYNC</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-1">Live OCDS Sync</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">Machine-readable records pulled directly from the Open Contracting Data Standard (OCDS) feed where available. Kenya's PPIP is progressively adopting this standard.</p>
+            </div>
+          </div>
         </div>
-        <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-          <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span>
-          <p class="text-sm text-slate-700 mt-2">Representative sample records ensuring every one of the 47 counties has baseline data to browse while official machine-readable coverage is incomplete. Never presented as verified fact.</p>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-start gap-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold border kw-badge-ref flex-shrink-0 mt-1">REFERENCE</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-1">Reference Baseline</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">Representative sample contracts generated to ensure every county and sector has a baseline for UI testing and risk-scoring demonstration. Clearly labeled as such.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-start gap-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold border kw-badge-scan flex-shrink-0 mt-1">MANUAL SCAN</span>
+            <div>
+              <h3 class="font-bold text-slate-900 mb-1">Manual AI Scans</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">Contracts manually submitted by users or investigators through the "Scan New Contract" feature, processed through our risk engine in real-time.</p>
+            </div>
+          </div>
         </div>
       </div>
-      <p class="text-slate-600 text-sm leading-relaxed">Risk scores are computed by a transparent, rules-based engine (bid type, contract value, timing between supplier registration and award, and vague-scope language) — the same rules apply whether a contract was seeded, synced, or manually scanned.</p>
-      <p class="text-slate-400 text-xs">Kenya's Public Procurement Information Portal (PPIP) is still working toward full OCDS compliance, per Kenya's Open Government Partnership commitments — so no single automated feed currently covers every contract, in every county, for every year. This platform combines what's verifiably documented with what's live-syncable, and is transparent about the gap.</p>
     </div>
   </div>
 
 </main>
 
-<footer class="bg-navy-900 text-slate-300 mt-8">
-  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 text-sm">
-    <div class="flex flex-col md:flex-row justify-between gap-8">
-      <div class="max-w-md">
-        <p class="font-bold text-white font-display text-lg">KenyaWatch <span class="text-emerald-400">AI</span></p>
-        <p class="text-slate-400 mt-2 text-sm leading-relaxed">An independent civic-tech tool for procurement transparency. Not affiliated with the Government of Kenya, PPRA, or EACC.</p>
-      </div>
-      <div class="grid grid-cols-2 gap-8 text-sm">
-        <div>
-          <p class="font-bold text-white mb-3">Explore</p>
-          <ul class="space-y-2 text-slate-400">
-            <li><button onclick="showTab('v-procurement')" class="hover:text-emerald-400">Contracts</button></li>
-            <li><button onclick="showTab('v-ghost')" class="hover:text-emerald-400">Ghost Projects</button></li>
-            <li><button onclick="showTab('v-ai')" class="hover:text-emerald-400">AI Investigator</button></li>
-            <li><button onclick="showTab('v-sync')" class="hover:text-emerald-400">Sync Data</button></li>
-          </ul>
-        </div>
-        <div>
-          <p class="font-bold text-white mb-3">Get Help</p>
-          <ul class="space-y-2 text-slate-400">
-            <li>EACC Hotline: 0800 720 880</li>
-            <li>Free, 24/7</li>
-            <li><button onclick="showTab('v-report')" class="hover:text-emerald-400">Report anonymously</button></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="border-t border-slate-800 mt-8 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-slate-500">
-      <p>© 2026 KenyaWatch AI · Independent civic-tech initiative</p>
-      <p>Data sources: Auditor-General reports · EACC/DPP proceedings · Open Contracting Partnership (OCDS)</p>
+<!-- Footer -->
+<footer class="bg-navy-900 text-slate-400 py-8 mt-12 border-t border-slate-800">
+  <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+    <p>© 2026 KenyaWatch AI. Independent civic-tech platform.</p>
+    <div class="flex gap-6">
+      <a href="#" class="hover:text-white transition-colors">Privacy</a>
+      <a href="#" class="hover:text-white transition-colors">Terms</a>
+      <a href="#" class="hover:text-white transition-colors">API Docs</a>
     </div>
   </div>
 </footer>
 
+<!-- ===================== MODALS ===================== -->
+
 <!-- Scan Modal -->
 <div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
-      <h3 class="text-xl font-bold text-slate-900 font-display">🔍 Scan Contract</h3>
-      <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-2xl">
+      <h3 class="text-xl font-bold text-slate-900 font-display">Scan New Contract</h3>
+      <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none hover:bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors">&times;</button>
     </div>
     <div class="p-6 space-y-4">
+      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Supplier *</label><input type="text" id="scan-supplier" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Description</label><textarea id="scan-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Supplier *</label><input type="text" id="scan-supplier" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
-      </div>
-      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Description</label><textarea id="scan-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
-      <div class="grid grid-cols-3 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">County</label><select id="scan-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sector</label><select id="scan-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Value (KES) *</label><input type="number" id="scan-value" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">County</label><select id="scan-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></select></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sector</label><select id="scan-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></select></div>
       </div>
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Bid Type</label><select id="scan-bid" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"><option value="open">open</option><option value="restricted">restricted</option><option value="single_source">single_source</option></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Award Date</label><input type="date" id="scan-date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Value (KES) *</label><input type="number" id="scan-value" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Award Date</label><input type="date" id="scan-date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
       </div>
-      <button onclick="runScan()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg mt-4">🤖 Run AI Scan</button>
-      <div id="scan-result" class="hidden mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm"></div>
+      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Bid Type</label><select id="scan-bid" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"><option value="open">Open</option><option value="restricted">Restricted</option><option value="single_source">Single Source</option></select></div>
+      <button onclick="runScan()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition-all shadow-sm mt-2">🤖 Run AI Scan</button>
+      <div id="scan-result" class="hidden mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm"></div>
     </div>
   </div>
 </div>
 
 <!-- Contract Detail Modal -->
 <div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-2xl">
       <h3 class="text-xl font-bold text-slate-900 font-display">Contract Detail</h3>
-      <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+      <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none hover:bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors">&times;</button>
     </div>
-    <div id="detail-body" class="p-6 space-y-3 text-sm text-slate-700"></div>
+    <div id="detail-body" class="p-6 space-y-4 text-sm text-slate-700">
+      <div class="animate-pulse space-y-3">
+        <div class="h-6 bg-slate-100 rounded w-1/3"></div>
+        <div class="h-4 bg-slate-100 rounded w-full"></div>
+        <div class="h-4 bg-slate-100 rounded w-2/3"></div>
+      </div>
+   3</div>
   </div>
 </div>
 
 <!-- Toast -->
-<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-navy-900 text-white px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold toast"></div>
+<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-navy-900 text-white px-6 py-4 rounded-xl shadow-2xl text-sm font-semibold toast flex items-center gap-3 border border-slate-700"></div>
 
 <script>
   // ── Backend URL resolution ────────────────────────────────────────────────
-  // Priority: ?api= query param override (handy for testing) > the <meta>
-  // tag above > same-origin fallback.
   const API_BASE = (() => {
     const qp = new URLSearchParams(location.search).get('api');
     if (qp) return qp.replace(/\/$/, '');
@@ -640,7 +707,7 @@
   let riskChart = null, sectorChart = null;
 
   function formatMoney(n) {
-    if (!n) return '0';
+    if (!n && n !== 0) return '0';
     const num = parseInt(n, 10);
     if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
     if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
@@ -648,10 +715,10 @@
   }
 
   function dataTypeBadge(t) {
-    if (t === 'documented') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-doc">DOCUMENTED</span>`;
-    if (t === 'live_sync') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">LIVE SYNC</span>`;
-    if (t === 'manual_scan') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">SCANNED</span>`;
-    return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-ref">REFERENCE</span>`;
+    if (t === 'documented') return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-doc">DOCUMENTED</span>`;
+    if (t === 'live_sync') return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-live">LIVE SYNC</span>`;
+    if (t === 'manual_scan') return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-scan">SCANNED</span>`;
+    return `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold border kw-badge-ref">REFERENCE</span>`;
   }
 
   let debounceTimer;
@@ -668,20 +735,21 @@
     if (tabId === 'v-overview') loadDash();
     if (tabId === 'v-procurement') loadC();
     if (tabId === 'v-ghost') loadGhost();
+    if (tabId === 'v-sync') loadSyncStatus();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-  function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+  function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+  function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.body.style.overflow = ''; }
 
   function showConnError(show) { document.getElementById('conn-banner').classList.toggle('hidden', !show); }
 
-  function showToast(msg) {
+  function showToast(msg, isError = false) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
+    t.innerHTML = isError ? `<span class="text-red-400">⚠️</span> ${msg}` : `<span class="text-emerald-400">✅</span> ${msg}`;
     t.classList.remove('hidden');
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.add('hidden'), 3200);
+    t._timer = setTimeout(() => t.classList.add('hidden'), 4000);
   }
 
   async function apiFetch(path, opts) {
@@ -705,19 +773,22 @@
 
       const countyOpts = META.counties.map(c => `<option value="${c.name}">${c.name} (${c.contracts})</option>`).join('');
       const countyOptsPlain = META.counties.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+      
       document.getElementById('filter-county').innerHTML = '<option value="All">All Counties (47)</option>' + countyOpts;
-      document.getElementById('report-county').innerHTML = '<option value="">— Select —</option>' + countyOptsPlain;
-      document.getElementById('scan-county').innerHTML = countyOptsPlain;
+      document.getElementById('report-county').innerHTML = '<option value="">— Select County —</option>' + countyOptsPlain;
+      document.getElementById('scan-county').innerHTML = '<option value="">— Select County —</option>' + countyOptsPlain;
       document.getElementById('sync-county').innerHTML = '<option value="All">All Counties</option>' + countyOptsPlain;
 
       const sectorOpts = META.sectors.map(s => `<option>${s}</option>`).join('');
       document.getElementById('filter-sector').innerHTML = '<option value="All">All Sectors</option>' + sectorOpts;
-      document.getElementById('scan-sector').innerHTML = sectorOpts;
-      document.getElementById('report-sector').innerHTML = '<option value="">— Select —</option>' + sectorOpts;
+      document.getElementById('scan-sector').innerHTML = '<option value="">— Select Sector —</option>' + sectorOpts;
+      document.getElementById('report-sector').innerHTML = '<option value="">— Select Sector (Optional) —</option>' + sectorOpts;
 
       const years = META.years.length ? META.years : [2026, 2025, 2024, 2023, 2022, 2021];
       document.getElementById('filter-year').innerHTML = '<option value="All">All Years</option>' + years.map(y => `<option>${y}</option>`).join('');
-    } catch (e) { /* banner already shown by apiFetch */ }
+    } catch (e) { 
+      console.error("Meta load failed", e);
+    }
   }
 
   // ── Animated counter ─────────────────────────────────────────────────────
@@ -755,35 +826,41 @@
     loadGhostPreview();
   }
 
-  // ── County Explorer (heatmap) ────────────────────────────────────────────
+  // ── County Explorer (heatmap) - FIXED to guarantee all 47 counties ───────
   async function loadCountyExplorer() {
     const grid = document.getElementById('county-grid');
     try {
       const res = await apiFetch('/api/stats/by-county');
       const data = await res.json();
       const map = {};
-      (data.success ? data.data : []).forEach(c => { map[c.county] = c; });
-      const maxHigh = Math.max(1, ...Object.values(map).map(c => c.high_risk || 0));
-      const counties = META.counties.length ? META.counties : [];
-      if (!counties.length) {
-        // fallback: build from the by-county response if meta not ready
-        const names = Object.keys(map);
-        names.forEach(n => counties.push({ name: n }));
+      if (data.success && Array.isArray(data.data)) {
+        data.data.forEach(c => { map[c.county] = c; });
       }
+      
+      // Use META.counties as the source of truth for all 47 counties
+      const countiesToRender = META.counties.length > 0 ? META.counties : [];
+      
+      // Find max high risk for scaling
+      const maxHigh = Math.max(1, ...Object.values(map).map(c => c.high_risk || 0));
+      
       grid.innerHTML = '';
-      counties.forEach(c => {
+      countiesToRender.forEach(c => {
         const row = map[c.name] || { contracts: 0, high_risk: 0, funds_at_risk: 0 };
         const heat = row.high_risk === 0 ? 0 : Math.min(5, 1 + Math.round((row.high_risk / maxHigh) * 4));
         const el = document.createElement('button');
-        el.className = `county-chip heatmap-${heat} rounded-xl px-3 py-3 text-left border border-slate-200/60 shadow-sm`;
+        el.className = `county-chip heatmap-${heat} rounded-xl px-4 py-3.5 text-left border shadow-sm flex flex-col justify-between h-full`;
         el.innerHTML = `
-          <div class="font-bold text-sm truncate">${c.name}</div>
-          <div class="text-[11px] opacity-80">${row.contracts} contracts · ${row.high_risk} high-risk</div>`;
-        el.onclick = () => { document.getElementById('filter-county').value = c.name; showTab('v-procurement'); loadC(); };
+          <div class="font-bold text-sm truncate mb-1">${c.name}</div>
+          <div class="text-[11px] opacity-80 font-medium">${row.contracts} contracts · <span class="font-bold">${row.high_risk}</span> high-risk</div>`;
+        el.onclick = () => { 
+          document.getElementById('filter-county').value = c.name; 
+          showTab('v-procurement'); 
+          loadC(); 
+        };
         grid.appendChild(el);
       });
     } catch (e) {
-      grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-600">Failed to load counties.</div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-600 bg-red-50 rounded-xl border border-red-100">Failed to load counties. Please check your connection.</div>';
     }
   }
 
@@ -796,15 +873,18 @@
       const rows = data.data;
       const riskCounts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
       const sectorCounts = {};
-      rows.forEach(c => { if (riskCounts[c.risk_level] !== undefined) riskCounts[c.risk_level]++; sectorCounts[c.sector || 'Other'] = (sectorCounts[c.sector || 'Other'] || 0) + 1; });
+      rows.forEach(c => { 
+        if (riskCounts[c.risk_level] !== undefined) riskCounts[c.risk_level]++; 
+        sectorCounts[c.sector || 'Other'] = (sectorCounts[c.sector || 'Other'] || 0) + 1; 
+      });
 
       const riskCtx = document.getElementById('risk-chart');
       if (riskCtx) {
         if (riskChart) riskChart.destroy();
         riskChart = new Chart(riskCtx, {
           type: 'doughnut',
-          data: { labels: ['HIGH', 'MEDIUM', 'LOW'], datasets: [{ data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], backgroundColor: ['#dc2626', '#f59e0b', '#10b981'], borderWidth: 2, borderColor: '#fff' }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+          data: { labels: ['HIGH', 'MEDIUM', 'LOW'], datasets: [{ data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], backgroundColor: ['#dc2626', '#f59e0b', '#10b981'], borderWidth: 0, hoverOffset: 8 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } } }
         });
       }
       const secCtx = document.getElementById('sector-chart');
@@ -813,8 +893,8 @@
         if (sectorChart) sectorChart.destroy();
         sectorChart = new Chart(secCtx, {
           type: 'bar',
-          data: { labels: sorted.map(s => s[0]), datasets: [{ label: 'Contracts', data: sorted.map(s => s[1]), backgroundColor: '#059669', borderRadius: 6 }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+          data: { labels: sorted.map(s => s[0]), datasets: [{ label: 'Contracts', data: sorted.map(s => s[1]), backgroundColor: '#059669', borderRadius: 6, barThickness: 20 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
         });
       }
     } catch (e) { /* noop */ }
@@ -826,20 +906,20 @@
     try {
       const res = await apiFetch('/api/contracts?risk_level=HIGH&limit=5');
       const data = await res.json();
-      if (!data.success || !data.data.length) { box.innerHTML = '<p class="text-slate-400 text-sm">No high-risk contracts found.</p>'; return; }
+      if (!data.success || !data.data.length) { box.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">No high-risk contracts found.</p>'; return; }
       box.innerHTML = data.data.map(c => `
-        <div class="flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors" onclick="showDetail('${c.contract_id}')">
-          <div class="min-w-0">
-            <div class="font-mono text-[11px] text-slate-400 truncate">${c.contract_id}</div>
-            <div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(c.description)}</div>
-            <div class="text-xs text-slate-500">${c.county || '—'} · ${c.sector || '—'}</div>
+        <div class="flex items-center justify-between gap-3 p-4 rounded-xl border border-slate-100 hover:bg-slate-50 hover:border-brand-200 cursor-pointer transition-all group" onclick="showDetail('${c.contract_id}')">
+          <div class="min-w-0 flex-1">
+            <div class="font-mono text-[11px] text-slate-400 truncate mb-0.5">${c.contract_id}</div>
+            <div class="text-sm font-semibold text-slate-800 truncate group-hover:text-brand-700 transition-colors">${escapeHtml(c.description)}</div>
+            <div class="text-xs text-slate-500 mt-1">${c.county || '—'} · ${c.sector || '—'}</div>
           </div>
           <div class="text-right flex-shrink-0">
             <div class="text-sm font-black text-red-600">${c.risk_score}</div>
-            <div class="text-[10px] text-slate-400 uppercase">risk</div>
+            <div class="text-[10px] text-slate-400 uppercase font-semibold">risk</div>
           </div>
         </div>`).join('');
-    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm">Failed to load.</div>'; }
+    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm text-center py-4">Failed to load.</div>'; }
   }
 
   // ── Ghost project preview ────────────────────────────────────────────────
@@ -848,19 +928,19 @@
     try {
       const res = await apiFetch('/api/ghost-projects');
       const data = await res.json();
-      if (!data.success || !data.data.length) { box.innerHTML = '<div class="text-slate-400 text-sm">No ghost projects detected.</div>'; return; }
+      if (!data.success || !data.data.length) { box.innerHTML = '<div class="text-slate-400 text-sm text-center py-4">No ghost projects detected.</div>'; return; }
       box.innerHTML = data.data.slice(0, 4).map(g => `
-        <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
-          <div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200">
-            <img src="${g.satellite_image_url || 'https://placehold.co/100x100?text=Sat'}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+        <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer" onclick="showTab('v-ghost')">
+          <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200 relative">
+            <img src="${g.satellite_image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=200&auto=format&fit=crop'}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=200&auto=format&fit=crop'">
           </div>
           <div class="min-w-0 flex-1">
             <div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(g.project_name)}</div>
-            <div class="text-xs text-slate-500">${g.county} · KES ${formatMoney(g.amount_at_risk)}</div>
+            <div class="text-xs text-slate-500 mt-0.5">${g.county} · KES ${formatMoney(g.amount_at_risk)}</div>
           </div>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700'}">${g.detection_status.toUpperCase()}</span>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'}">${g.detection_status.toUpperCase()}</span>
         </div>`).join('');
-    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm">Failed to load.</div>'; }
+    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm text-center py-4">Failed to load.</div>'; }
   }
 
   function scrollToCounty() {
@@ -872,7 +952,7 @@
   function initReveal() {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
@@ -889,7 +969,7 @@
   }
 
   function prevPage() { if (currentPage > 1) { currentPage--; loadC(); } }
-  function nextPage() { if (currentPage * PAGE_SIZE < lastTotal) { currentPage++; loadC(); } }
+  function nextPage() { if ((currentPage * PAGE_SIZE) < lastTotal) { currentPage++; loadC(); } }
 
   async function loadC() {
     const search = document.getElementById('search-contracts').value;
@@ -905,7 +985,7 @@
     });
 
     const tbody = document.getElementById('contracts-table');
-    tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse">Querying database...</div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Querying database...</span></div></td></tr>';
 
     try {
       const res = await apiFetch('/api/contracts?' + params.toString());
@@ -913,15 +993,20 @@
       tbody.innerHTML = '';
       if (data.success && data.data.length > 0) {
         lastTotal = data.total || data.data.length;
-        document.getElementById('pagination-info').textContent = `Showing ${(currentPage-1)*PAGE_SIZE+1}-${(currentPage-1)*PAGE_SIZE+data.data.length} of ${lastTotal} contracts`;
+        document.getElementById('pagination-info').textContent = `Showing ${(currentPage-1)*PAGE_SIZE+1}–${Math.min(currentPage*PAGE_SIZE, lastTotal)} of ${lastTotal} contracts`;
         document.getElementById('page-indicator').textContent = `Page ${currentPage}`;
+        
+        // Update pagination buttons
+        document.getElementById('btn-prev').disabled = currentPage === 1;
+        document.getElementById('btn-next').disabled = (currentPage * PAGE_SIZE) >= lastTotal;
+
         data.data.forEach(c => {
           const riskColor = c.risk_level === 'HIGH' ? 'text-red-700 bg-red-50 border-red-200' : (c.risk_level === 'MEDIUM' ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200');
           const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-50 transition-colors cursor-pointer';
+          tr.className = 'hover:bg-slate-50 transition-colors cursor-pointer border-b border-slate-50 last:border-0';
           tr.onclick = () => showDetail(c.contract_id);
           tr.innerHTML = `
-            <td class="p-4 font-mono text-xs text-slate-600">${c.contract_id}</td>
+            <td class="p-4 font-mono text-xs text-slate-600 font-medium">${c.contract_id}</td>
             <td class="p-4 text-slate-900 font-medium max-w-xs truncate" title="${escapeHtml(c.description)}">${escapeHtml(c.description)}</td>
             <td class="p-4 text-slate-700">${c.county || '—'}</td>
             <td class="p-4 text-slate-700">${c.sector || '—'}</td>
@@ -933,12 +1018,14 @@
           tbody.appendChild(tr);
         });
       } else {
-        tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500">No contracts found matching filters.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500 bg-slate-50/50">No contracts found matching filters.</td></tr>';
         document.getElementById('pagination-info').textContent = '0 results';
+        document.getElementById('btn-prev').disabled = true;
+        document.getElementById('btn-next').disabled = true;
         lastTotal = 0;
       }
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-red-600">Connection failed. Verify the backend URL configured on this page.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-red-600 bg-red-50 rounded-xl border border-red-100 m-4">Connection failed. Verify the backend URL configured on this page.</td></tr>`;
     }
   }
 
@@ -946,38 +1033,44 @@
 
   async function showDetail(contractId) {
     const body = document.getElementById('detail-body');
-    body.innerHTML = '<div class="animate-pulse text-slate-400">Loading...</div>';
+    body.innerHTML = '<div class="animate-pulse space-y-3"><div class="h-6 bg-slate-100 rounded w-1/3"></div><div class="h-4 bg-slate-100 rounded w-full"></div><div class="h-4 bg-slate-100 rounded w-2/3"></div></div>';
     openModal('detail-modal');
     try {
       const res = await apiFetch('/api/contracts/' + encodeURIComponent(contractId));
       const data = await res.json();
-      if (!data.success) { body.innerHTML = '<p class="text-red-600">Not found.</p>'; return; }
+      if (!data.success) { body.innerHTML = '<p class="text-red-600 text-center py-8">Contract not found.</p>'; return; }
       const c = data.data;
       let flags = [];
       try { flags = typeof c.flags === 'string' ? JSON.parse(c.flags) : (c.flags || []); } catch (e) {}
+      
+      const riskColor = c.risk_level === 'HIGH' ? 'text-red-700 bg-red-50' : (c.risk_level === 'MEDIUM' ? 'text-amber-700 bg-amber-50' : 'text-emerald-700 bg-emerald-50');
+      
       body.innerHTML = `
-        <div class="flex justify-between items-start">
-          <div><p class="font-mono text-xs text-slate-500">${c.contract_id}</p><h4 class="text-lg font-bold text-slate-900">${escapeHtml(c.description)}</h4></div>
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-3 pb-4 border-b border-slate-100">
+          <div>
+            <p class="font-mono text-xs text-slate-500 mb-1">${c.contract_id}</p>
+            <h4 class="text-xl font-bold text-slate-900 leading-tight">${escapeHtml(c.description)}</h4>
+          </div>
           ${dataTypeBadge(c.data_type)}
         </div>
-        <div class="grid grid-cols-2 gap-4 pt-2">
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">County</p><p class="font-medium">${c.county || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Sector</p><p class="font-medium">${c.sector || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Value</p><p class="font-medium">KES ${Number(c.value).toLocaleString()}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Awarded</p><p class="font-medium">${c.awarded_date || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Bid Type</p><p class="font-medium">${c.bid_type || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Status</p><p class="font-medium capitalize">${c.status || 'active'}</p></div>
-          <div class="col-span-2"><p class="text-xs uppercase text-slate-400 font-semibold">Supplier</p><p class="font-medium">${escapeHtml(c.supplier||'—')}</p></div>
-          <div class="col-span-2"><p class="text-xs uppercase text-slate-400 font-semibold">Procuring Entity</p><p class="font-medium">${escapeHtml(c.procuring_entity||'—')}</p></div>
+        <div class="grid grid-cols-2 gap-6 pt-2">
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">County</p><p class="font-semibold text-slate-800">${c.county || '—'}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Sector</p><p class="font-semibold text-slate-800">${c.sector || '—'}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Value</p><p class="font-semibold text-slate-800">KES ${Number(c.value || 0).toLocaleString()}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Awarded</p><p class="font-semibold text-slate-800">${c.awarded_date || '—'}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Bid Type</p><p class="font-semibold text-slate-800 capitalize">${(c.bid_type || '—').replace('_', ' ')}</p></div>
+          <div><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Status</p><p class="font-semibold text-slate-800 capitalize">${c.status || 'active'}</p></div>
+          <div class="col-span-2"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Supplier</p><p class="font-semibold text-slate-800">${escapeHtml(c.supplier||'—')}</p></div>
+          <div class="col-span-2"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Procuring Entity</p><p class="font-semibold text-slate-800">${escapeHtml(c.procuring_entity||'—')}</p></div>
         </div>
-        <div class="pt-3 border-t border-slate-100">
-          <p class="text-xs uppercase text-slate-400 font-semibold mb-2">Risk Assessment — ${c.risk_score}/100 (${c.risk_level})</p>
-          <ul class="list-disc pl-5 space-y-1">${flags.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+        <div class="pt-4 border-t border-slate-100">
+          <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-3">Risk Assessment — <span class="${riskColor} px-2 py-0.5 rounded font-bold">${c.risk_score}/100 (${c.risk_level})</span></p>
+          ${flags.length > 0 ? `<ul class="list-disc pl-5 space-y-1.5 text-slate-700">${flags.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>` : '<p class="text-slate-500 italic">No specific risk flags generated.</p>'}
         </div>
-        ${c.notes ? `<div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-1">Notes</p><p>${escapeHtml(c.notes)}</p></div>` : ''}
-        ${c.source_url ? `<div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-1">Source</p><a href="${c.source_url}" target="_blank" rel="noopener" class="text-brand-600 hover:underline font-medium">${escapeHtml(c.source_name || c.source_url)} ↗</a></div>` : ''}
+        ${c.notes ? `<div class="pt-4 border-t border-slate-100"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Notes</p><p class="text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100">${escapeHtml(c.notes)}</p></div>` : ''}
+        ${c.source_url ? `<div class="pt-4 border-t border-slate-100"><p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-1">Source</p><a href="${c.source_url}" target="_blank" rel="noopener" class="text-brand-600 hover:text-brand-700 hover:underline font-semibold flex items-center gap-1">${escapeHtml(c.source_name || c.source_url)} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></div>` : ''}
       `;
-    } catch (e) { body.innerHTML = '<p class="text-red-600">Failed to load contract.</p>'; }
+    } catch (e) { body.innerHTML = '<p class="text-red-600 text-center py-8">Failed to load contract details.</p>'; }
   }
 
   // ── CSV export ───────────────────────────────────────────────────────────
@@ -996,6 +1089,7 @@
   // ── Ghost projects ───────────────────────────────────────────────────────
   async function loadGhost() {
     const grid = document.getElementById('ghost-grid');
+    grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500"><div class="animate-pulse flex flex-col items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-200"></div><span>Loading ghost projects...</span></div></div>';
     try {
       const res = await apiFetch('/api/ghost-projects');
       const data = await res.json();
@@ -1003,30 +1097,34 @@
       if (data.success && data.data.length > 0) {
         data.data.forEach(g => {
           const el = document.createElement('div');
-          el.className = 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover';
+          el.className = 'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden card-hover flex flex-col';
           el.innerHTML = `
-            <div class="h-48 bg-slate-200 relative">
-              <img src="${g.satellite_image_url || 'https://placehold.co/600x400?text=Satellite'}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Satellite'">
-              <div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'}">${g.detection_status.toUpperCase()}</div>
+            <div class="h-56 bg-slate-200 relative group">
+              <img src="${g.satellite_image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop'}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'} backdrop-blur-sm">${g.detection_status.toUpperCase()}</div>
               <div class="absolute top-3 left-3">${dataTypeBadge(g.data_type)}</div>
             </div>
-            <div class="p-5">
-              <h3 class="font-bold text-slate-900">${escapeHtml(g.project_name)}</h3>
-              <p class="text-xs text-slate-500 mb-1">📍 ${g.county} County</p>
-              <p class="text-xs text-slate-500 mb-3">Claimed: ${escapeHtml(g.claimed_status||'—')}<br>Satellite: ${escapeHtml(g.satellite_status||'—')}</p>
-              <div class="flex justify-between items-center pt-3 border-t border-slate-100">
-                <span class="text-red-600 font-bold">KES ${formatMoney(g.amount_at_risk)}</span>
-                <span class="text-xs text-slate-500">${g.confidence_score}% confidence</span>
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="font-bold text-slate-900 text-lg mb-1">${escapeHtml(g.project_name)}</h3>
+              <p class="text-xs text-slate-500 mb-3 flex items-center gap-1">📍 ${g.county} County</p>
+              <div class="bg-slate-50 rounded-lg p-3 mb-4 border border-slate-100 flex-grow">
+                <p class="text-xs text-slate-600 mb-1"><span class="font-semibold">Claimed:</span> ${escapeHtml(g.claimed_status||'—')}</p>
+                <p class="text-xs text-slate-600"><span class="font-semibold">Satellite:</span> ${escapeHtml(g.satellite_status||'—')}</p>
               </div>
-              ${g.source_url ? `<a href="${g.source_url}" target="_blank" rel="noopener" class="block mt-3 text-xs text-brand-600 hover:underline font-semibold">${escapeHtml(g.source_name||'Source')} ↗</a>` : ''}
+              <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-auto">
+                <span class="text-red-600 font-black text-lg">KES ${formatMoney(g.amount_at_risk)}</span>
+                <span class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded">${g.confidence_score}% confidence</span>
+              </div>
+              ${g.source_url ? `<a href="${g.source_url}" target="_blank" rel="noopener" class="block mt-4 text-xs text-brand-600 hover:text-brand-700 hover:underline font-semibold flex items-center gap-1">View Source <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>` : ''}
             </div>`;
           grid.appendChild(el);
         });
       } else {
-        grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200">No ghost projects detected.</div>';
+        grid.innerHTML = '<div class="col-span-full text-center py-16 text-slate-500 bg-white rounded-2xl border border-slate-200 border-dashed">No ghost projects detected in the database.</div>';
       }
     } catch (e) {
-      grid.innerHTML = '<div class="col-span-full text-center py-12 text-red-600">Failed to load.</div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-16 text-red-600 bg-red-50 rounded-2xl border border-red-100">Failed to load ghost projects. Check your connection.</div>';
     }
   }
 
@@ -1035,7 +1133,9 @@
     e.preventDefault();
     const form = e.target;
     const btn = form.querySelector('button[type="submit"]');
-    btn.innerHTML = 'Submitting...'; btn.disabled = true;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Submitting...'; 
+    btn.disabled = true;
     try {
       const res = await apiFetch('/api/reports', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1047,16 +1147,23 @@
         }),
       });
       const data = await res.json();
-      if (data.success) { showToast('✅ Report submitted. Case number: ' + data.data.case_number); form.reset(); }
-      else { showToast('Error: ' + data.error); }
-    } catch (err) { showToast('Network error — please try again.'); }
-    btn.innerHTML = '🔒 Submit Securely'; btn.disabled = false;
+      if (data.success) { 
+        showToast('✅ Report submitted securely. Case number: ' + data.data.case_number); 
+        form.reset(); 
+      } else { 
+        showToast('Error: ' + data.error, true); 
+      }
+    } catch (err) { 
+      showToast('Network error — please try again.', true); 
+    }
+    btn.innerHTML = originalText; 
+    btn.disabled = false;
   }
 
   // ── AI chat ──────────────────────────────────────────────────────────────
   function clearChat() {
     const history = document.getElementById('chat-history');
-    history.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`;
+    history.innerHTML = `<div class="flex gap-3"><div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200 shadow-sm"><p class="text-sm text-slate-800 leading-relaxed">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`;
   }
 
   async function sendAI(e) {
@@ -1064,27 +1171,33 @@
     const input = document.getElementById('ai-input');
     const msg = input.value.trim(); if (!msg) return;
     const history = document.getElementById('chat-history');
+    
     const userDiv = document.createElement('div');
     userDiv.className = 'flex gap-3 flex-row-reverse';
-    userDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-slate-300 flex items-center justify-center text-sm font-bold text-white">You</div><div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800">${escapeHtml(msg)}</div>`;
+    userDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-slate-300 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">You</div><div class="bg-brand-50 border border-brand-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800 shadow-sm">${escapeHtml(msg)}</div>`;
     history.appendChild(userDiv);
     input.value = '';
+    
     const loadDiv = document.createElement('div');
     loadDiv.id = 'ai-loading';
     loadDiv.className = 'flex gap-3';
-    loadDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none border border-slate-200 text-sm text-slate-500 animate-pulse">Thinking...</div>`;
+    loadDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-sm text-slate-500 flex items-center gap-2"><div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div><div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div></div>`;
     history.appendChild(loadDiv);
     history.scrollTop = history.scrollHeight;
+    
     try {
       const res = await apiFetch('/api/ai/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: msg }) });
       const data = await res.json();
       document.getElementById('ai-loading')?.remove();
       const aiDiv = document.createElement('div');
       aiDiv.className = 'flex gap-3';
-      aiDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none border border-slate-200 text-sm text-slate-800 whitespace-pre-wrap">${escapeHtml(data.reply)}</div>`;
+      aiDiv.innerHTML = `<div class="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-sm">AI</div><div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">${escapeHtml(data.reply)}</div>`;
       history.appendChild(aiDiv);
       history.scrollTop = history.scrollHeight;
-    } catch (err) { document.getElementById('ai-loading')?.remove(); }
+    } catch (err) { 
+      document.getElementById('ai-loading')?.remove(); 
+      showToast('Failed to reach AI service.', true);
+    }
   }
 
   // ── Scan contract ────────────────────────────────────────────────────────
@@ -1092,10 +1205,12 @@
     const id = document.getElementById('scan-id').value;
     const supplier = document.getElementById('scan-supplier').value;
     const value = document.getElementById('scan-value').value;
-    if (!id || !supplier || !value) { showToast('Fill required fields'); return; }
+    if (!id || !supplier || !value) { showToast('Please fill in all required fields (*)', true); return; }
+    
     const resultDiv = document.getElementById('scan-result');
     resultDiv.classList.remove('hidden');
-    resultDiv.innerHTML = '<span class="text-blue-600 animate-pulse">Analysing...</span>';
+    resultDiv.innerHTML = '<span class="text-blue-600 animate-pulse flex items-center gap-2"><svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Analysing contract risk...</span>';
+    
     try {
       const res = await apiFetch('/api/contracts/scan', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1111,10 +1226,19 @@
         const c = data.data;
         let flags = [];
         try { flags = typeof c.flags === 'string' ? JSON.parse(c.flags) : c.flags; } catch (e) {}
-        resultDiv.innerHTML = `<div class="font-bold text-lg ${c.risk_level==='HIGH'?'text-red-600':(c.risk_level==='MEDIUM'?'text-amber-600':'text-emerald-600')}">Risk Score: ${c.risk_score}/100 (${c.risk_level})</div><ul class="list-disc pl-5 mt-2 text-slate-700">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>`;
+        const color = c.risk_level==='HIGH'?'text-red-600':(c.risk_level==='MEDIUM'?'text-amber-600':'text-emerald-600');
+        resultDiv.innerHTML = `
+          <div class="font-bold text-lg ${color} mb-2">Risk Score: ${c.risk_score}/100 (${c.risk_level})</div>
+          ${flags.length > 0 ? `<ul class="list-disc pl-5 space-y-1 text-slate-700">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>` : '<p class="text-slate-600">No specific risk flags detected.</p>'}
+        `;
+        showToast('✅ Contract scanned and saved successfully');
         currentPage = 1; loadC();
-      } else { resultDiv.innerHTML = `<span class="text-red-600">Error: ${escapeHtml(data.error)}</span>`; }
-    } catch (e) { resultDiv.innerHTML = '<span class="text-red-600">Network error.</span>'; }
+      } else { 
+        resultDiv.innerHTML = `<span class="text-red-600 font-medium">Error: ${escapeHtml(data.error)}</span>`; 
+      }
+    } catch (e) { 
+      resultDiv.innerHTML = '<span class="text-red-600 font-medium">Network error. Please try again.</span>'; 
+    }
   }
 
   // ── Sync ─────────────────────────────────────────────────────────────────
@@ -1122,13 +1246,19 @@
     const year = document.getElementById('sync-year').value;
     const county = document.getElementById('sync-county').value;
     const statusDiv = document.getElementById('sync-status');
-    statusDiv.innerHTML = '<span class="text-blue-600 animate-pulse">Starting background sync...</span>';
+    statusDiv.innerHTML = '<span class="text-blue-600 animate-pulse flex items-center gap-2"><svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Starting background sync...</span>';
     try {
       const res = await apiFetch('/api/sync/ocds', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ year: parseInt(year, 10), county }) });
       const data = await res.json();
-      if (data.success) { statusDiv.innerHTML = `<div class="text-emerald-700 font-bold py-2">✅ ${data.message}</div>`; setTimeout(loadSyncStatus, 4000); }
-      else { statusDiv.innerHTML = `<span class="text-red-600">❌ ${escapeHtml(data.error)}</span>`; }
-    } catch (e) { statusDiv.innerHTML = '<span class="text-red-600">❌ Network error.</span>'; }
+      if (data.success) { 
+        statusDiv.innerHTML = `<div class="text-emerald-700 font-bold py-2 flex items-center gap-2">✅ ${data.message}</div>`; 
+        setTimeout(loadSyncStatus, 4000); 
+      } else { 
+        statusDiv.innerHTML = `<span class="text-red-600 font-medium">❌ ${escapeHtml(data.error)}</span>`; 
+      }
+    } catch (e) { 
+      statusDiv.innerHTML = '<span class="text-red-600 font-medium">❌ Network error.</span>'; 
+    }
   }
 
   async function loadSyncStatus() {
@@ -1137,15 +1267,19 @@
       const res = await apiFetch('/api/sync/status');
       const data = await res.json();
       if (data.success && data.data.length > 0) {
-        statusDiv.innerHTML = data.data.map(log => `
-          <div class="flex justify-between items-center py-2.5">
-            <span class="font-medium text-slate-900">${log.year}${log.county ? ' · ' + log.county : ''} —
-              <span class="${log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-blue-600')} font-bold uppercase">${log.status}</span>
+        statusDiv.innerHTML = '<div class="space-y-2">' + data.data.map(log => `
+          <div class="flex justify-between items-center py-3 px-4 bg-slate-50 rounded-lg border border-slate-100">
+            <span class="font-medium text-slate-900 text-sm">${log.year}${log.county ? ' · ' + log.county : ''} —
+              <span class="${log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-blue-600')} font-bold uppercase text-xs ml-2">${log.status}</span>
             </span>
-            <span class="text-sm text-slate-600">${log.records || 0} records${log.error_msg ? ' · ' + escapeHtml(log.error_msg) : ''}</span>
-          </div>`).join('');
-      } else { statusDiv.innerHTML = '<span class="text-slate-500">No sync history yet.</span>'; }
-    } catch (e) { statusDiv.innerHTML = '<span class="text-red-600">Failed to load status.</span>'; }
+            <span class="text-xs text-slate-500 font-medium">${log.records || 0} records${log.error_msg ? ' · ' + escapeHtml(log.error_msg) : ''}</span>
+          </div>`).join('') + '</div>';
+      } else { 
+        statusDiv.innerHTML = '<span class="text-slate-500 text-sm">No sync history yet.</span>'; 
+      }
+    } catch (e) { 
+      statusDiv.innerHTML = '<span class="text-red-600 text-sm">Failed to load status.</span>'; 
+    }
   }
 
   // ── Init ─────────────────────────────────────────────────────────────────
