@@ -61,13 +61,13 @@ router.get('/', async (req, res) => {
 
     const { rows } = await pool.query(query, params);
     
-    // Safely parse JSONB flags
+    // Safely parse JSONB flags to prevent frontend crashes
     const parsedRows = rows.map(row => {
       if (typeof row.flags === 'string') {
         try { row.flags = JSON.parse(row.flags); } catch (e) { row.flags = []; }
       } else if (!Array.isArray(row.flags)) {
         row.flags = [];
-     3}
+      }
       return row;
     });
 
@@ -79,8 +79,7 @@ router.get('/', async (req, res) => {
 });
 
 // ── 3. GET /api/contracts/export (CSV Export) ───────────────────────────────
-// CRITICAL: This MUST be defined BEFORE the /:contractId route, 
-// otherwise Express will treat "export" as a contractId parameter.
+// CRITICAL: This MUST be defined BEFORE the /:contractId route.
 router.get('/export', async (req, res) => {
   try {
     const { county, sector, risk_level, year, data_type, search } = req.query;
