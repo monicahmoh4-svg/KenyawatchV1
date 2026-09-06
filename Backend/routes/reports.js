@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     if (county && county !== 'All') { query += ` AND county = $${pIdx}`; params.push(county); pIdx++; }
     query += ' ORDER BY created_at DESC';
     const { rows } = await pool.query(query, params);
-    res.json({ success: true, data: rows });
+    res.json({ success: true, data: rows || [] });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
   }
@@ -24,14 +24,13 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ success: false, error: 'type and description are required' });
     }
     const case_number = 'KW-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
-    const credibility = Math.floor(60 + Math.random() * 35);
-    const routing = /bribery|embezzlement/i.test(type) ? 'EACC' : (/procurement/i.test(type) ? 'PPRA' : 'DPP');
+    const credibility = Math.floor(75 + Math.random() * 23);
+    const routing = /bribery|embezzlement|corruption|kickback/i.test(type) ? 'EACC' : (/procurement|tender|bid/i.test(type) ? 'PPRA' : 'DCI Financial Crimes');
     const { rows } = await pool.query(
       `INSERT INTO reports (case_number, type, county, sector, description, amount, anonymous, ai_credibility_score, routing)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
-      [case_number, type, county || null, sector || null, description, amount || 0, anonymous !== false, credibility, routing]
+      [case_number, type, county || 'National', sector || 'General', description, Number(amount) || 0, anonymous !== false, credibility, routing]
     );
-    if (req.app.locals.broadcast) req.app.locals.broadcast('new_report', { message: `New report: ${case_number}` });
     res.status(201).json({ success: true, data: rows[0] });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
@@ -41,7 +40,7 @@ router.post('/', async (req, res) => {
 router.patch('/:id/status', async (req, res) => {
   try {
     const { rows } = await pool.query('UPDATE reports SET status=$1, updated_at=NOW() WHERE id=$2 RETURNING *', [req.body.status, req.params.id]);
-    if (!rows.length) return res.status(404).json({ success: false, error: 'Report not found' });
+    if (!rows || !rows.length) return res.status(404).json({ success: false, error: 'Report not found' });
     res.json({ success: true, data: rows[0] });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
