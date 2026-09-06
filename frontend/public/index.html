@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,119 +6,132 @@
 <meta name="description" content="KenyaWatch AI — an independent civic-tech platform exposing corruption in Kenyan public procurement. AI-scored contracts across all 47 counties, satellite ghost-project verification, and anonymous citizen reporting.">
 <meta name="theme-color" content="#0b1220">
 <title>KenyaWatch AI — Procurement Intelligence Platform</title>
-
-<!--
-  ============================================================================
-  BACKEND URL CONFIGURATION
-  ============================================================================
-  This is the ONE place you need to edit to point the frontend at your
-  backend. Set it to your deployed Render (or other) backend URL, with NO
-  trailing slash. Every API call in this app reads from this single value.
-  ============================================================================
--->
 <meta name="kenyawatch-api-base" content="https://kenyawatch-ai-backend.onrender.com">
-
 <script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config = { theme: { extend: { colors: {
-  navy: { 900:'#0b1220', 800:'#111a2e', 700:'#182541', 600:'#1f2f4d' },
-  brand: { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 500:'#059669', 600:'#047857', 700:'#065f46' }
-}}}}</script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{navy:{900:'#0b1220',800:'#111a2e',700:'#182541',600:'#1f2f4d'},brand:{50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',500:'#059669',600:'#047857',700:'#065f46'}}}}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  :root { --brand:#059669; --brand-dark:#047857; --navy:#0b1220; }
-  body { font-family: 'Inter', sans-serif; background-color: #f6f7f9; color: #0f172a; }
-  .font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; }
-
-  .tab-content { display: none; animation: fadeIn .35s ease-out; }
-  .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
-
-  .nav-link.active { background-color: rgba(5,150,105,.12); color: #047857; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-  .flag-strip { background: linear-gradient(90deg,#000 0 25%,#fff 25% 27%,#BB0000 27% 52%,#fff 52% 54%,#006600 54% 100%); height: 4px; }
-
-  .kw-badge-doc { color:#7c2d12; background:#ffedd5; border-color:#fed7aa; }
-  .kw-badge-ref { color:#334155; background:#f1f5f9; border-color:#e2e8f0; }
-  .kw-badge-live { color:#075985; background:#e0f2fe; border-color:#bae6fd; }
-
-  .skeleton { background: linear-gradient(90deg,#eef1f4 25%,#e4e8ec 37%,#eef1f4 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
-  @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0 50%} }
-
-  /* ---- Hero animations ---- */
-  .hero-bg { background:
-    radial-gradient(1200px 600px at 15% -10%, rgba(5,150,105,.35), transparent 60%),
-    radial-gradient(1000px 500px at 90% 10%, rgba(6,95,70,.45), transparent 55%),
-    linear-gradient(135deg,#0b1220 0%,#111a2e 45%,#065f46 100%); }
-  .hero-grid { background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 44px 44px; }
-  .float-slow { animation: floaty 7s ease-in-out infinite; }
-  .float-slower { animation: floaty 10s ease-in-out infinite; }
-  @keyframes floaty { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-14px);} }
-  .pulse-ring { animation: pulseRing 2.6s ease-out infinite; }
-  @keyframes pulseRing { 0%{ box-shadow: 0 0 0 0 rgba(5,150,105,.5);} 70%{ box-shadow: 0 0 0 18px rgba(5,150,105,0);} 100%{ box-shadow: 0 0 0 0 rgba(5,150,105,0);} }
-
-  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-  .reveal.in { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: .1s; } .reveal-delay-2 { transition-delay: .2s; } .reveal-delay-3 { transition-delay: .3s; }
-
-  .grad-text { background: linear-gradient(90deg,#34d399,#a7f3d0,#6ee7b7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .card-hover { transition: transform .3s ease, box-shadow .3s ease; }
-  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgba(2,44,34,.35); }
-
-  .county-chip { transition: all .2s ease; cursor: pointer; }
-  .county-chip:hover { transform: translateY(-2px); }
-  .heatmap-0{background:#eef2f7;color:#64748b} .heatmap-1{background:#d1fae5;color:#065f46}
-  .heatmap-2{background:#a7f3d0;color:#065f46} .heatmap-3{background:#6ee7b7;color:#064e3b}
-  .heatmap-4{background:#fde68a;color:#78350f} .heatmap-5{background:#fca5a5;color:#7f1d1d}
-
-  .marquee { display:flex; gap:2.5rem; animation: marquee 30s linear infinite; width:max-content; }
-  @keyframes marquee { from{ transform: translateX(0);} to{ transform: translateX(-50%);} }
-
-  .stat-card { position: relative; overflow: hidden; }
-  .stat-card::after { content:''; position:absolute; inset:0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.5) 50%, transparent 70%); transform: translateX(-120%); animation: sheen 5s ease-in-out infinite; }
-  @keyframes sheen { 0%,60%{ transform: translateX(-120%);} 100%{ transform: translateX(120%);} }
-
-  .modal-backdrop { background: rgba(11,18,32,.6); backdrop-filter: blur(6px); }
-  .toast { animation: toastIn .3s ease-out; }
-  @keyframes toastIn { from{ opacity:0; transform: translateY(12px);} to{ opacity:1; transform: translateY(0);} }
+:root{--brand:#059669;--brand-dark:#047857;--navy:#0b1220}
+body{font-family:'Inter',sans-serif;background-color:#f6f7f9;color:#0f172a;overflow-x:hidden}
+.font-display{font-family:'Space Grotesk','Inter',sans-serif}
+.tab-content{display:none;animation:fadeInUp .45s cubic-bezier(.2,.7,.2,1)}
+.tab-content.active{display:block}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(5,150,105,.5)}70%{box-shadow:0 0 0 18px rgba(5,150,105,0)}100%{box-shadow:0 0 0 0 rgba(5,150,105,0)}}
+@keyframes shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@keyframes sheen{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes particleFloat{0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) translateX(40px) rotate(360deg);opacity:0}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse-glow{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.8;transform:scale(1.05)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav-link.active{background:linear-gradient(135deg,rgba(5,150,105,.12),rgba(16,185,129,.08));color:#047857;font-weight:700}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+.flag-strip{background:linear-gradient(90deg,#000 0 25%,#fff 25% 27%,#BB0000 27% 52%,#fff 52% 54%,#006600 54% 100%);height:4px}
+.kw-badge-doc{color:#7c2d12;background:#ffedd5;border-color:#fed7aa}
+.kw-badge-ref{color:#334155;background:#f1f5f9;border-color:#e2e8f0}
+.kw-badge-live{color:#075985;background:#e0f2fe;border-color:#bae6fd}
+.skeleton{background:linear-gradient(90deg,#eef1f4 25%,#e4e8ec 37%,#eef1f4 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite}
+.hero-section{position:relative;overflow:hidden;background:url('https://images.unsplash.com/photo-1589483174854-a1d4a7e1f5a7?w=1920&q=85&auto=format') center/cover no-repeat}
+.hero-section::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,18,32,.92) 0%,rgba(17,26,46,.88) 40%,rgba(6,95,70,.85) 100%);z-index:1}
+.hero-section::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px;z-index:2}
+.hero-content{position:relative;z-index:10}
+.particles-container{position:absolute;inset:0;z-index:3;overflow:hidden;pointer-events:none}
+.particle{position:absolute;width:4px;height:4px;background:rgba(16,185,129,.5);border-radius:50%;animation:particleFloat linear infinite}
+.particle:nth-child(odd){background:rgba(52,211,153,.4);width:3px;height:3px}
+.particle:nth-child(3n){background:rgba(167,243,208,.3);width:5px;height:5px;border-radius:50%}
+.float-slow{animation:floaty 7s ease-in-out infinite}
+.float-slower{animation:floaty 10s ease-in-out infinite}
+.pulse-ring{animation:pulseRing 2.6s ease-out infinite}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.grad-text{background:linear-gradient(90deg,#34d399,#a7f3d0,#6ee7b7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card-hover{transition:transform .3s ease,box-shadow .3s ease}
+.card-hover:hover{transform:translateY(-6px);box-shadow:0 20px 50px -20px rgba(2,44,34,.35)}
+.glass{background:rgba(255,255,255,.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.18)}
+.county-chip{transition:all .25s ease;cursor:pointer}
+.county-chip:hover{transform:translateY(-3px);box-shadow:0 8px 24px -8px rgba(5,150,105,.3)}
+.heatmap-0{background:#eef2f7;color:#64748b}
+.heatmap-1{background:#d1fae5;color:#065f46}
+.heatmap-2{background:#a7f3d0;color:#065f46}
+.heatmap-3{background:#6ee7b7;color:#064e3b}
+.heatmap-4{background:#fde68a;color:#78350f}
+.heatmap-5{background:#fca5a5;color:#7f1d1d}
+.marquee{display:flex;gap:2.5rem;animation:marquee 30s linear infinite;width:max-content}
+.stat-card{position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);transform:translateX(-120%);animation:sheen 5s ease-in-out infinite}
+.modal-backdrop{background:rgba(11,18,32,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.toast{animation:toastIn .3s ease-out}
+.typing-cursor::after{content:'|';animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.btn-ripple{position:relative;overflow:hidden}
+.btn-ripple::after{content:'';position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.25) 10%,transparent 10.01%);transform:scale(10);opacity:0;transition:transform .5s,opacity 1s}
+.btn-ripple:active::after{transform:scale(0);opacity:.3;transition:0s}
+.loading-spinner{width:24px;height:24px;border:3px solid rgba(5,150,105,.2);border-top-color:#059669;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+.loading-spinner-sm{width:16px;height:16px;border:2px solid rgba(5,150,105,.2);border-top-color:#059669;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+body.modal-open{overflow:hidden}
+@media(max-width:1024px){.hero-section{background-image:url('https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=1200&q=80&auto=format')}}
+@media(max-width:640px){.hero-section{background-image:url('https://images.unsplash.com/photo-1590005354167-6da97870c757?w=800&q=80&auto=format')}}
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
-
 <div class="flag-strip"></div>
-
-<!-- Top Bar -->
-<header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+<header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-sm transition-all">
   <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('v-overview')">
-        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow pulse-ring">
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="showTab('v-overview')">
+        <div class="w-10 h-10 bg-gradient-to-br from-navy-900 to-brand-600 rounded-xl flex items-center justify-center shadow-lg pulse-ring group-hover:scale-105 transition-transform">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
         </div>
         <div>
           <h1 class="text-lg font-black tracking-tight text-slate-900 leading-none font-display">KenyaWatch <span class="text-brand-600">AI</span></h1>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold -mt-0.5">Procurement Intelligence · 47 Counties</p>
+          <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold -mt-0.5">Procurement Intelligence &middot; 47 Counties</p>
         </div>
       </div>
-
       <nav class="hidden lg:flex items-center gap-1">
-        <button onclick="showTab('v-overview')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-overview">Overview</button>
-        <button onclick="showTab('v-procurement')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-procurement">Contracts</button>
-        <button onclick="showTab('v-ghost')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-ghost">Ghost Projects</button>
-        <button onclick="showTab('v-report')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-report">Report</button>
-        <button onclick="showTab('v-ai')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-ai">AI Investigator</button>
-        <button onclick="showTab('v-sync')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-sync">Sync Data</button>
-        <button onclick="showTab('v-about')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors" data-tab="v-about">Sources</button>
+        <button onclick="showTab('v-overview')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-overview">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>Overview
+        </button>
+        <button onclick="showTab('v-procurement')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-procurement">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Contracts
+        </button>
+        <button onclick="showTab('v-ghost')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-ghost">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Ghost Projects
+        </button>
+        <button onclick="showTab('v-report')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-report">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Report
+        </button>
+        <button onclick="showTab('v-ai')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-ai">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>AI Investigator
+        </button>
+        <button onclick="showTab('v-sync')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-sync">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Sync Data
+        </button>
+        <button onclick="showTab('v-about')" class="nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all" data-tab="v-about">
+          <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Sources
+        </button>
       </nav>
-
-      <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-slate-100" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
-        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-      </button>
+      <div class="flex items-center gap-2">
+        <button id="dark-mode-btn" onclick="toggleDark()" class="hidden lg:flex p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-600" title="Toggle dark mode">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+        <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-slate-100" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+          <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
     </div>
-    <div id="mobile-nav" class="hidden lg:hidden pb-3 flex flex-col gap-1">
+    <div id="mobile-nav" class="hidden lg:hidden pb-3 flex flex-col gap-1 border-t border-slate-100 pt-2">
       <button onclick="showTab('v-overview')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-overview">Overview</button>
       <button onclick="showTab('v-procurement')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-procurement">Contracts</button>
       <button onclick="showTab('v-ghost')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-ghost">Ghost Projects</button>
@@ -126,104 +139,119 @@
       <button onclick="showTab('v-ai')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-ai">AI Investigator</button>
       <button onclick="showTab('v-sync')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-sync">Sync Data</button>
       <button onclick="showTab('v-about')" class="nav-link text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600" data-tab="v-about">Sources</button>
+      <button onclick="toggleDark()" class="text-left px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 flex items-center gap-2">Toggle Dark Mode</button>
     </div>
   </div>
 </header>
-
-<!-- Connection banner (shown only if backend unreachable) -->
-<div id="conn-banner" class="hidden bg-red-600 text-white text-sm text-center py-2 px-4">
-  ⚠️ Can't reach the backend API. Check the API URL configured in this page's <code>&lt;meta name="kenyawatch-api-base"&gt;</code> tag.
-</div>
-
-<main class="flex-grow max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-
-  <!-- ===================== OVERVIEW / LANDING ===================== -->
+<div id="conn-banner" class="hidden bg-gradient-to-r from-red-600 to-red-500 text-white text-sm text-center py-2.5 px-4 shadow-lg">
+  <svg class="w-4 h-4 inline mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+  Cannot reach the backend API. Check the API URL configured in this page's <code class="bg-red-700/50 px-1.5 py-0.5 rounded text-xs font-mono">&lt;meta name="kenyawatch-api-base"&gt;</code> tag.
+</div><main class="flex-grow max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
   <div id="v-overview" class="tab-content active space-y-14">
-
-    <!-- HERO -->
-    <section class="hero-bg relative overflow-hidden rounded-3xl text-white shadow-2xl">
-      <div class="hero-grid absolute inset-0 opacity-60"></div>
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl float-slow"></div>
+    <section class="hero-section relative rounded-3xl shadow-2xl overflow-hidden" style="min-height:520px;">
+      <div class="particles-container" id="particles-container"></div>
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl float-slow" style="animation:pulse-glow 6s ease-in-out infinite;"></div>
       <div class="absolute bottom-0 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl float-slower"></div>
-      <div class="relative z-10 px-6 py-14 md:px-14 md:py-20 lg:py-24">
+      <div class="absolute top-1/3 right-1/4 w-48 h-48 bg-brand-400/10 rounded-full blur-2xl float-slow" style="animation-delay:2s;"></div>
+      <div class="hero-content px-6 py-14 md:px-14 md:py-20 lg:py-24" style="animation:fadeInDown .8s ease-out;">
         <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 mb-6 backdrop-blur">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 mb-6 glass">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            🇰🇪 Real-Time Intelligence · All 47 Counties
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Real-Time Intelligence &middot; All 47 Counties
           </div>
           <h2 class="font-display text-4xl md:text-6xl font-black mb-5 tracking-tight leading-[1.05]">
             Exposing Corruption.<br><span class="grad-text">Protecting Public Funds.</span>
           </h2>
           <p class="text-slate-200 text-lg md:text-xl mb-8 leading-relaxed max-w-xl">
-            AI-scored analysis of government procurement, satellite verification of "ghost" projects, and anonymous citizen reporting — searchable by county and year.
+            AI-scored analysis of government procurement, satellite verification of &quot;ghost&quot; projects, and anonymous citizen reporting &mdash; searchable by county and year.
           </p>
           <div class="flex flex-col sm:flex-row gap-3">
-            <button onclick="showTab('v-procurement')" class="px-7 py-3.5 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5">🔍 Explore Contracts</button>
-            <button onclick="showTab('v-report')" class="px-7 py-3.5 bg-white/10 backdrop-blur text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 hover:-translate-y-0.5">🚨 Report Fraud</button>
-            <button onclick="scrollToCounty()" class="px-7 py-3.5 bg-transparent text-emerald-200 font-bold rounded-xl hover:bg-white/5 transition-all border border-emerald-400/40">🗺️ County Explorer</button>
+            <button onclick="showTab('v-procurement')" class="btn-ripple px-7 py-3.5 bg-white text-navy-900 font-bold rounded-xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 flex items-center gap-2 justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Explore Contracts
+            </button>
+            <button onclick="showTab('v-report')" class="btn-ripple px-7 py-3.5 bg-white/10 backdrop-blur text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 hover:-translate-y-0.5 flex items-center gap-2 justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Report Fraud
+            </button>
+            <button onclick="scrollToCounty()" class="btn-ripple px-7 py-3.5 bg-transparent text-emerald-200 font-bold rounded-xl hover:bg-white/5 transition-all border border-emerald-400/40 flex items-center gap-2 justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>County Explorer
+            </button>
           </div>
         </div>
       </div>
-      <!-- floating stat chips -->
       <div class="hidden lg:flex absolute right-10 top-1/2 -translate-y-1/2 flex-col gap-4 z-10">
-        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slow">
+        <div class="glass rounded-2xl px-5 py-4 float-slow" style="animation-delay:0s;">
           <div class="text-2xl font-black text-emerald-300" id="hero-flagged">--</div>
           <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
         </div>
-        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slower">
+        <div class="glass rounded-2xl px-5 py-4 float-slower" style="animation-delay:1s;">
           <div class="text-2xl font-black text-red-300" id="hero-ghost">--</div>
           <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Ghost Projects</div>
         </div>
-        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-5 py-4 float-slow">
+        <div class="glass rounded-2xl px-5 py-4 float-slow" style="animation-delay:2s;">
           <div class="text-2xl font-black text-amber-300" id="hero-funds">KES --</div>
           <div class="text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Funds at Risk</div>
         </div>
       </div>
     </section>
-
-    <!-- TRUST STRIP -->
     <section class="reveal">
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm py-5 overflow-hidden">
         <div class="marquee text-sm font-semibold text-slate-500">
-          <span>🇰🇪 All 47 Counties</span><span class="text-emerald-600">●</span>
-          <span>🛰️ Satellite Ghost-Project Verification</span><span class="text-emerald-600">●</span>
-          <span>🤖 AI Risk Scoring Engine</span><span class="text-emerald-600">●</span>
-          <span>🔒 100% Anonymous Reporting</span><span class="text-emerald-600">●</span>
-          <span>📊 Open Contracting Data Standard (OCDS)</span><span class="text-emerald-600">●</span>
-          <span>🇰🇪 All 47 Counties</span><span class="text-emerald-600">●</span>
-          <span>🛰️ AI Ghost-Project Verification</span><span class="text-emerald-600">●</span>
-          <span>🤖 AI-Driven Risk Scoring</span><span class="text-emerald-600">●</span>
-          <span>🔒 Anonymous Reporting</span><span class="text-emerald-600">●</span>
-          <span>📊 OCDS Live Sync</span><span class="text-emerald-600">●</span>
+          <span class="flex items-center gap-1.5">All 47 Counties</span><span class="text-emerald-600">&bull;</span>
+          <span>Satellite Ghost-Project Verification</span><span class="text-emerald-600">&bull;</span>
+          <span>AI Risk Scoring Engine</span><span class="text-emerald-600">&bull;</span>
+          <span>100% Anonymous Reporting</span><span class="text-emerald-600">&bull;</span>
+          <span>Open Contracting Data Standard (OCDS)</span><span class="text-emerald-600">&bull;</span>
+          <span>All 47 Counties</span><span class="text-emerald-600">&bull;</span>
+          <span>AI Ghost-Project Verification</span><span class="text-emerald-600">&bull;</span>
+          <span>AI-Driven Risk Scoring</span><span class="text-emerald-600">&bull;</span>
+          <span>Anonymous Reporting</span><span class="text-emerald-600">&bull;</span>
+          <span>OCDS Live Sync</span><span class="text-emerald-600">&bull;</span>
         </div>
       </div>
     </section>
-
-    <!-- STAT CARDS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">🚩</span><span class="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">HIGH RISK</span></div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal" style="animation:scaleIn .5s ease-out .1s both;">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <span class="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full uppercase tracking-wider">High Risk</span>
+        </div>
         <div class="text-3xl md:text-4xl font-black text-red-600 mb-1" id="dash-flagged">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">High-Risk Contracts</div>
       </div>
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-1">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">👻</span><span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">DETECTED</span></div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-1" style="animation:scaleIn .5s ease-out .2s both;">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </div>
+          <span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Detected</span>
+        </div>
         <div class="text-3xl md:text-4xl font-black text-purple-600 mb-1" id="dash-ghost">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Ghost Projects</div>
       </div>
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-2">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">📢</span><span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">30 DAYS</span></div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-2" style="animation:scaleIn .5s ease-out .3s both;">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+          </div>
+          <span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">30 Days</span>
+        </div>
         <div class="text-3xl md:text-4xl font-black text-blue-600 mb-1" id="dash-reports">--</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Citizen Reports</div>
       </div>
-      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-3">
-        <div class="flex items-center justify-between mb-2"><span class="text-2xl">💰</span><span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">AT RISK</span></div>
+      <div class="stat-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover reveal reveal-delay-3" style="animation:scaleIn .5s ease-out .4s both;">
+        <div class="flex items-center justify-between mb-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">At Risk</span>
+        </div>
         <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-1" id="dash-funds">KES --</div>
         <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Funds at Risk</div>
       </div>
     </section>
-
-    <!-- HOW IT WORKS -->
     <section class="reveal">
       <div class="text-center max-w-2xl mx-auto mb-10">
         <p class="text-brand-600 font-bold text-xs uppercase tracking-[0.2em] mb-2">How It Works</p>
@@ -231,30 +259,36 @@
         <p class="text-slate-500 mt-3">A transparent, four-step pipeline turns public procurement data into actionable intelligence.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl mb-4">📥</div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover group">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          </div>
           <h4 class="font-bold text-slate-900 mb-1">1. Ingest</h4>
           <p class="text-sm text-slate-500">Pull machine-readable records from the Open Contracting Data Standard (OCDS) feed, plus documented public-interest cases.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl mb-4">🧠</div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover group">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+          </div>
           <h4 class="font-bold text-slate-900 mb-1">2. Score</h4>
-          <p class="text-sm text-slate-500">A transparent rules engine scores every contract for risk — bid type, value, supplier timing, and vague scope.</p>
+          <p class="text-sm text-slate-500">A transparent rules engine scores every contract for risk &mdash; bid type, value, supplier timing, and vague scope.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl mb-4">🛰️</div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover group">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
           <h4 class="font-bold text-slate-900 mb-1">3. Verify</h4>
-          <p class="text-sm text-slate-500">Cross-check claimed project completion against live satellite imagery to expose "ghost" projects.</p>
+          <p class="text-sm text-slate-500">Cross-check claimed project completion against live satellite imagery to expose &quot;ghost&quot; projects.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover">
-          <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl mb-4">🔔</div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm card-hover group">
+          <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+          </div>
           <h4 class="font-bold text-slate-900 mb-1">4. Act</h4>
           <p class="text-sm text-slate-500">Citizens report anonymously, AI triages credibility, and cases route to EACC, PPRA, or the DPP.</p>
         </div>
       </div>
     </section>
-
-    <!-- COUNTY EXPLORER -->
     <section id="county-explorer" class="reveal">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
@@ -271,295 +305,256 @@
         </div>
       </div>
       <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
-        <div class="col-span-full text-center py-10 text-slate-400 bg-white rounded-xl border border-slate-200">Loading counties...</div>
+        <div class="col-span-full text-center py-10 text-slate-400 bg-white rounded-xl border border-slate-200 flex items-center justify-center gap-2">
+          <span class="loading-spinner-sm"></span> Loading counties...
+        </div>
       </div>
     </section>
-
-    <!-- CHARTS + TOP FLAGGED -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal">
-        <h3 class="font-bold text-slate-900 mb-1">Risk Level Distribution</h3>
+        <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+          Risk Level Distribution
+        </h3>
         <p class="text-sm text-slate-500 mb-4">Share of contracts by AI risk score band.</p>
         <div class="h-64"><canvas id="risk-chart"></canvas></div>
       </div>
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal reveal-delay-1">
-        <h3 class="font-bold text-slate-900 mb-1">Top Flagged Contracts</h3>
+        <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Top Flagged Contracts
+        </h3>
         <p class="text-sm text-slate-500 mb-4">Highest-risk contracts in the database.</p>
         <div id="top-flagged" class="space-y-3">
-          <div class="animate-pulse text-slate-400 text-sm">Loading...</div>
+          <div class="flex items-center gap-3 animate-pulse"><span class="loading-spinner-sm"></span><span class="text-slate-400 text-sm">Loading...</span></div>
         </div>
       </div>
     </section>
-
-    <!-- SECTOR CHART + GHOST PREVIEW -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal">
-        <h3 class="font-bold text-slate-900 mb-1">Contracts by Sector</h3>
+        <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          Contracts by Sector
+        </h3>
         <p class="text-sm text-slate-500 mb-4">Where procurement activity concentrates.</p>
         <div class="h-64"><canvas id="sector-chart"></canvas></div>
       </div>
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm reveal reveal-delay-1">
         <div class="flex items-center justify-between mb-4">
-          <div><h3 class="font-bold text-slate-900">Latest Ghost Projects</h3><p class="text-sm text-slate-500">Satellite-verified anomalies.</p></div>
-          <button onclick="showTab('v-ghost')" class="text-xs font-bold text-brand-600 hover:text-brand-700">View all →</button>
+          <div>
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+              Latest Ghost Projects
+            </h3>
+            <p class="text-sm text-slate-500">Satellite-verified anomalies.</p>
+          </div>
+          <button onclick="showTab('v-ghost')" class="text-xs font-bold text-brand-600 hover:text-brand-700 transition-colors flex items-center gap-1">View all<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
         </div>
         <div id="ghost-preview" class="space-y-3">
-          <div class="animate-pulse text-slate-400 text-sm">Loading...</div>
+          <div class="flex items-center gap-3 animate-pulse"><span class="loading-spinner-sm"></span><span class="text-slate-400 text-sm">Loading...</span></div>
         </div>
       </div>
     </section>
-
-    <!-- REPORT CTA -->
     <section class="reveal">
       <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-700 via-red-600 to-rose-700 text-white p-8 md:p-14 shadow-2xl">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1920&q=80')] bg-cover bg-center opacity-15"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-red-800/50 to-transparent"></div>
         <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div class="max-w-xl">
             <h3 class="font-display text-3xl md:text-4xl font-black mb-3">Seen something? Speak up.</h3>
             <p class="text-red-100 text-lg">Your identity is fully protected. Reports are anonymous by default and AI-triage routes them to the right authority.</p>
           </div>
-          <button onclick="showTab('v-report')" class="px-8 py-4 bg-white text-red-700 font-black rounded-xl hover:bg-red-50 transition-all shadow-lg hover:-translate-y-0.5 whitespace-nowrap">🚨 Submit a Report</button>
+          <button onclick="showTab('v-report')" class="btn-ripple px-8 py-4 bg-white text-red-700 font-black rounded-xl hover:bg-red-50 transition-all shadow-lg hover:-translate-y-0.5 whitespace-nowrap flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Submit a Report
+          </button>
         </div>
       </div>
     </section>
-
-    <!-- DATA HONESTY -->
     <section class="reveal">
       <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
         <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl flex-shrink-0">🛡️</div>
+          <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          </div>
           <div>
             <h3 class="font-bold text-slate-900 mb-1">Data honesty, always</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Every contract carries a <b>data type</b> — <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span> (source-cited real cases), <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span> (official OCDS feed), or <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span> (representative sample). Kenya's PPIP is still working toward full OCDS compliance, so we're transparent about the gap — see the <button onclick="showTab('v-about')" class="text-brand-600 font-semibold hover:underline">Sources</button> tab.</p>
+            <p class="text-sm text-slate-600 leading-relaxed">Every contract carries a <b>data type</b> &mdash; <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span> (source-cited real cases), <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span> (official OCDS feed), or <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span> (representative sample). Kenya's PPIP is still working toward full OCDS compliance, so we're transparent about the gap &mdash; see the <button onclick="showTab('v-about')" class="text-brand-600 font-semibold hover:underline">Sources</button> tab.</p>
           </div>
         </div>
       </div>
     </section>
   </div>
-
-  <!-- ===================== PROCUREMENT ===================== -->
   <div id="v-procurement" class="tab-content space-y-6">
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 font-display">Procurement Database</h2>
+        <h2 class="text-2xl font-bold text-slate-900 font-display flex items-center gap-2">
+          <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Procurement Database
+        </h2>
         <p class="text-slate-500 text-sm">Browse, filter, and sync government contracts across all 47 counties.</p>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button onclick="exportCSV()" class="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          Export CSV
+        <button onclick="exportCSV()" class="btn-ripple px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>Export CSV
         </button>
-        <button onclick="openModal('scan-modal')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          Scan New Contract
+        <button onclick="openModal('scan-modal')" class="btn-ripple px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-sm flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Scan New Contract
         </button>
       </div>
     </div>
-
-    <!-- Filters Bar -->
     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-3 items-center">
-      <input type="text" id="search-contracts" placeholder="Search ID, supplier, entity, description..." class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 w-full lg:w-72 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm" onkeyup="debounceLoadC()">
-      <select id="filter-county" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Counties (47)</option>
+      <div class="relative flex-1 min-w-[200px]">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="search-contracts" placeholder="Search ID, supplier, entity, description..." class="bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 w-full focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm transition-all" onkeyup="debounceLoadC()">
+      </div>
+      <select id="filter-county" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all" onchange="loadC()"><option value="All">All Counties (47)</option></select>
+      <select id="filter-sector" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all" onchange="loadC()"><option value="All">All Sectors</option></select>
+      <select id="filter-year" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all" onchange="loadC()"><option value="All">All Years</option></select>
+      <select id="filter-risk" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all" onchange="loadC()">
+        <option value="All">All Risk Levels</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option>
       </select>
-      <select id="filter-sector" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Sectors</option>
+      <select id="filter-datatype" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all" onchange="loadC()">
+        <option value="All">All Data Types</option><option value="documented">Documented (cited)</option><option value="live_sync">Live Sync (OCDS)</option><option value="reference">Reference (sample)</option><option value="manual_scan">Manually Scanned</option>
       </select>
-      <select id="filter-year" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Years</option>
-      </select>
-      <select id="filter-risk" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Risk Levels</option>
-        <option>HIGH</option><option>MEDIUM</option><option>LOW</option>
-      </select>
-      <select id="filter-datatype" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500" onchange="loadC()">
-        <option value="All">All Data Types</option>
-        <option value="documented">Documented (cited)</option>
-        <option value="live_sync">Live Sync (OCDS)</option>
-        <option value="reference">Reference (sample)</option>
-        <option value="manual_scan">Manually Scanned</option>
-      </select>
-      <button onclick="resetFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 ml-auto">Reset filters</button>
+      <button onclick="resetFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 ml-auto flex items-center gap-1 transition-colors">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Reset filters
+      </button>
     </div>
-
-    <!-- Data Table -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-            <tr>
-              <th class="p-4 font-semibold">Contract ID</th>
-              <th class="p-4 font-semibold">Description</th>
-              <th class="p-4 font-semibold">County</th>
-              <th class="p-4 font-semibold">Sector</th>
-              <th class="p-4 font-semibold">Year</th>
-              <th class="p-4 font-semibold">Value (KES)</th>
-              <th class="p-4 font-semibold">Supplier</th>
-              <th class="p-4 font-semibold">Risk</th>
-              <th class="p-4 font-semibold">Source</th>
-            </tr>
+            <tr><th class="p-4 font-semibold">Contract ID</th><th class="p-4 font-semibold">Description</th><th class="p-4 font-semibold">County</th><th class="p-4 font-semibold">Sector</th><th class="p-4 font-semibold">Year</th><th class="p-4 font-semibold">Value (KES)</th><th class="p-4 font-semibold">Supplier</th><th class="p-4 font-semibold">Risk</th><th class="p-4 font-semibold">Source</th></tr>
           </thead>
           <tbody id="contracts-table" class="divide-y divide-slate-100">
-            <tr><td colspan="9" class="p-12 text-center text-slate-500">Loading database...</td></tr>
+            <tr><td colspan="9" class="p-12 text-center text-slate-500 flex items-center justify-center gap-2"><span class="loading-spinner"></span> Loading database...</td></tr>
           </tbody>
         </table>
       </div>
       <div class="p-4 border-t border-slate-200 flex flex-wrap justify-between items-center gap-3 bg-slate-50">
         <span class="text-xs text-slate-500 font-medium" id="pagination-info">Showing 0 results</span>
         <div class="flex items-center gap-2">
-          <button onclick="prevPage()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100">← Prev</button>
+          <button onclick="prevPage()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100 transition-colors flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Prev</button>
           <span class="text-xs font-semibold text-slate-600" id="page-indicator">Page 1</span>
-          <button onclick="nextPage()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100">Next →</button>
+          <button onclick="nextPage()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100 transition-colors flex items-center gap-1">Next<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ===================== GHOST PROJECTS ===================== -->
   <div id="v-ghost" class="tab-content space-y-6">
     <div class="text-center max-w-3xl mx-auto mb-2">
-      <h2 class="text-2xl font-bold text-slate-900 font-display mb-2">🛰️ Ghost Project Detector</h2>
+      <h2 class="text-2xl font-bold text-slate-900 font-display mb-2 flex items-center justify-center gap-2">
+        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Ghost Project Detector
+      </h2>
       <p class="text-slate-500">Satellite imagery verification vs. government-reported completion status.</p>
     </div>
     <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200">Loading...</div>
+      <div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200 flex items-center justify-center gap-2"><span class="loading-spinner"></span> Loading...</div>
     </div>
   </div>
-
-  <!-- ===================== REPORT ===================== -->
   <div id="v-report" class="tab-content max-w-2xl mx-auto space-y-6">
-    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
       <div class="flex items-center gap-3 mb-6">
         <div class="p-3 bg-red-100 rounded-full"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-        <div><h2 class="text-2xl font-bold text-slate-900 font-display">Submit a Report</h2><p class="text-slate-500 text-sm">Anonymous by default · AI-assisted triage</p></div>
+        <div><h2 class="text-2xl font-bold text-slate-900 font-display">Submit a Report</h2><p class="text-slate-500 text-sm">Anonymous by default &middot; AI-assisted triage</p></div>
       </div>
       <form id="report-form" onsubmit="submitReport(event)" class="space-y-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Type *</label>
-            <select name="type" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-              <option value="">— Select —</option>
-              <option>Bribery</option><option>Ghost project</option><option>Procurement fraud</option>
-              <option>Embezzlement</option><option>Nepotism / favoritism</option><option>Other</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County *</label>
-            <select name="county" required id="report-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-              <option value="">— Select —</option>
-            </select>
-          </div>
+          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Type *</label><select name="type" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 transition-all"><option value="">-- Select --</option><option>Bribery</option><option>Ghost project</option><option>Procurement fraud</option><option>Embezzlement</option><option>Nepotism / favoritism</option><option>Other</option></select></div>
+          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County *</label><select name="county" required id="report-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 transition-all"><option value="">-- Select --</option></select></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Sector (optional)</label>
-            <select name="sector" id="report-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-              <option value="">— Select —</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Approximate amount (KES, optional)</label>
-            <input type="number" name="amount" min="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500">
-          </div>
+          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Sector (optional)</label><select name="sector" id="report-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 transition-all"><option value="">-- Select --</option></select></div>
+          <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Approximate amount (KES, optional)</label><input type="number" name="amount" min="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 transition-all"></div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Description *</label>
-          <textarea name="description" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 resize-none" placeholder="What happened, when, and who was involved? Avoid sharing personal identifying info if you wish to remain anonymous."></textarea>
-        </div>
-        <label class="flex items-center gap-2 text-sm text-slate-600">
-          <input type="checkbox" name="anonymous" checked class="rounded border-slate-300"> Submit anonymously (recommended)
-        </label>
-        <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-sm">🔒 Submit Securely</button>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Description *</label><textarea name="description" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 resize-none transition-all" placeholder="What happened, when, and who was involved? Avoid sharing personal identifying info if you wish to remain anonymous."></textarea></div>
+        <label class="flex items-center gap-2 text-sm text-slate-600 cursor-pointer"><input type="checkbox" name="anonymous" checked class="rounded border-slate-300 text-red-600 focus:ring-red-500"> Submit anonymously (recommended)</label>
+        <button type="submit" class="btn-ripple w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all shadow-sm flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>Submit Securely
+        </button>
       </form>
     </div>
   </div>
-
-  <!-- ===================== AI INVESTIGATOR ===================== -->
   <div id="v-ai" class="tab-content space-y-6 max-w-4xl mx-auto">
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
       <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900 flex items-center gap-2">🤖 AI Investigator <span class="text-xs font-normal text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">Gemini 2.5 Flash</span></h3>
-        <button onclick="clearChat()" class="text-xs font-semibold text-slate-400 hover:text-slate-700">Clear</button>
+        <h3 class="font-bold text-slate-900 flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+          AI Investigator <span class="text-xs font-normal text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">Gemini 2.5 Flash</span>
+        </h3>
+        <button onclick="clearChat()" class="text-xs font-semibold text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>Clear
+        </button>
       </div>
       <div id="chat-history" class="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
         <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>
       </div>
       <div class="p-4 border-t border-slate-200 bg-slate-50">
         <form onsubmit="sendAI(event)" class="flex gap-2">
-          <input type="text" id="ai-input" placeholder="Ask about contracts, fraud patterns, a county..." class="flex-1 bg-white border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm" required>
-          <button type="submit" class="px-6 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg transition-colors">Send</button>
+          <input type="text" id="ai-input" placeholder="Ask about contracts, fraud patterns, a county..." class="flex-1 bg-white border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm transition-all" required>
+          <button type="submit" class="btn-ripple px-6 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>Send
+          </button>
         </form>
       </div>
     </div>
   </div>
-
-  <!-- ===================== SYNC DATA ===================== -->
   <div id="v-sync" class="tab-content space-y-6 max-w-3xl mx-auto">
-    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-      <h2 class="text-2xl font-bold mb-2 text-slate-900 font-display">📥 Live Data Sync (OCDS)</h2>
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+      <h2 class="text-2xl font-bold mb-2 text-slate-900 font-display flex items-center gap-2">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Live Data Sync (OCDS)
+      </h2>
       <p class="text-slate-500 mb-6 text-sm">Pull the latest machine-readable procurement records from the Open Contracting Partnership's Kenya publication for a given year, optionally narrowed to one county.</p>
       <div class="flex flex-wrap gap-4 items-end">
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Year</label>
-          <select id="sync-year" class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none">
-            <option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County (optional)</label>
-          <select id="sync-county" class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none min-w-[180px]">
-            <option value="All">All Counties</option>
-          </select>
-        </div>
-        <button onclick="startSync()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors text-sm shadow-sm">🔄 Start Sync</button>
-        <button onclick="loadSyncStatus()" class="px-6 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors text-sm shadow-sm">📊 Refresh Status</button>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Year</label><select id="sync-year" class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none transition-all"><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1.5">County (optional)</label><select id="sync-county" class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none min-w-[180px] transition-all"><option value="All">All Counties</option></select></div>
+        <button onclick="startSync()" class="btn-ripple px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all text-sm shadow-sm flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Start Sync
+        </button>
+        <button onclick="loadSyncStatus()" class="btn-ripple px-6 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-all text-sm shadow-sm flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Refresh Status
+        </button>
       </div>
-      <div id="sync-status" class="mt-6 divide-y divide-slate-100 text-sm text-slate-600 min-h-[60px]">Click "Refresh Status" to load recent sync history.</div>
-      <p class="mt-6 text-xs text-slate-400 leading-relaxed">Note: Kenya's official procurement portal (PPIP) is not yet fully OCDS-compliant, so live sync results depend on what the upstream registry currently publishes for the selected year — it may return zero new records for some years. This does not affect the documented and reference records already in the database.</p>
+      <div id="sync-status" class="mt-6 divide-y divide-slate-100 text-sm text-slate-600 min-h-[60px]">Click &quot;Refresh Status&quot; to load recent sync history.</div>
+      <p class="mt-6 text-xs text-slate-400 leading-relaxed">Note: Kenya's official procurement portal (PPIP) is not yet fully OCDS-compliant, so live sync results depend on what the upstream registry currently publishes for the selected year &mdash; it may return zero new records for some years. This does not affect the documented and reference records already in the database.</p>
     </div>
   </div>
-
-  <!-- ===================== ABOUT / SOURCES ===================== -->
   <div id="v-about" class="tab-content max-w-3xl mx-auto space-y-6">
-    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-5">
-      <h2 class="text-2xl font-bold text-slate-900 font-display">Data & Methodology</h2>
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+      <h2 class="text-2xl font-bold text-slate-900 font-display flex items-center gap-2">
+        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Data &amp; Methodology
+      </h2>
       <p class="text-slate-600 text-sm leading-relaxed">Every contract in this platform carries a <b>data type</b> so you always know what you're looking at:</p>
       <div class="space-y-3">
-        <div class="p-4 rounded-lg border border-orange-200 bg-orange-50">
-          <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span>
-          <p class="text-sm text-slate-700 mt-2">Real, publicly reported cases sourced from Auditor-General reports, court/EACC proceedings, and mainstream investigative reporting. Each record links to its source.</p>
-        </div>
-        <div class="p-4 rounded-lg border border-sky-200 bg-sky-50">
-          <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span>
-          <p class="text-sm text-slate-700 mt-2">Pulled directly from the Open Contracting Partnership's machine-readable Kenya feed via the "Sync Data" tab, using the official Open Contracting Data Standard (OCDS).</p>
-        </div>
-        <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-          <span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span>
-          <p class="text-sm text-slate-700 mt-2">Representative sample records ensuring every one of the 47 counties has baseline data to browse while official machine-readable coverage is incomplete. Never presented as verified fact.</p>
-        </div>
+        <div class="p-4 rounded-lg border border-orange-200 bg-orange-50"><span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-doc">Documented</span><p class="text-sm text-slate-700 mt-2">Real, publicly reported cases sourced from Auditor-General reports, court/EACC proceedings, and mainstream investigative reporting. Each record links to its source.</p></div>
+        <div class="p-4 rounded-lg border border-sky-200 bg-sky-50"><span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-live">Live Sync</span><p class="text-sm text-slate-700 mt-2">Pulled directly from the Open Contracting Partnership's machine-readable Kenya feed via the &quot;Sync Data&quot; tab, using the official Open Contracting Data Standard (OCDS).</p></div>
+        <div class="p-4 rounded-lg border border-slate-200 bg-slate-50"><span class="px-2 py-0.5 rounded-full text-xs font-bold border kw-badge-ref">Reference</span><p class="text-sm text-slate-700 mt-2">Representative sample records ensuring every one of the 47 counties has baseline data to browse while official machine-readable coverage is incomplete. Never presented as verified fact.</p></div>
       </div>
-      <p class="text-slate-600 text-sm leading-relaxed">Risk scores are computed by a transparent, rules-based engine (bid type, contract value, timing between supplier registration and award, and vague-scope language) — the same rules apply whether a contract was seeded, synced, or manually scanned.</p>
-      <p class="text-slate-400 text-xs">Kenya's Public Procurement Information Portal (PPIP) is still working toward full OCDS compliance, per Kenya's Open Government Partnership commitments — so no single automated feed currently covers every contract, in every county, for every year. This platform combines what's verifiably documented with what's live-syncable, and is transparent about the gap.</p>
+      <p class="text-slate-600 text-sm leading-relaxed">Risk scores are computed by a transparent, rules-based engine (bid type, contract value, timing between supplier registration and award, and vague-scope language) &mdash; the same rules apply whether a contract was seeded, synced, or manually scanned.</p>
+      <p class="text-slate-400 text-xs">Kenya's Public Procurement Information Portal (PPIP) is still working toward full OCDS compliance, per Kenya's Open Government Partnership commitments &mdash; so no single automated feed currently covers every contract, in every county, for every year. This platform combines what's verifiably documented with what's live-syncable, and is transparent about the gap.</p>
     </div>
   </div>
-
 </main>
-
 <footer class="bg-navy-900 text-slate-300 mt-8">
   <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 text-sm">
     <div class="flex flex-col md:flex-row justify-between gap-8">
       <div class="max-w-md">
-        <p class="font-bold text-white font-display text-lg">KenyaWatch <span class="text-emerald-400">AI</span></p>
+        <p class="font-bold text-white font-display text-lg flex items-center gap-2">
+          <div class="w-8 h-8 bg-gradient-to-br from-navy-900 to-brand-600 rounded-lg flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          </div>KenyaWatch <span class="text-emerald-400">AI</span>
+        </p>
         <p class="text-slate-400 mt-2 text-sm leading-relaxed">An independent civic-tech tool for procurement transparency. Not affiliated with the Government of Kenya, PPRA, or EACC.</p>
       </div>
       <div class="grid grid-cols-2 gap-8 text-sm">
         <div>
           <p class="font-bold text-white mb-3">Explore</p>
           <ul class="space-y-2 text-slate-400">
-            <li><button onclick="showTab('v-procurement')" class="hover:text-emerald-400">Contracts</button></li>
-            <li><button onclick="showTab('v-ghost')" class="hover:text-emerald-400">Ghost Projects</button></li>
-            <li><button onclick="showTab('v-ai')" class="hover:text-emerald-400">AI Investigator</button></li>
-            <li><button onclick="showTab('v-sync')" class="hover:text-emerald-400">Sync Data</button></li>
+            <li><button onclick="showTab('v-procurement')" class="hover:text-emerald-400 transition-colors">Contracts</button></li>
+            <li><button onclick="showTab('v-ghost')" class="hover:text-emerald-400 transition-colors">Ghost Projects</button></li>
+            <li><button onclick="showTab('v-ai')" class="hover:text-emerald-400 transition-colors">AI Investigator</button></li>
+            <li><button onclick="showTab('v-sync')" class="hover:text-emerald-400 transition-colors">Sync Data</button></li>
           </ul>
         </div>
         <div>
@@ -567,593 +562,123 @@
           <ul class="space-y-2 text-slate-400">
             <li>EACC Hotline: 0800 720 880</li>
             <li>Free, 24/7</li>
-            <li><button onclick="showTab('v-report')" class="hover:text-emerald-400">Report anonymously</button></li>
+            <li><button onclick="showTab('v-report')" class="hover:text-emerald-400 transition-colors">Report anonymously</button></li>
           </ul>
         </div>
       </div>
     </div>
     <div class="border-t border-slate-800 mt-8 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-slate-500">
-      <p>© 2026 KenyaWatch AI · Independent civic-tech initiative</p>
-      <p>Data sources: Auditor-General reports · EACC/DPP proceedings · Open Contracting Partnership (OCDS)</p>
+      <p>&copy; 2026 KenyaWatch AI &middot; Independent civic-tech initiative</p>
+      <p>Data sources: Auditor-General reports &middot; EACC/DPP proceedings &middot; Open Contracting Partnership (OCDS)</p>
     </div>
   </div>
 </footer>
-
-<!-- Scan Modal -->
-<div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
-      <h3 class="text-xl font-bold text-slate-900 font-display">🔍 Scan Contract</h3>
-      <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+<div id="scan-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeModal('scan-modal')">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" style="animation:scaleIn .3s ease-out;">
+    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-2xl">
+      <h3 class="text-xl font-bold text-slate-900 font-display flex items-center gap-2"><svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Scan Contract</h3>
+      <button onclick="closeModal('scan-modal')" class="text-slate-400 hover:text-slate-900 transition-colors p-1 hover:bg-slate-100 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </div>
     <div class="p-6 space-y-4">
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Supplier *</label><input type="text" id="scan-supplier" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Supplier *</label><input type="text" id="scan-supplier" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all"></div>
       </div>
-      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Description</label><textarea id="scan-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
+      <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Description</label><textarea id="scan-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all"></textarea></div>
       <div class="grid grid-cols-3 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">County</label><select id="scan-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sector</label><select id="scan-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Value (KES) *</label><input type="number" id="scan-value" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">County</label><select id="scan-county" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm transition-all"></select></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Sector</label><select id="scan-sector" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm transition-all"></select></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Value (KES) *</label><input type="number" id="scan-value" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 transition-all"></div>
       </div>
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Bid Type</label><select id="scan-bid" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"><option value="open">open</option><option value="restricted">restricted</option><option value="single_source">single_source</option></select></div>
-        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Award Date</label><input type="date" id="scan-date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm"></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Bid Type</label><select id="scan-bid" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm transition-all"><option value="open">open</option><option value="restricted">restricted</option><option value="single_source">single_source</option></select></div>
+        <div><label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Award Date</label><input type="date" id="scan-date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm transition-all"></div>
       </div>
-      <button onclick="runScan()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg mt-4">🤖 Run AI Scan</button>
+      <button onclick="runScan()" class="btn-ripple w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg mt-4 transition-all flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>Run AI Scan
+      </button>
       <div id="scan-result" class="hidden mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm"></div>
     </div>
   </div>
 </div>
-
-<!-- Contract Detail Modal -->
-<div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
-      <h3 class="text-xl font-bold text-slate-900 font-display">Contract Detail</h3>
-      <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+<div id="detail-modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeModal('detail-modal')">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" style="animation:scaleIn .3s ease-out;">
+    <div class="p-6 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-2xl">
+      <h3 class="text-xl font-bold text-slate-900 font-display flex items-center gap-2"><svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Contract Detail</h3>
+      <button onclick="closeModal('detail-modal')" class="text-slate-400 hover:text-slate-900 transition-colors p-1 hover:bg-slate-100 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </div>
     <div id="detail-body" class="p-6 space-y-3 text-sm text-slate-700"></div>
   </div>
 </div>
-
-<!-- Toast -->
-<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-navy-900 text-white px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold toast"></div>
+<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] bg-navy-900 text-white px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold toast flex items-center gap-2">
+  <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span id="toast-msg"></span>
+</div>
 
 <script>
-  // ── Backend URL resolution ────────────────────────────────────────────────
-  // Priority: ?api= query param override (handy for testing) > the <meta>
-  // tag above > same-origin fallback.
-  const API_BASE = (() => {
-    const qp = new URLSearchParams(location.search).get('api');
-    if (qp) return qp.replace(/\/$/, '');
-    const meta = document.querySelector('meta[name="kenyawatch-api-base"]');
-    if (meta && meta.content) return meta.content.replace(/\/$/, '');
-    return location.origin;
-  })();
+const API_BASE=(()=>{const q=new URLSearchParams(location.search).get('api');if(q)return q.replace(/\/$/,'');const m=document.querySelector('meta[name="kenyawatch-api-base"]');if(m&&m.content)return m.content.replace(/\/$/,'');return location.origin})();
+let META={counties:[],sectors:[],years:[]};let currentPage=1;const PAGE_SIZE=25;let lastTotal=0;let riskChart=null,sectorChart=null;
 
-  let META = { counties: [], sectors: [], years: [] };
-  let currentPage = 1;
-  const PAGE_SIZE = 25;
-  let lastTotal = 0;
-  let riskChart = null, sectorChart = null;
+function formatMoney(n){if(!n)return'0';const num=parseInt(n,10);if(num>=1e9)return(num/1e9).toFixed(1)+'B';if(num>=1e6)return(num/1e6).toFixed(1)+'M';return num.toLocaleString()}
+function dataTypeBadge(t){if(t==='documented')return`<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-doc">DOCUMENTED</span>`;if(t==='live_sync')return`<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">LIVE SYNC</span>`;if(t==='manual_scan')return`<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">SCANNED</span>`;return`<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-ref">REFERENCE</span>`}
+function escapeHtml(s){return(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
-  function formatMoney(n) {
-    if (!n) return '0';
-    const num = parseInt(n, 10);
-    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
-    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
-    return num.toLocaleString();
-  }
+let debounceTimer;
+function debounceLoadC(){clearTimeout(debounceTimer);debounceTimer=setTimeout(()=>{currentPage=1;loadC()},400)}
 
-  function dataTypeBadge(t) {
-    if (t === 'documented') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-doc">DOCUMENTED</span>`;
-    if (t === 'live_sync') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">LIVE SYNC</span>`;
-    if (t === 'manual_scan') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-live">SCANNED</span>`;
-    return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border kw-badge-ref">REFERENCE</span>`;
-  }
+function showTab(tabId){document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));document.getElementById(tabId).classList.add('active');document.querySelectorAll('.nav-link').forEach(btn=>{btn.classList.remove('active');if(btn.dataset.tab===tabId)btn.classList.add('active')});document.getElementById('mobile-nav').classList.add('hidden');if(tabId==='v-overview')loadDash();if(tabId==='v-procurement')loadC();if(tabId==='v-ghost')loadGhost();window.scrollTo({top:0,behavior:'smooth'})}
 
-  let debounceTimer;
-  function debounceLoadC() { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => { currentPage = 1; loadC(); }, 400); }
+function openModal(id){document.getElementById(id).classList.remove('hidden');document.body.classList.add('modal-open')}
+function closeModal(id){document.getElementById(id).classList.add('hidden');document.body.classList.remove('modal-open')}
+function showConnError(show){document.getElementById('conn-banner').classList.toggle('hidden',!show)}
+function showToast(msg){const t=document.getElementById('toast');const m=document.getElementById('toast-msg');m.textContent=msg;t.classList.remove('hidden');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.add('hidden'),3500)}
 
-  function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.querySelectorAll('.nav-link').forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.dataset.tab === tabId) btn.classList.add('active');
-    });
-    document.getElementById('mobile-nav').classList.add('hidden');
-    if (tabId === 'v-overview') loadDash();
-    if (tabId === 'v-procurement') loadC();
-    if (tabId === 'v-ghost') loadGhost();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+async function apiFetch(path,opts){try{const res=await fetch(API_BASE+path,opts);showConnError(false);return res}catch(e){showConnError(true);throw e}}
 
-  function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-  function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+async function loadMeta(){try{const res=await apiFetch('/api/contracts/meta');const data=await res.json();if(!data.success)return;META=data.data;const cOpts=META.counties.map(c=>`<option value="${c.name}">${c.name} (${c.contracts})</option>`).join('');const cPlain=META.counties.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');document.getElementById('filter-county').innerHTML='<option value="All">All Counties (47)</option>'+cOpts;document.getElementById('report-county').innerHTML='<option value="">-- Select --</option>'+cPlain;document.getElementById('scan-county').innerHTML=cPlain;document.getElementById('sync-county').innerHTML='<option value="All">All Counties</option>'+cPlain;const sOpts=META.sectors.map(s=>`<option>${s}</option>`).join('');document.getElementById('filter-sector').innerHTML='<option value="All">All Sectors</option>'+sOpts;document.getElementById('scan-sector').innerHTML=sOpts;document.getElementById('report-sector').innerHTML='<option value="">-- Select --</option>'+sOpts;const yrs=META.years.length?META.years:[2026,2025,2024,2023,2022,2021];document.getElementById('filter-year').innerHTML='<option value="All">All Years</option>'+yrs.map(y=>`<option>${y}</option>`).join('')}catch(e){}}
 
-  function showConnError(show) { document.getElementById('conn-banner').classList.toggle('hidden', !show); }
+function animateCount(el,target,prefix='',suffix=''){if(!el)return;const dur=1400,start=performance.now();function step(now){const p=Math.min((now-start)/dur,1);const eased=1-Math.pow(1-p,4);el.textContent=prefix+Math.round(target*eased).toLocaleString()+suffix;if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.remove('hidden');
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.add('hidden'), 3200);
-  }
+async function loadDash(){try{const res=await apiFetch('/api/stats');const data=await res.json();if(data.success){const d=data.data;animateCount(document.getElementById('dash-flagged'),d.contracts_flagged);animateCount(document.getElementById('dash-ghost'),d.ghost_projects);animateCount(document.getElementById('dash-reports'),d.reports_30d);animateCount(document.getElementById('dash-funds'),d.funds_at_risk,'KES ');animateCount(document.getElementById('hero-flagged'),d.contracts_flagged);animateCount(document.getElementById('hero-ghost'),d.ghost_projects);animateCount(document.getElementById('hero-funds'),d.funds_at_risk,'KES ')}}catch(e){}loadCountyExplorer();loadCharts();loadTopFlagged();loadGhostPreview()}
 
-  async function apiFetch(path, opts) {
-    try {
-      const res = await fetch(API_BASE + path, opts);
-      showConnError(false);
-      return res;
-    } catch (e) {
-      showConnError(true);
-      throw e;
-    }
-  }
+async function loadCountyExplorer(){const grid=document.getElementById('county-grid');try{const res=await apiFetch('/api/stats/by-county');const data=await res.json();const map={};(data.success?data.data:[]).forEach(c=>{map[c.county]=c});const maxHigh=Math.max(1,...Object.values(map).map(c=>c.high_risk||0));const counties=META.counties.length?META.counties:[];if(!counties.length){Object.keys(map).forEach(n=>counties.push({name:n}))}grid.innerHTML='';counties.forEach(c=>{const row=map[c.name]||{contracts:0,high_risk:0,funds_at_risk:0};const heat=row.high_risk===0?0:Math.min(5,1+Math.round((row.high_risk/maxHigh)*4));const el=document.createElement('button');el.className=`county-chip heatmap-${heat} rounded-xl px-3 py-3 text-left border border-slate-200/60 shadow-sm`;el.innerHTML=`<div class="font-bold text-sm truncate">${c.name}</div><div class="text-[11px] opacity-80">${row.contracts} contracts \u00b7 ${row.high_risk} high-risk</div>`;el.onclick=()=>{document.getElementById('filter-county').value=c.name;showTab('v-procurement');loadC()};grid.appendChild(el)})}catch(e){grid.innerHTML='<div class="col-span-full text-center py-10 text-red-600">Failed to load counties.</div>'}}
 
-  // ── Meta (populates all dropdowns from the real 47-county list) ──────────
-  async function loadMeta() {
-    try {
-      const res = await apiFetch('/api/contracts/meta');
-      const data = await res.json();
-      if (!data.success) return;
-      META = data.data;
+async function loadCharts(){try{const res=await apiFetch('/api/contracts?limit=500');const data=await res.json();if(!data.success)return;const rows=data.data;const riskCounts={HIGH:0,MEDIUM:0,LOW:0};const sectorCounts={};rows.forEach(c=>{if(riskCounts[c.risk_level]!==undefined)riskCounts[c.risk_level]++;sectorCounts[c.sector||'Other']=(sectorCounts[c.sector||'Other']||0)+1});const riskCtx=document.getElementById('risk-chart');if(riskCtx){if(riskChart)riskChart.destroy();riskChart=new Chart(riskCtx,{type:'doughnut',data:{labels:['HIGH','MEDIUM','LOW'],datasets:[{data:[riskCounts.HIGH,riskCounts.MEDIUM,riskCounts.LOW],backgroundColor:['#dc2626','#f59e0b','#10b981'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:16,usePointStyle:true}}}}})}const secCtx=document.getElementById('sector-chart');if(secCtx){const sorted=Object.entries(sectorCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);if(sectorChart)sectorChart.destroy();sectorChart=new Chart(secCtx,{type:'bar',data:{labels:sorted.map(s=>s[0]),datasets:[{label:'Contracts',data:sorted.map(s=>s[1]),backgroundColor:'#059669',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}})}}catch(e){}}
 
-      const countyOpts = META.counties.map(c => `<option value="${c.name}">${c.name} (${c.contracts})</option>`).join('');
-      const countyOptsPlain = META.counties.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-      document.getElementById('filter-county').innerHTML = '<option value="All">All Counties (47)</option>' + countyOpts;
-      document.getElementById('report-county').innerHTML = '<option value="">— Select —</option>' + countyOptsPlain;
-      document.getElementById('scan-county').innerHTML = countyOptsPlain;
-      document.getElementById('sync-county').innerHTML = '<option value="All">All Counties</option>' + countyOptsPlain;
+async function loadTopFlagged(){const box=document.getElementById('top-flagged');try{const res=await apiFetch('/api/contracts?risk_level=HIGH&limit=5');const data=await res.json();if(!data.success||!data.data.length){box.innerHTML='<p class="text-slate-400 text-sm">No high-risk contracts found.</p>';return}box.innerHTML=data.data.map(c=>`<div class="flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-all hover:shadow-sm" onclick="showDetail('${c.contract_id}')"><div class="min-w-0"><div class="font-mono text-[11px] text-slate-400 truncate">${c.contract_id}</div><div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(c.description)}</div><div class="text-xs text-slate-500">${c.county||'\u2014'} \u00b7 ${c.sector||'\u2014'}</div></div><div class="text-right flex-shrink-0"><div class="text-sm font-black text-red-600">${c.risk_score}</div><div class="text-[10px] text-slate-400 uppercase">risk</div></div></div>`).join('')}catch(e){box.innerHTML='<div class="text-red-500 text-sm">Failed to load.</div>'}}
 
-      const sectorOpts = META.sectors.map(s => `<option>${s}</option>`).join('');
-      document.getElementById('filter-sector').innerHTML = '<option value="All">All Sectors</option>' + sectorOpts;
-      document.getElementById('scan-sector').innerHTML = sectorOpts;
-      document.getElementById('report-sector').innerHTML = '<option value="">— Select —</option>' + sectorOpts;
+async function loadGhostPreview(){const box=document.getElementById('ghost-preview');try{const res=await apiFetch('/api/ghost-projects');const data=await res.json();if(!data.success||!data.data.length){box.innerHTML='<div class="text-slate-400 text-sm">No ghost projects detected.</div>';return}box.innerHTML=data.data.slice(0,4).map(g=>`<div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all hover:shadow-sm"><div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200"><img src="${g.satellite_image_url||'https://placehold.co/100x100?text=Sat'}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'"></div><div class="min-w-0 flex-1"><div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(g.project_name)}</div><div class="text-xs text-slate-500">${g.county} \u00b7 KES ${formatMoney(g.amount_at_risk)}</div></div><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700'}">${g.detection_status.toUpperCase()}</span></div>`).join('')}catch(e){box.innerHTML='<div class="text-red-500 text-sm">Failed to load.</div>'}}
 
-      const years = META.years.length ? META.years : [2026, 2025, 2024, 2023, 2022, 2021];
-      document.getElementById('filter-year').innerHTML = '<option value="All">All Years</option>' + years.map(y => `<option>${y}</option>`).join('');
-    } catch (e) { /* banner already shown by apiFetch */ }
-  }
+function scrollToCounty(){document.getElementById('county-explorer')?.scrollIntoView({behavior:'smooth',block:'center'})}
 
-  // ── Animated counter ─────────────────────────────────────────────────────
-  function animateCount(el, target, prefix = '', suffix = '') {
-    if (!el) return;
-    const dur = 1200, start = performance.now();
-    function step(now) {
-      const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
+function initReveal(){const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:0.1});document.querySelectorAll('.reveal').forEach(el=>io.observe(el))}
 
-  // ── Dashboard / landing data ─────────────────────────────────────────────
-  async function loadDash() {
-    try {
-      const res = await apiFetch('/api/stats');
-      const data = await res.json();
-      if (data.success) {
-        const d = data.data;
-        animateCount(document.getElementById('dash-flagged'), d.contracts_flagged);
-        animateCount(document.getElementById('dash-ghost'), d.ghost_projects);
-        animateCount(document.getElementById('dash-reports'), d.reports_30d);
-        animateCount(document.getElementById('dash-funds'), d.funds_at_risk, 'KES ');
-        animateCount(document.getElementById('hero-flagged'), d.contracts_flagged);
-        animateCount(document.getElementById('hero-ghost'), d.ghost_projects);
-        animateCount(document.getElementById('hero-funds'), d.funds_at_risk, 'KES ');
-      }
-    } catch (e) { /* noop */ }
-    loadCountyExplorer();
-    loadCharts();
-    loadTopFlagged();
-    loadGhostPreview();
-  }
+function initParticles(){const c=document.getElementById('particles');if(!c)return;for(let i=0;i<25;i++){const p=document.createElement('span');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(12+Math.random()*18)+'s';p.style.animationDelay=Math.random()*10+'s';c.appendChild(p)}}
 
-  // ── County Explorer (heatmap) ────────────────────────────────────────────
-  async function loadCountyExplorer() {
-    const grid = document.getElementById('county-grid');
-    try {
-      const res = await apiFetch('/api/stats/by-county');
-      const data = await res.json();
-      const map = {};
-      (data.success ? data.data : []).forEach(c => { map[c.county] = c; });
-      const maxHigh = Math.max(1, ...Object.values(map).map(c => c.high_risk || 0));
-      const counties = META.counties.length ? META.counties : [];
-      if (!counties.length) {
-        // fallback: build from the by-county response if meta not ready
-        const names = Object.keys(map);
-        names.forEach(n => counties.push({ name: n }));
-      }
-      grid.innerHTML = '';
-      counties.forEach(c => {
-        const row = map[c.name] || { contracts: 0, high_risk: 0, funds_at_risk: 0 };
-        const heat = row.high_risk === 0 ? 0 : Math.min(5, 1 + Math.round((row.high_risk / maxHigh) * 4));
-        const el = document.createElement('button');
-        el.className = `county-chip heatmap-${heat} rounded-xl px-3 py-3 text-left border border-slate-200/60 shadow-sm`;
-        el.innerHTML = `
-          <div class="font-bold text-sm truncate">${c.name}</div>
-          <div class="text-[11px] opacity-80">${row.contracts} contracts · ${row.high_risk} high-risk</div>`;
-        el.onclick = () => { document.getElementById('filter-county').value = c.name; showTab('v-procurement'); loadC(); };
-        grid.appendChild(el);
-      });
-    } catch (e) {
-      grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-600">Failed to load counties.</div>';
-    }
-  }
+function resetFilters(){document.getElementById('search-contracts').value='';document.getElementById('filter-county').value='All';document.getElementById('filter-sector').value='All';document.getElementById('filter-year').value='All';document.getElementById('filter-risk').value='All';document.getElementById('filter-datatype').value='All';currentPage=1;loadC()}
+function prevPage(){if(currentPage>1){currentPage--;loadC()}}
+function nextPage(){if(currentPage*PAGE_SIZE<lastTotal){currentPage++;loadC()}}
 
-  // ── Charts ───────────────────────────────────────────────────────────────
-  async function loadCharts() {
-    try {
-      const res = await apiFetch('/api/contracts?limit=500');
-      const data = await res.json();
-      if (!data.success) return;
-      const rows = data.data;
-      const riskCounts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
-      const sectorCounts = {};
-      rows.forEach(c => { if (riskCounts[c.risk_level] !== undefined) riskCounts[c.risk_level]++; sectorCounts[c.sector || 'Other'] = (sectorCounts[c.sector || 'Other'] || 0) + 1; });
+async function loadC(){const search=document.getElementById('search-contracts').value;const county=document.getElementById('filter-county').value;const sector=document.getElementById('filter-sector').value;const year=document.getElementById('filter-year').value;const risk=document.getElementById('filter-risk').value;const dataType=document.getElementById('filter-datatype').value;const params=new URLSearchParams({search,county,sector,year,risk_level:risk,data_type:dataType,limit:PAGE_SIZE,page:currentPage});const tbody=document.getElementById('contracts-table');tbody.innerHTML='<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse flex flex-col items-center gap-2"><div class="loading-spinner"></div>Querying database...</div></td></tr>';try{const res=await apiFetch('/api/contracts?'+params.toString());const data=await res.json();tbody.innerHTML='';if(data.success&&data.data.length>0){lastTotal=data.total||data.data.length;document.getElementById('pagination-info').textContent=`Showing ${(currentPage-1)*PAGE_SIZE+1}-${(currentPage-1)*PAGE_SIZE+data.data.length} of ${lastTotal} contracts`;document.getElementById('page-indicator').textContent=`Page ${currentPage}`;data.data.forEach(c=>{const riskColor=c.risk_level==='HIGH'?'text-red-700 bg-red-50 border-red-200':(c.risk_level==='MEDIUM'?'text-amber-700 bg-amber-50 border-amber-200':'text-emerald-700 bg-emerald-50 border-emerald-200');const tr=document.createElement('tr');tr.className='hover:bg-slate-50 transition-colors cursor-pointer';tr.onclick=()=>showDetail(c.contract_id);tr.innerHTML=`<td class="p-4 font-mono text-xs text-slate-600">${c.contract_id}</td><td class="p-4 text-slate-900 font-medium max-w-xs truncate" title="${escapeHtml(c.description)}">${escapeHtml(c.description)}</td><td class="p-4 text-slate-700">${c.county||'\u2014'}</td><td class="p-4 text-slate-700">${c.sector||'\u2014'}</td><td class="p-4 text-slate-700">${c.year||'\u2014'}</td><td class="p-4 font-semibold text-slate-900">${formatMoney(c.value)}</td><td class="p-4 text-slate-700 max-w-[150px] truncate" title="${escapeHtml(c.supplier||'')}">${escapeHtml(c.supplier||'\u2014')}</td><td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold border ${riskColor}">${c.risk_level} (${c.risk_score})</span></td><td class="p-4">${dataTypeBadge(c.data_type)}</td>`;tbody.appendChild(tr)})}else{tbody.innerHTML='<tr><td colspan="9" class="p-12 text-center text-slate-500">No contracts found matching filters.</td></tr>';document.getElementById('pagination-info').textContent='0 results';lastTotal=0}}catch(e){tbody.innerHTML='<tr><td colspan="9" class="p-12 text-center text-red-600">Connection failed. Verify the backend URL.</td></tr>'}}
 
-      const riskCtx = document.getElementById('risk-chart');
-      if (riskCtx) {
-        if (riskChart) riskChart.destroy();
-        riskChart = new Chart(riskCtx, {
-          type: 'doughnut',
-          data: { labels: ['HIGH', 'MEDIUM', 'LOW'], datasets: [{ data: [riskCounts.HIGH, riskCounts.MEDIUM, riskCounts.LOW], backgroundColor: ['#dc2626', '#f59e0b', '#10b981'], borderWidth: 2, borderColor: '#fff' }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-        });
-      }
-      const secCtx = document.getElementById('sector-chart');
-      if (secCtx) {
-        const sorted = Object.entries(sectorCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
-        if (sectorChart) sectorChart.destroy();
-        sectorChart = new Chart(secCtx, {
-          type: 'bar',
-          data: { labels: sorted.map(s => s[0]), datasets: [{ label: 'Contracts', data: sorted.map(s => s[1]), backgroundColor: '#059669', borderRadius: 6 }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
-        });
-      }
-    } catch (e) { /* noop */ }
-  }
+async function showDetail(contractId){const body=document.getElementById('detail-body');body.innerHTML='<div class="animate-pulse text-slate-400 flex items-center gap-2"><div class="loading-spinner-sm"></div>Loading...</div>';openModal('detail-modal');try{const res=await apiFetch('/api/contracts/'+encodeURIComponent(contractId));const data=await res.json();if(!data.success){body.innerHTML='<p class="text-red-600">Not found.</p>';return}const c=data.data;let flags=[];try{flags=typeof c.flags==='string'?JSON.parse(c.flags):(c.flags||[])}catch(e){}body.innerHTML=`<div class="flex justify-between items-start"><div><p class="font-mono text-xs text-slate-500">${c.contract_id}</p><h4 class="text-lg font-bold text-slate-900">${escapeHtml(c.description)}</h4></div>${dataTypeBadge(c.data_type)}</div><div class="grid grid-cols-2 gap-4 pt-2"><div><p class="text-xs uppercase text-slate-400 font-semibold">County</p><p class="font-medium">${c.county||'\u2014'}</p></div><div><p class="text-xs uppercase text-slate-400 font-semibold">Sector</p><p class="font-medium">${c.sector||'\u2014'}</p></div><div><p class="text-xs uppercase text-slate-400 font-semibold">Value</p><p class="font-medium">KES ${Number(c.value).toLocaleString()}</p></div><div><p class="text-xs uppercase text-slate-400 font-semibold">Awarded</p><p class="font-medium">${c.awarded_date||'\u2014'}</p></div><div><p class="text-xs uppercase text-slate-400 font-semibold">Bid Type</p><p class="font-medium">${c.bid_type||'\u2014'}</p></div><div><p class="text-xs uppercase text-slate-400 font-semibold">Status</p><p class="font-medium capitalize">${c.status||'active'}</p></div><div class="col-span-2"><p class="text-xs uppercase text-slate-400 font-semibold">Supplier</p><p class="font-medium">${escapeHtml(c.supplier||'\u2014')}</p></div><div class="col-span-2"><p class="text-xs uppercase text-slate-400 font-semibold">Procuring Entity</p><p class="font-medium">${escapeHtml(c.procuring_entity||'\u2014')}</p></div></div><div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-2">Risk Assessment \u2014 ${c.risk_score}/100 (${c.risk_level})</p><ul class="list-disc pl-5 space-y-1">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul></div>${c.notes?`<div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-1">Notes</p><p>${escapeHtml(c.notes)}</p></div>`:''}${c.source_url?`<div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-1">Source</p><a href="${c.source_url}" target="_blank" rel="noopener" class="text-brand-600 hover:underline font-medium">${escapeHtml(c.source_name||c.source_url)} \u2197</a></div>`:''}`}catch(e){body.innerHTML='<p class="text-red-600">Failed to load contract.</p>'}}
 
-  // ── Top flagged contracts ────────────────────────────────────────────────
-  async function loadTopFlagged() {
-    const box = document.getElementById('top-flagged');
-    try {
-      const res = await apiFetch('/api/contracts?risk_level=HIGH&limit=5');
-      const data = await res.json();
-      if (!data.success || !data.data.length) { box.innerHTML = '<p class="text-slate-400 text-sm">No high-risk contracts found.</p>'; return; }
-      box.innerHTML = data.data.map(c => `
-        <div class="flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors" onclick="showDetail('${c.contract_id}')">
-          <div class="min-w-0">
-            <div class="font-mono text-[11px] text-slate-400 truncate">${c.contract_id}</div>
-            <div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(c.description)}</div>
-            <div class="text-xs text-slate-500">${c.county || '—'} · ${c.sector || '—'}</div>
-          </div>
-          <div class="text-right flex-shrink-0">
-            <div class="text-sm font-black text-red-600">${c.risk_score}</div>
-            <div class="text-[10px] text-slate-400 uppercase">risk</div>
-          </div>
-        </div>`).join('');
-    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm">Failed to load.</div>'; }
-  }
+function exportCSV(){const search=document.getElementById('search-contracts').value;const county=document.getElementById('filter-county').value;const sector=document.getElementById('filter-sector').value;const year=document.getElementById('filter-year').value;const risk=document.getElementById('filter-risk').value;const dataType=document.getElementById('filter-datatype').value;const params=new URLSearchParams({search,county,sector,year,risk_level:risk,data_type:dataType});window.open(API_BASE+'/api/contracts/export?'+params.toString(),'_blank');showToast('Downloading CSV...')}
 
-  // ── Ghost project preview ────────────────────────────────────────────────
-  async function loadGhostPreview() {
-    const box = document.getElementById('ghost-preview');
-    try {
-      const res = await apiFetch('/api/ghost-projects');
-      const data = await res.json();
-      if (!data.success || !data.data.length) { box.innerHTML = '<div class="text-slate-400 text-sm">No ghost projects detected.</div>'; return; }
-      box.innerHTML = data.data.slice(0, 4).map(g => `
-        <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
-          <div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200">
-            <img src="${g.satellite_image_url || 'https://placehold.co/100x100?text=Sat'}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(g.project_name)}</div>
-            <div class="text-xs text-slate-500">${g.county} · KES ${formatMoney(g.amount_at_risk)}</div>
-          </div>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700'}">${g.detection_status.toUpperCase()}</span>
-        </div>`).join('');
-    } catch (e) { box.innerHTML = '<div class="text-red-500 text-sm">Failed to load.</div>'; }
-  }
+async function loadGhost(){const grid=document.getElementById('ghost-grid');try{const res=await apiFetch('/api/ghost-projects');const data=await res.json();grid.innerHTML='';if(data.success&&data.data.length>0){data.data.forEach(g=>{const el=document.createElement('div');el.className='bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden card-hover';el.innerHTML=`<div class="h-48 bg-slate-200 relative overflow-hidden"><img src="${g.satellite_image_url||'https://placehold.co/600x400?text=Satellite'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Satellite'"><div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm ${g.detection_status==='ghost'?'bg-red-100/90 text-red-700 border border-red-200':'bg-amber-100/90 text-amber-700 border border-amber-200'}">${g.detection_status.toUpperCase()}</div><div class="absolute top-3 left-3">${dataTypeBadge(g.data_type)}</div></div><div class="p-5"><h3 class="font-bold text-slate-900 mb-1">${escapeHtml(g.project_name)}</h3><p class="text-xs text-slate-500 mb-1">${g.county} County</p><p class="text-xs text-slate-500 mb-3">Claimed: ${escapeHtml(g.claimed_status||'\u2014')}<br>Satellite: ${escapeHtml(g.satellite_status||'\u2014')}</p><div class="flex justify-between items-center pt-3 border-t border-slate-100"><span class="text-red-600 font-bold">KES ${formatMoney(g.amount_at_risk)}</span><span class="text-xs text-slate-500">${g.confidence_score}% confidence</span></div>${g.source_url?`<a href="${g.source_url}" target="_blank" rel="noopener" class="block mt-3 text-xs text-brand-600 hover:underline font-semibold">${escapeHtml(g.source_name||'Source')} \u2197</a>`:''}</div>`;grid.appendChild(el)})}else{grid.innerHTML='<div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200">No ghost projects detected.</div>'}}catch(e){grid.innerHTML='<div class="col-span-full text-center py-12 text-red-600">Failed to load.</div>'}}
 
-  function scrollToCounty() {
-    const el = document.getElementById('county-explorer');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
+async function submitReport(e){e.preventDefault();const form=e.target;const btn=form.querySelector('button[type="submit"]');const origHTML=btn.innerHTML;btn.innerHTML='<div class="loading-spinner-sm mr-2" style="display:inline-block"></div>Submitting...';btn.disabled=true;try{const res=await apiFetch('/api/reports',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:form.type.value,county:form.county.value,sector:form.sector.value||null,description:form.description.value,amount:form.amount.value?parseInt(form.amount.value,10):0,anonymous:form.anonymous.checked})});const data=await res.json();if(data.success){showToast('Report submitted. Case: '+data.data.case_number);form.reset()}else{showToast('Error: '+data.error)}}catch(err){showToast('Network error.')}btn.innerHTML=origHTML;btn.disabled=false}
 
-  // ── Reveal-on-scroll ─────────────────────────────────────────────────────
-  function initReveal() {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  }
+function clearChat(){document.getElementById('chat-history').innerHTML=`<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white shadow-sm">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`}
 
-  // ── Contracts table ──────────────────────────────────────────────────────
-  function resetFilters() {
-    document.getElementById('search-contracts').value = '';
-    document.getElementById('filter-county').value = 'All';
-    document.getElementById('filter-sector').value = 'All';
-    document.getElementById('filter-year').value = 'All';
-    document.getElementById('filter-risk').value = 'All';
-    document.getElementById('filter-datatype').value = 'All';
-    currentPage = 1;
-    loadC();
-  }
+async function sendAI(e){e.preventDefault();const input=document.getElementById('ai-input');const msg=input.value.trim();if(!msg)return;const history=document.getElementById('chat-history');const userDiv=document.createElement('div');userDiv.className='flex gap-3 flex-row-reverse';userDiv.innerHTML=`<div class="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-sm font-bold text-white shadow-sm flex-shrink-0">You</div><div class="bg-brand-50 border border-brand-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800">${escapeHtml(msg)}</div>`;history.appendChild(userDiv);input.value='';const loadDiv=document.createElement('div');loadDiv.id='ai-loading';loadDiv.className='flex gap-3';loadDiv.innerHTML=`<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white shadow-sm flex-shrink-0">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none border border-slate-200 text-sm text-slate-500 animate-pulse flex items-center gap-2"><div class="loading-spinner-sm"></div>Thinking...</div>`;history.appendChild(loadDiv);history.scrollTop=history.scrollHeight;try{const res=await apiFetch('/api/ai/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});const data=await res.json();document.getElementById('ai-loading')?.remove();const aiDiv=document.createElement('div');aiDiv.className='flex gap-3';aiDiv.innerHTML=`<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white shadow-sm flex-shrink-0">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none border border-slate-200 text-sm text-slate-800 whitespace-pre-wrap max-w-[85%]">${escapeHtml(data.reply)}</div>`;history.appendChild(aiDiv);history.scrollTop=history.scrollHeight}catch(err){document.getElementById('ai-loading')?.remove();showToast('Failed to get AI response.')}}
 
-  function prevPage() { if (currentPage > 1) { currentPage--; loadC(); } }
-  function nextPage() { if (currentPage * PAGE_SIZE < lastTotal) { currentPage++; loadC(); } }
+async function runScan(){const id=document.getElementById('scan-id').value;const supplier=document.getElementById('scan-supplier').value;const value=document.getElementById('scan-value').value;if(!id||!supplier||!value){showToast('Fill required fields');return}const resultDiv=document.getElementById('scan-result');resultDiv.classList.remove('hidden');resultDiv.innerHTML='<span class="text-blue-600 animate-pulse flex items-center gap-2"><div class="loading-spinner-sm"></div>Analysing...</span>';try{const res=await apiFetch('/api/contracts/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contract_id:id,supplier,description:document.getElementById('scan-desc').value,county:document.getElementById('scan-county').value,sector:document.getElementById('scan-sector').value,value:parseInt(value,10),bid_type:document.getElementById('scan-bid').value,awarded_date:document.getElementById('scan-date').value||null})});const data=await res.json();if(data.success){const c=data.data;let flags=[];try{flags=typeof c.flags==='string'?JSON.parse(c.flags):c.flags}catch(e){}resultDiv.innerHTML=`<div class="font-bold text-lg ${c.risk_level==='HIGH'?'text-red-600':(c.risk_level==='MEDIUM'?'text-amber-600':'text-emerald-600')}">Risk Score: ${c.risk_score}/100 (${c.risk_level})</div><ul class="list-disc pl-5 mt-2 text-slate-700">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>`;currentPage=1;loadC()}else{resultDiv.innerHTML=`<span class="text-red-600">Error: ${escapeHtml(data.error)}</span>`}}catch(e){resultDiv.innerHTML='<span class="text-red-600">Network error.</span>'}}
 
-  async function loadC() {
-    const search = document.getElementById('search-contracts').value;
-    const county = document.getElementById('filter-county').value;
-    const sector = document.getElementById('filter-sector').value;
-    const year = document.getElementById('filter-year').value;
-    const risk = document.getElementById('filter-risk').value;
-    const dataType = document.getElementById('filter-datatype').value;
+async function startSync(){const year=document.getElementById('sync-year').value;const county=document.getElementById('sync-county').value;const statusDiv=document.getElementById('sync-status');statusDiv.innerHTML='<span class="text-blue-600 animate-pulse flex items-center gap-2"><div class="loading-spinner-sm"></div>Starting background sync...</span>';try{const res=await apiFetch('/api/sync/ocds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({year:parseInt(year,10),county})});const data=await res.json();if(data.success){statusDiv.innerHTML=`<div class="text-emerald-700 font-bold py-2 flex items-center gap-2">${data.message}</div>`;setTimeout(loadSyncStatus,4000)}else{statusDiv.innerHTML=`<span class="text-red-600">${escapeHtml(data.error)}</span>`}}catch(e){statusDiv.innerHTML='<span class="text-red-600">Network error.</span>'}}
 
-    const params = new URLSearchParams({
-      search, county, sector, year, risk_level: risk, data_type: dataType,
-      limit: PAGE_SIZE, page: currentPage,
-    });
+async function loadSyncStatus(){const statusDiv=document.getElementById('sync-status');try{const res=await apiFetch('/api/sync/status');const data=await res.json();if(data.success&&data.data.length>0){statusDiv.innerHTML=data.data.map(log=>`<div class="flex flex-wrap justify-between items-center py-3 gap-2"><span class="font-medium text-slate-900">${log.year}${log.county?' \u00b7 '+log.county:''} \u2014 <span class="${log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-blue-600')} font-bold uppercase">${log.status}</span></span><span class="text-sm text-slate-600">${log.records||0} records${log.error_msg?' \u00b7 '+escapeHtml(log.error_msg):''}</span></div>`).join('')}else{statusDiv.innerHTML='<span class="text-slate-500">No sync history yet.</span>'}}catch(e){statusDiv.innerHTML='<span class="text-red-600">Failed to load status.</span>'}}
 
-    const tbody = document.getElementById('contracts-table');
-    tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500"><div class="animate-pulse">Querying database...</div></td></tr>';
-
-    try {
-      const res = await apiFetch('/api/contracts?' + params.toString());
-      const data = await res.json();
-      tbody.innerHTML = '';
-      if (data.success && data.data.length > 0) {
-        lastTotal = data.total || data.data.length;
-        document.getElementById('pagination-info').textContent = `Showing ${(currentPage-1)*PAGE_SIZE+1}-${(currentPage-1)*PAGE_SIZE+data.data.length} of ${lastTotal} contracts`;
-        document.getElementById('page-indicator').textContent = `Page ${currentPage}`;
-        data.data.forEach(c => {
-          const riskColor = c.risk_level === 'HIGH' ? 'text-red-700 bg-red-50 border-red-200' : (c.risk_level === 'MEDIUM' ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200');
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-50 transition-colors cursor-pointer';
-          tr.onclick = () => showDetail(c.contract_id);
-          tr.innerHTML = `
-            <td class="p-4 font-mono text-xs text-slate-600">${c.contract_id}</td>
-            <td class="p-4 text-slate-900 font-medium max-w-xs truncate" title="${escapeHtml(c.description)}">${escapeHtml(c.description)}</td>
-            <td class="p-4 text-slate-700">${c.county || '—'}</td>
-            <td class="p-4 text-slate-700">${c.sector || '—'}</td>
-            <td class="p-4 text-slate-700">${c.year || '—'}</td>
-            <td class="p-4 font-semibold text-slate-900">${formatMoney(c.value)}</td>
-            <td class="p-4 text-slate-700 max-w-[150px] truncate" title="${escapeHtml(c.supplier||'')}">${escapeHtml(c.supplier||'—')}</td>
-            <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold border ${riskColor}">${c.risk_level} (${c.risk_score})</span></td>
-            <td class="p-4">${dataTypeBadge(c.data_type)}</td>`;
-          tbody.appendChild(tr);
-        });
-      } else {
-        tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-slate-500">No contracts found matching filters.</td></tr>';
-        document.getElementById('pagination-info').textContent = '0 results';
-        lastTotal = 0;
-      }
-    } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-red-600">Connection failed. Verify the backend URL configured on this page.</td></tr>`;
-    }
-  }
-
-  function escapeHtml(s) { return (s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-  async function showDetail(contractId) {
-    const body = document.getElementById('detail-body');
-    body.innerHTML = '<div class="animate-pulse text-slate-400">Loading...</div>';
-    openModal('detail-modal');
-    try {
-      const res = await apiFetch('/api/contracts/' + encodeURIComponent(contractId));
-      const data = await res.json();
-      if (!data.success) { body.innerHTML = '<p class="text-red-600">Not found.</p>'; return; }
-      const c = data.data;
-      let flags = [];
-      try { flags = typeof c.flags === 'string' ? JSON.parse(c.flags) : (c.flags || []); } catch (e) {}
-      body.innerHTML = `
-        <div class="flex justify-between items-start">
-          <div><p class="font-mono text-xs text-slate-500">${c.contract_id}</p><h4 class="text-lg font-bold text-slate-900">${escapeHtml(c.description)}</h4></div>
-          ${dataTypeBadge(c.data_type)}
-        </div>
-        <div class="grid grid-cols-2 gap-4 pt-2">
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">County</p><p class="font-medium">${c.county || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Sector</p><p class="font-medium">${c.sector || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Value</p><p class="font-medium">KES ${Number(c.value).toLocaleString()}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Awarded</p><p class="font-medium">${c.awarded_date || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Bid Type</p><p class="font-medium">${c.bid_type || '—'}</p></div>
-          <div><p class="text-xs uppercase text-slate-400 font-semibold">Status</p><p class="font-medium capitalize">${c.status || 'active'}</p></div>
-          <div class="col-span-2"><p class="text-xs uppercase text-slate-400 font-semibold">Supplier</p><p class="font-medium">${escapeHtml(c.supplier||'—')}</p></div>
-          <div class="col-span-2"><p class="text-xs uppercase text-slate-400 font-semibold">Procuring Entity</p><p class="font-medium">${escapeHtml(c.procuring_entity||'—')}</p></div>
-        </div>
-        <div class="pt-3 border-t border-slate-100">
-          <p class="text-xs uppercase text-slate-400 font-semibold mb-2">Risk Assessment — ${c.risk_score}/100 (${c.risk_level})</p>
-          <ul class="list-disc pl-5 space-y-1">${flags.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
-        </div>
-        ${c.notes ? `<div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-1">Notes</p><p>${escapeHtml(c.notes)}</p></div>` : ''}
-        ${c.source_url ? `<div class="pt-3 border-t border-slate-100"><p class="text-xs uppercase text-slate-400 font-semibold mb-1">Source</p><a href="${c.source_url}" target="_blank" rel="noopener" class="text-brand-600 hover:underline font-medium">${escapeHtml(c.source_name || c.source_url)} ↗</a></div>` : ''}
-      `;
-    } catch (e) { body.innerHTML = '<p class="text-red-600">Failed to load contract.</p>'; }
-  }
-
-  // ── CSV export ───────────────────────────────────────────────────────────
-  function exportCSV() {
-    const search = document.getElementById('search-contracts').value;
-    const county = document.getElementById('filter-county').value;
-    const sector = document.getElementById('filter-sector').value;
-    const year = document.getElementById('filter-year').value;
-    const risk = document.getElementById('filter-risk').value;
-    const dataType = document.getElementById('filter-datatype').value;
-    const params = new URLSearchParams({ search, county, sector, year, risk_level: risk, data_type: dataType });
-    window.open(API_BASE + '/api/contracts/export?' + params.toString(), '_blank');
-    showToast('📥 Downloading CSV...');
-  }
-
-  // ── Ghost projects ───────────────────────────────────────────────────────
-  async function loadGhost() {
-    const grid = document.getElementById('ghost-grid');
-    try {
-      const res = await apiFetch('/api/ghost-projects');
-      const data = await res.json();
-      grid.innerHTML = '';
-      if (data.success && data.data.length > 0) {
-        data.data.forEach(g => {
-          const el = document.createElement('div');
-          el.className = 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden card-hover';
-          el.innerHTML = `
-            <div class="h-48 bg-slate-200 relative">
-              <img src="${g.satellite_image_url || 'https://placehold.co/600x400?text=Satellite'}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Satellite'">
-              <div class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${g.detection_status==='ghost'?'bg-red-100 text-red-700 border border-red-200':'bg-amber-100 text-amber-700 border border-amber-200'}">${g.detection_status.toUpperCase()}</div>
-              <div class="absolute top-3 left-3">${dataTypeBadge(g.data_type)}</div>
-            </div>
-            <div class="p-5">
-              <h3 class="font-bold text-slate-900">${escapeHtml(g.project_name)}</h3>
-              <p class="text-xs text-slate-500 mb-1">📍 ${g.county} County</p>
-              <p class="text-xs text-slate-500 mb-3">Claimed: ${escapeHtml(g.claimed_status||'—')}<br>Satellite: ${escapeHtml(g.satellite_status||'—')}</p>
-              <div class="flex justify-between items-center pt-3 border-t border-slate-100">
-                <span class="text-red-600 font-bold">KES ${formatMoney(g.amount_at_risk)}</span>
-                <span class="text-xs text-slate-500">${g.confidence_score}% confidence</span>
-              </div>
-              ${g.source_url ? `<a href="${g.source_url}" target="_blank" rel="noopener" class="block mt-3 text-xs text-brand-600 hover:underline font-semibold">${escapeHtml(g.source_name||'Source')} ↗</a>` : ''}
-            </div>`;
-          grid.appendChild(el);
-        });
-      } else {
-        grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-200">No ghost projects detected.</div>';
-      }
-    } catch (e) {
-      grid.innerHTML = '<div class="col-span-full text-center py-12 text-red-600">Failed to load.</div>';
-    }
-  }
-
-  // ── Report ───────────────────────────────────────────────────────────────
-  async function submitReport(e) {
-    e.preventDefault();
-    const form = e.target;
-    const btn = form.querySelector('button[type="submit"]');
-    btn.innerHTML = 'Submitting...'; btn.disabled = true;
-    try {
-      const res = await apiFetch('/api/reports', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: form.type.value, county: form.county.value, sector: form.sector.value || null,
-          description: form.description.value,
-          amount: form.amount.value ? parseInt(form.amount.value, 10) : 0,
-          anonymous: form.anonymous.checked,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) { showToast('✅ Report submitted. Case number: ' + data.data.case_number); form.reset(); }
-      else { showToast('Error: ' + data.error); }
-    } catch (err) { showToast('Network error — please try again.'); }
-    btn.innerHTML = '🔒 Submit Securely'; btn.disabled = false;
-  }
-
-  // ── AI chat ──────────────────────────────────────────────────────────────
-  function clearChat() {
-    const history = document.getElementById('chat-history');
-    history.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-200"><p class="text-sm text-slate-800">Habari! I have access to the live procurement database. Ask me about high-risk contracts, ghost projects, or a specific county.</p></div></div>`;
-  }
-
-  async function sendAI(e) {
-    e.preventDefault();
-    const input = document.getElementById('ai-input');
-    const msg = input.value.trim(); if (!msg) return;
-    const history = document.getElementById('chat-history');
-    const userDiv = document.createElement('div');
-    userDiv.className = 'flex gap-3 flex-row-reverse';
-    userDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-slate-300 flex items-center justify-center text-sm font-bold text-white">You</div><div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-slate-800">${escapeHtml(msg)}</div>`;
-    history.appendChild(userDiv);
-    input.value = '';
-    const loadDiv = document.createElement('div');
-    loadDiv.id = 'ai-loading';
-    loadDiv.className = 'flex gap-3';
-    loadDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none border border-slate-200 text-sm text-slate-500 animate-pulse">Thinking...</div>`;
-    history.appendChild(loadDiv);
-    history.scrollTop = history.scrollHeight;
-    try {
-      const res = await apiFetch('/api/ai/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: msg }) });
-      const data = await res.json();
-      document.getElementById('ai-loading')?.remove();
-      const aiDiv = document.createElement('div');
-      aiDiv.className = 'flex gap-3';
-      aiDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-sm font-bold text-white">AI</div><div class="bg-slate-100 p-4 rounded-2xl rounded-tl-none border border-slate-200 text-sm text-slate-800 whitespace-pre-wrap">${escapeHtml(data.reply)}</div>`;
-      history.appendChild(aiDiv);
-      history.scrollTop = history.scrollHeight;
-    } catch (err) { document.getElementById('ai-loading')?.remove(); }
-  }
-
-  // ── Scan contract ────────────────────────────────────────────────────────
-  async function runScan() {
-    const id = document.getElementById('scan-id').value;
-    const supplier = document.getElementById('scan-supplier').value;
-    const value = document.getElementById('scan-value').value;
-    if (!id || !supplier || !value) { showToast('Fill required fields'); return; }
-    const resultDiv = document.getElementById('scan-result');
-    resultDiv.classList.remove('hidden');
-    resultDiv.innerHTML = '<span class="text-blue-600 animate-pulse">Analysing...</span>';
-    try {
-      const res = await apiFetch('/api/contracts/scan', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contract_id: id, supplier, description: document.getElementById('scan-desc').value,
-          county: document.getElementById('scan-county').value, sector: document.getElementById('scan-sector').value,
-          value: parseInt(value, 10), bid_type: document.getElementById('scan-bid').value,
-          awarded_date: document.getElementById('scan-date').value || null,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        const c = data.data;
-        let flags = [];
-        try { flags = typeof c.flags === 'string' ? JSON.parse(c.flags) : c.flags; } catch (e) {}
-        resultDiv.innerHTML = `<div class="font-bold text-lg ${c.risk_level==='HIGH'?'text-red-600':(c.risk_level==='MEDIUM'?'text-amber-600':'text-emerald-600')}">Risk Score: ${c.risk_score}/100 (${c.risk_level})</div><ul class="list-disc pl-5 mt-2 text-slate-700">${flags.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>`;
-        currentPage = 1; loadC();
-      } else { resultDiv.innerHTML = `<span class="text-red-600">Error: ${escapeHtml(data.error)}</span>`; }
-    } catch (e) { resultDiv.innerHTML = '<span class="text-red-600">Network error.</span>'; }
-  }
-
-  // ── Sync ─────────────────────────────────────────────────────────────────
-  async function startSync() {
-    const year = document.getElementById('sync-year').value;
-    const county = document.getElementById('sync-county').value;
-    const statusDiv = document.getElementById('sync-status');
-    statusDiv.innerHTML = '<span class="text-blue-600 animate-pulse">Starting background sync...</span>';
-    try {
-      const res = await apiFetch('/api/sync/ocds', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ year: parseInt(year, 10), county }) });
-      const data = await res.json();
-      if (data.success) { statusDiv.innerHTML = `<div class="text-emerald-700 font-bold py-2">✅ ${data.message}</div>`; setTimeout(loadSyncStatus, 4000); }
-      else { statusDiv.innerHTML = `<span class="text-red-600">❌ ${escapeHtml(data.error)}</span>`; }
-    } catch (e) { statusDiv.innerHTML = '<span class="text-red-600">❌ Network error.</span>'; }
-  }
-
-  async function loadSyncStatus() {
-    const statusDiv = document.getElementById('sync-status');
-    try {
-      const res = await apiFetch('/api/sync/status');
-      const data = await res.json();
-      if (data.success && data.data.length > 0) {
-        statusDiv.innerHTML = data.data.map(log => `
-          <div class="flex justify-between items-center py-2.5">
-            <span class="font-medium text-slate-900">${log.year}${log.county ? ' · ' + log.county : ''} —
-              <span class="${log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-blue-600')} font-bold uppercase">${log.status}</span>
-            </span>
-            <span class="text-sm text-slate-600">${log.records || 0} records${log.error_msg ? ' · ' + escapeHtml(log.error_msg) : ''}</span>
-          </div>`).join('');
-      } else { statusDiv.innerHTML = '<span class="text-slate-500">No sync history yet.</span>'; }
-    } catch (e) { statusDiv.innerHTML = '<span class="text-red-600">Failed to load status.</span>'; }
-  }
-
-  // ── Init ─────────────────────────────────────────────────────────────────
-  (async function init() {
-    await loadMeta();
-    initReveal();
-    showTab('v-overview');
-  })();
+(async function init(){await loadMeta();initReveal();initParticles();showTab('v-overview')})();
 </script>
 </body>
 </html>

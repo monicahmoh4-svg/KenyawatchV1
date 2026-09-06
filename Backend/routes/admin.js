@@ -33,11 +33,11 @@ router.get('/stats', async (_req, res) => {
       success: true,
       data: {
         contracts_total: totals.rows[0].n,
-        contracts_flagged: highRisk.rows[0].n,
+        contracts_flagged: flagged.rows[0].n,
         ghost_projects: ghosts.rows[0].n,
-        pending_reports: counties.rows[0].n,
+        pending_reports: pending.rows[0].n,
         counties_covered: counties.rows[0].n,
-        data_type_breakdown: dataType.rows,
+        data_type_breakdown: byDataType.rows,
       },
     });
   } catch (e) {
