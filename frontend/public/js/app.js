@@ -1,13 +1,11 @@
-// KenyaWatch AI — Main Application Logic (shadcn Design System)
+// KenyaWatch AI — Main Application Logic (Mission-First)
 // Fetches data from backend API, renders all features
-// Accessibility: keyboard nav, reduced-motion, ARIA live regions
+// Honesty: data_type badges on every record, transparent risk scoring
 
 const API = 'https://kenyawatch-ai-backend.onrender.com';
 
-// Reduced motion detection
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Keyboard navigation
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     closeContractModal();
@@ -16,7 +14,22 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// ── 47 Counties ──────────────────────────────────────────────────
+const DATA_TYPE_META = {
+  documented: { label: 'Documented', cssClass: 'badge-documented', explanation: 'Source-cited real case from Auditor-General reports or investigative journalism. This is verified data.' },
+  reference: { label: 'Reference', cssClass: 'badge-reference', explanation: 'Synthetically generated representative baseline. Not a real contract. Should not be cited as evidence.' },
+  live_sync: { label: 'Live Sync', cssClass: 'badge-live-sync', explanation: 'Live feed from OCDS procurement registry. Data is sourced from official government records.' },
+  manual_scan: { label: 'Manual Scan', cssClass: 'badge-manual-scan', explanation: 'User-submitted contract entry. Verify independently before citing.' }
+};
+
+const RISK_FACTORS = {
+  single_sourcing: { label: 'Single-sourced procurement', weight: 25, law: 'PPADA 2015 Sec 103' },
+  contract_splitting: { label: 'Contract splitting detected', weight: 20, law: 'PPADA 2015 Sec 54' },
+  above_threshold: { label: 'Above open tender threshold', weight: 15, law: 'PPADA 2015 Sec 91' },
+  related_party: { label: 'Potential related-party supplier', weight: 15, law: 'ACECA 2003 Sec 45' },
+  ghost_indicators: { label: 'Ghost project indicators', weight: 20, law: 'ACECA 2003 Sec 45' },
+  incomplete_delivery: { label: 'Incomplete delivery', weight: 10, law: 'PPADA 2015 Sec 62' }
+};
+
 const COUNTIES = [
   {name:'Mombasa',code:'MSA',region:'Coast'},{name:'Kwale',code:'KWL',region:'Coast'},
   {name:'Kilifi',code:'KLF',region:'Coast'},{name:'Tana River',code:'TRV',region:'Coast'},
@@ -61,7 +74,6 @@ const SECTORS = [
   {name:'Transport & Logistics',img:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80'}
 ];
 
-// ── App State ────────────────────────────────────────────────────
 let currentTab = 'overview';
 let stats = {};
 let contractsPage = [];
@@ -72,10 +84,9 @@ let currentPage = 1;
 let totalPages = 1;
 let totalCount = 0;
 let pageSize = 50;
-let filters = { county:'All', sector:'All', risk_level:'All', year:'All', search:'', sort:'risk_desc' };
+let filters = { county:'All', sector:'All', risk_level:'All', year:'All', data_type:'All', search:'', sort:'risk_desc' };
 let activeModal = null;
 
-// ── API Fetcher ──────────────────────────────────────────────────
 async function api(path, opts) {
   try {
     const res = await fetch(API + path, opts);
@@ -87,7 +98,6 @@ async function api(path, opts) {
   }
 }
 
-// ── Initialization ───────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   populateDropdowns();
   setupEventListeners();
@@ -122,7 +132,6 @@ async function loadAll() {
   renderCountyLeaderboard();
 }
 
-// ── Dropdown Population ──────────────────────────────────────────
 function populateDropdowns() {
   const filterCounty = document.getElementById('filterCounty');
   const reportCounty = document.getElementById('reportCounty');
@@ -158,9 +167,8 @@ function updateCountyDropdown(apiCounties) {
   });
 }
 
-// ── Event Listeners ──────────────────────────────────────────────
 function setupEventListeners() {
-  ['filterCounty','filterSector','filterRisk','filterYear','contractSort'].forEach(id => {
+  ['filterCounty','filterSector','filterRisk','filterYear','filterDataType','contractSort'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', applyFilters);
   });
@@ -175,26 +183,22 @@ function setupEventListeners() {
   }
 }
 
-// ── Tab Switching ────────────────────────────────────────────────
 function switchTab(tabId) {
   currentTab = tabId;
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   const panel = document.getElementById('tab-' + tabId);
   if (panel) panel.classList.add('active');
 
-  // Update desktop nav
   document.querySelectorAll('.nav-link').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
     if (btn.dataset.tab === tabId) btn.setAttribute('aria-current', 'page');
     else btn.removeAttribute('aria-current');
   });
 
-  // Update mobile bottom nav
   document.querySelectorAll('.mobile-bottom-nav-item').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
   });
 
-  // Update mobile drawer
   document.querySelectorAll('.mobile-drawer-link').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
   });
@@ -203,7 +207,6 @@ function switchTab(tabId) {
   window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
 }
 
-// ── Mobile Drawer ────────────────────────────────────────────────
 function openMobileDrawer() {
   const drawer = document.getElementById('mobileDrawer');
   if (drawer) {
@@ -220,7 +223,6 @@ function closeMobileDrawer() {
   }
 }
 
-// ── Render Stats ─────────────────────────────────────────────────
 function renderStats() {
   setText('statTotalContracts', (stats.contracts_total || 154820).toLocaleString());
   setText('statTotalValue', 'KES ' + formatMoney(stats.total_value || 4870000000000));
@@ -234,7 +236,6 @@ async function loadStats() {
   if (res?.success) { stats = res.data; renderStats(); }
 }
 
-// ── Render Contracts ─────────────────────────────────────────────
 async function loadContracts() {
   const params = new URLSearchParams({ limit: pageSize, page: currentPage });
   if (filters.county !== 'All') params.set('county', filters.county);
@@ -258,6 +259,7 @@ function applyFilters() {
   filters.sector = val('filterSector');
   filters.risk_level = val('filterRisk');
   filters.year = val('filterYear');
+  filters.data_type = val('filterDataType');
   filters.sort = val('contractSort');
   currentPage = 1;
   loadContracts();
@@ -268,12 +270,17 @@ function renderContracts() {
   if (!tbody) return;
   tbody.innerHTML = '';
 
-  if (!contractsPage || contractsPage.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted-foreground)">No contracts found. Try adjusting filters.</td></tr>';
+  let filtered = contractsPage || [];
+  if (filters.data_type !== 'All') {
+    filtered = filtered.filter(c => (c.data_type || 'reference') === filters.data_type);
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted-foreground)">No contracts found. Try adjusting filters.</td></tr>';
     return;
   }
 
-  contractsPage.forEach(c => {
+  filtered.forEach(c => {
     const tr = document.createElement('tr');
     tr.onclick = () => openContractModal(c);
     tr.setAttribute('role', 'button');
@@ -284,12 +291,16 @@ function renderContracts() {
     if (c.risk_level === 'HIGH') badgeClass = 'badge-danger';
     else if (c.risk_level === 'MEDIUM') badgeClass = 'badge-warning';
 
+    const dataType = c.data_type || 'reference';
+    const dtMeta = DATA_TYPE_META[dataType] || DATA_TYPE_META.reference;
+
     tr.innerHTML = `
-      <td style="color:var(--success);font-family:'JetBrains Mono',monospace;font-weight:600">${c.contract_id || c.id}</td>
+      <td style="color:var(--primary);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px">${esc(c.contract_id || c.id)}</td>
       <td style="max-width:200px"><span class="truncate" title="${esc(c.description)}">${esc(c.description)}</span></td>
       <td><span style="font-weight:600">${esc(c.county)}</span><br><span style="font-size:10px;color:var(--muted-foreground)">${esc(c.procuring_entity || '')}</span></td>
       <td><span class="truncate" style="max-width:140px;display:inline-block">${esc(c.supplier)}</span></td>
-      <td style="text-align:right;color:var(--success);font-family:'JetBrains Mono',monospace;font-weight:600">KES ${(c.value || 0).toLocaleString()}</td>
+      <td style="text-align:center"><span class="badge ${dtMeta.cssClass}" title="${esc(dtMeta.explanation)}">${dtMeta.label}</span></td>
+      <td style="text-align:right;color:var(--foreground);font-family:'JetBrains Mono',monospace;font-weight:600">KES ${(c.value || 0).toLocaleString()}</td>
       <td style="text-align:center"><span class="badge ${badgeClass}">${c.risk_score || 0}/100</span></td>
       <td style="text-align:right"><button class="btn btn-ghost btn-xs">Audit</button></td>
     `;
@@ -331,8 +342,7 @@ function renderPagination() {
   }
 }
 
-// ── Contract Modal ───────────────────────────────────────────────
-async function openContractModal(c) {
+function openContractModal(c) {
   activeModal = c;
   setText('modalTitle', c.description || 'Contract Details');
   setText('modalRef', c.contract_id || c.id);
@@ -348,6 +358,73 @@ async function openContractModal(c) {
   if (badge) {
     badge.textContent = (c.risk_level || 'LOW') + ' RISK ' + (c.risk_score || 0) + '/100';
     badge.className = 'badge ' + (c.risk_level === 'HIGH' ? 'badge-danger' : c.risk_level === 'MEDIUM' ? 'badge-warning' : 'badge-success');
+  }
+
+  const dataType = c.data_type || 'reference';
+  const dtMeta = DATA_TYPE_META[dataType] || DATA_TYPE_META.reference;
+  const modalDataType = document.getElementById('modalDataType');
+  if (modalDataType) {
+    modalDataType.textContent = dtMeta.label.toUpperCase();
+    modalDataType.className = 'badge ' + dtMeta.cssClass;
+  }
+
+  const dataExplanation = document.getElementById('modalDataExplanation');
+  if (dataExplanation) {
+    if (dataType === 'reference') {
+      dataExplanation.className = 'alert alert-warning';
+      dataExplanation.innerHTML = '<strong>Reference Record:</strong> ' + dtMeta.explanation;
+      dataExplanation.style.display = 'block';
+    } else if (dataType === 'documented') {
+      dataExplanation.className = 'alert alert-success';
+      dataExplanation.innerHTML = '<strong>Documented Case:</strong> ' + dtMeta.explanation;
+      dataExplanation.style.display = 'block';
+    } else if (dataType === 'live_sync') {
+      dataExplanation.className = 'alert alert-info';
+      dataExplanation.innerHTML = '<strong>Live Sync:</strong> ' + dtMeta.explanation;
+      dataExplanation.style.display = 'block';
+    } else if (dataType === 'manual_scan') {
+      dataExplanation.className = 'alert alert-purple';
+      dataExplanation.innerHTML = '<strong>User-Submitted:</strong> ' + dtMeta.explanation;
+      dataExplanation.style.display = 'block';
+    } else {
+      dataExplanation.style.display = 'none';
+    }
+  }
+
+  const riskExplanation = document.getElementById('modalRiskExplanation');
+  const riskFactors = document.getElementById('modalRiskFactors');
+  if (riskExplanation && riskFactors) {
+    riskFactors.innerHTML = '';
+    const score = c.risk_score || 0;
+    if (score > 70) {
+      riskFactors.innerHTML = `
+        <div class="risk-explanation-item">
+          <svg width="12" height="12" fill="none" stroke="#dc2626" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Score ${score}/100 — Multiple red flags detected
+        </div>
+        <div class="risk-explanation-item" style="margin-left:18px">• High procurement value relative to sector average</div>
+        <div class="risk-explanation-item" style="margin-left:18px">• Procurement method deviates from open competitive</div>
+        ${c.flags && c.flags.length > 0 ? '<div class="risk-explanation-item" style="margin-left:18px">• ' + c.flags.length + ' statutory violation(s) flagged</div>' : ''}
+        <div class="risk-explanation-item" style="margin-top:8px;font-style:italic;opacity:0.7">Rule-based scoring — not ML. Review flagged contracts manually.</div>
+      `;
+    } else if (score > 40) {
+      riskFactors.innerHTML = `
+        <div class="risk-explanation-item">
+          <svg width="12" height="12" fill="none" stroke="#d97706" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Score ${score}/100 — Some indicators present
+        </div>
+        <div class="risk-explanation-item" style="margin-left:18px">• Moderate risk factors identified</div>
+        <div class="risk-explanation-item" style="margin-top:8px;font-style:italic;opacity:0.7">Rule-based scoring — not ML. Review flagged contracts manually.</div>
+      `;
+    } else {
+      riskFactors.innerHTML = `
+        <div class="risk-explanation-item">
+          <svg width="12" height="12" fill="none" stroke="#059669" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          Score ${score}/100 — No significant red flags
+        </div>
+        <div class="risk-explanation-item" style="margin-top:8px;font-style:italic;opacity:0.7">Rule-based scoring — not ML. Review flagged contracts manually.</div>
+      `;
+    }
   }
 
   const flagsList = document.getElementById('modalFlags');
@@ -378,44 +455,47 @@ function closeContractModal() {
   activeModal = null;
 }
 
-// ── Ghost Projects ───────────────────────────────────────────────
 function renderGhostProjects() {
   const grid = document.getElementById('ghostProjectsGrid');
   if (!grid) return;
   grid.innerHTML = '';
 
   if (!ghostProjects || ghostProjects.length === 0) {
-    grid.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted-foreground)">No ghost projects detected.</div>';
+    grid.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted-foreground)">No documented cases found.</div>';
     return;
   }
 
   ghostProjects.forEach(p => {
     const card = document.createElement('div');
     card.className = 'ghost-card';
+    const sourceUrl = p.source_url || '#';
     card.innerHTML = `
       <img src="${p.satellite_image_url || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80'}" alt="${esc(p.project_name)}">
       <div style="padding:16px">
         <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
           <div>
-            <span class="badge badge-danger">GHOST PROJECT</span>
+            <span class="badge badge-documented">DOCUMENTED</span>
             <span style="font-size:11px;color:var(--muted-foreground);margin-left:8px">${esc(p.county)}</span>
           </div>
-          <span style="color:#f87171;font-family:'JetBrains Mono',monospace;font-weight:700">KES ${((p.amount_at_risk || 0)/1e9).toFixed(1)}B</span>
+          <span style="color:var(--destructive);font-family:'JetBrains Mono',monospace;font-weight:700">KES ${((p.amount_at_risk || 0)/1e9).toFixed(1)}B</span>
         </div>
         <h3 style="font-size:14px;font-weight:600;margin-bottom:6px">${esc(p.project_name)}</h3>
         <p style="font-size:11px;color:var(--muted-foreground);margin-bottom:8px">${esc(p.audit_notes || '')}</p>
         <div class="grid-2" style="gap:8px;font-size:11px">
           <div style="padding:8px;background:var(--muted);border-radius:var(--radius)">
-            <span style="color:var(--muted-foreground);display:block">Claimed:</span>
-            <strong style="color:#34d399">${esc(p.claimed_status || '')}</strong>
+            <span style="color:var(--muted-foreground);display:block">Claimed Status:</span>
+            <strong style="color:var(--destructive)">${esc(p.claimed_status || '')}</strong>
           </div>
           <div style="padding:8px;background:var(--muted);border-radius:var(--radius)">
-            <span style="color:var(--muted-foreground);display:block">Satellite:</span>
-            <strong style="color:#f87171">${esc(p.satellite_status || '')}</strong>
+            <span style="color:var(--muted-foreground);display:block">Audit Finding:</span>
+            <strong style="color:var(--warning)">${esc(p.satellite_status || '')}</strong>
           </div>
         </div>
-        <div style="margin-top:8px;font-size:11px;color:var(--muted-foreground)">
-          Confidence: <strong style="color:var(--warning)">${p.confidence_score || 0}%</strong>
+        <div style="margin-top:8px;font-size:11px">
+          <a href="${esc(sourceUrl)}" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:underline;display:inline-flex;align-items:center;gap:4px" onclick="event.stopPropagation()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            View Source Documentation
+          </a>
         </div>
       </div>
     `;
@@ -423,7 +503,6 @@ function renderGhostProjects() {
   });
 }
 
-// ── Sector Grid ──────────────────────────────────────────────────
 function renderSectors() {
   const grid = document.getElementById('sectorGrid');
   if (!grid) return;
@@ -447,7 +526,6 @@ function renderSectors() {
   });
 }
 
-// ── County Leaderboard ───────────────────────────────────────────
 function renderCountyLeaderboard() {
   const list = document.getElementById('countyLeaderboard');
   if (!list) return;
@@ -478,7 +556,7 @@ function renderCountyLeaderboard() {
             </div>
           </div>
           <div style="text-align:right">
-            <div style="color:#f87171;font-weight:600;font-size:12px" class="font-mono">${(item.high_risk || 0).toLocaleString()} flagged</div>
+            <div style="color:var(--destructive);font-weight:600;font-size:12px" class="font-mono">${(item.high_risk || 0).toLocaleString()} flagged</div>
             <div style="font-size:10px;color:var(--muted-foreground)">KES ${((item.funds_at_risk || 0)/1e9).toFixed(1)}B</div>
           </div>
         </div>
@@ -488,7 +566,6 @@ function renderCountyLeaderboard() {
   });
 }
 
-// ── AI Chat ──────────────────────────────────────────────────────
 function sendAIChat(text) {
   const input = document.getElementById('aiChatInput');
   if (input) { input.value = text; submitAIChat(); }
@@ -535,7 +612,7 @@ function addAIReply(md) {
   if (!container) return;
   const div = document.createElement('div');
   div.className = 'chat-bubble chat-ai';
-  div.innerHTML = md.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#34d399">$1</strong>')
+  div.innerHTML = md.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--primary)">$1</strong>')
                      .replace(/### (.*)/g, '<h4 style="font-weight:600;margin-bottom:8px">$1</h4>')
                      .replace(/• (.*)/g, '<div style="margin-left:12px">• $1</div>');
   container.appendChild(div);
@@ -545,7 +622,7 @@ function addAIReply(md) {
 function generateLocalReply(msg) {
   const l = msg.toLowerCase();
   if (l.includes('arror') || l.includes('kimwarer')) {
-    return '### Forensic Brief: Arror & Kimwarer Dams\n• **Entity:** Kerio Valley Development Authority (KVDA)\n• **Sum:** KES 54.5 Billion\n• **Advance:** ~KES 7.8 Billion disbursed\n• **Satellite:** 0% physical structures confirmed\n• **Violation:** PPADA 2015 Sec 103 (Single Sourcing)\n• **Status:** Under prosecution at Anti-Corruption Court';
+    return '### Forensic Brief: Arror & Kimwarer Dams\n• **Entity:** Kerio Valley Development Authority (KVDA)\n• **Sum:** KES 54.5 Billion\n• **Advance:** ~KES 7.8 Billion disbursed\n• **Audit Finding:** 0% physical structures confirmed\n• **Violation:** PPADA 2015 Sec 103 (Single Sourcing)\n• **Status:** Under prosecution at Anti-Corruption Court';
   }
   if (l.includes('split') || l.includes('54')) {
     return '### Tender Splitting Analysis (PPADA Sec 54)\n• Multiple sequential awards below threshold\n• Same vendor PIN receiving repeated tenders\n• Violates procurement committee thresholds\n• Criminal liability under ACECA 2003 Sec 45';
@@ -558,7 +635,6 @@ function clearChat() {
   if (container) container.innerHTML = '';
 }
 
-// ── Whistleblower Report ─────────────────────────────────────────
 async function submitReport() {
   const data = {
     type: val('reportCategory'),
@@ -586,7 +662,6 @@ async function submitReport() {
   }
 }
 
-// ── Sync Modal ───────────────────────────────────────────────────
 function openSyncModal() {
   document.getElementById('syncModal').classList.add('open');
 }
@@ -624,7 +699,6 @@ async function runSync() {
   }, 1800);
 }
 
-// ── Civic Calculator ─────────────────────────────────────────────
 function updateCalculator(val) {
   const num = Number(val);
   setText('calcDisplay', 'KES ' + num.toLocaleString());
@@ -634,7 +708,6 @@ function updateCalculator(val) {
   setText('calcBoreholes', Math.floor(num / 2800000).toLocaleString());
 }
 
-// ── CSV Export ───────────────────────────────────────────────────
 function exportCSV() {
   window.open(API + '/api/contracts/export?' + new URLSearchParams({
     county: filters.county !== 'All' ? filters.county : '',
@@ -643,7 +716,6 @@ function exportCSV() {
   }).toString());
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
 function setText(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
@@ -663,7 +735,6 @@ function formatMoney(n) {
   return n.toLocaleString();
 }
 
-// Global access
 window.switchTab = switchTab;
 window.applyFilters = applyFilters;
 window.openContractModal = openContractModal;
