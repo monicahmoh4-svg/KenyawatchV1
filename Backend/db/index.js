@@ -89,12 +89,36 @@ function executeMemQuery(sql, params = []) {
   // 1. Ghost Projects list query
   if (lower.includes('from ghost_projects')) {
     let rows = [...memStore.ghost_projects];
+    // Apply county filter if present in params
+    if (params && params.length > 0) {
+      for (let i = 0; i < params.length; i++) {
+        const p = String(params[i]).toLowerCase();
+        if (lower.includes('county') && p !== 'all' && p !== '%') {
+          rows = rows.filter(r => r.county && r.county.toLowerCase() === p);
+        }
+        if (lower.includes('detection_status') && p !== 'all' && p !== '%') {
+          rows = rows.filter(r => r.detection_status === p);
+        }
+      }
+    }
     return { rows };
   }
 
   // 2. Reports query
   if (lower.includes('from reports')) {
-    return { rows: [...memStore.reports] };
+    let rows = [...memStore.reports];
+    if (params && params.length > 0) {
+      for (let i = 0; i < params.length; i++) {
+        const p = String(params[i]).toLowerCase();
+        if (lower.includes('status') && p !== 'all' && p !== '%') {
+          rows = rows.filter(r => r.status === p);
+        }
+        if (lower.includes('county') && p !== 'all' && p !== '%') {
+          rows = rows.filter(r => r.county && r.county.toLowerCase() === p);
+        }
+      }
+    }
+    return { rows };
   }
 
   // 3. OCDS sync log

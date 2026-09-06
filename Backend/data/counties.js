@@ -55,9 +55,20 @@ const COUNTIES = [
 ];
 
 const SECTORS = [
-  'Roads & Infrastructure', 'Health', 'Education', 'Water & Irrigation',
-  'Agriculture', 'ICT & Innovation', 'Security', 'Energy',
-  'Housing & Urban Development', 'Environment & Sanitation',
+  'Roads & Infrastructure',
+  'Health',
+  'Water & Irrigation',
+  'Education',
+  'Agriculture',
+  'Energy & Petroleum',
+  'ICT & Digital Economy',
+  'Security & Defense',
+  'Housing & Urban Dev',
+  'Judiciary & Governance',
+  'Devolution & Planning',
+  'Trade & Industry',
+  'Environment & Forestry',
+  'Transport & Logistics',
 ];
 
 const COUNTY_NAMES = COUNTIES.map(c => c.name);

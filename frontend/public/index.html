@@ -1,426 +1,576 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="KenyaWatch AI - Independent civic-tech platform exposing corruption in Kenyan public procurement across all 47 counties.">
-<meta name="theme-color" content="#0a0a0a">
-<title>KenyaWatch AI - Procurement Intelligence Platform</title>
-<meta name="kenyawatch-api-base" content="https://kenyawatch-ai-backend.onrender.com">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0a0a' width='100' height='100' rx='20'/><path d='M50 15 L75 50 H55 V85 H45 V50 H25 Z' fill='%2300a651'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{ke:{red:'#bb0000',green:'#00a651',black:'#0a0a0a',dark:'#111111'}}}}}</script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#f8f9fa;color:#1a1a1a;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:#999}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideRight{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-@keyframes typingDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-.animate-fadeUp{animation:fadeUp .6s ease-out forwards;opacity:0}
-.animate-fadeIn{animation:fadeIn .4s ease-out forwards}
-.animate-spin{animation:spin .7s linear infinite}
-.animate-pulse{animation:pulse 2s infinite}
-.animate-float{animation:float 3s ease-in-out infinite}
-.delay-100{animation-delay:.1s}.delay-200{animation-delay:.2s}.delay-300{animation-delay:.3s}.delay-400{animation-delay:.4s}
-.card-lift{transition:all .3s cubic-bezier(.25,.46,.45,.94)}.card-lift:hover{transform:translateY(-4px);box-shadow:0 20px 40px -12px rgba(0,0,0,.12)}
-.gradient-text{background:linear-gradient(135deg,#bb0000,#00a651);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.glass-dark{backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);background:rgba(10,10,10,.7);border:1px solid rgba(255,255,255,.1)}
-.img-zoom{transition:transform .7s cubic-bezier(.25,.46,.45,.94)}.group:hover .img-zoom{transform:scale(1.05)}
-.flag-bar{background:linear-gradient(90deg,#000 0 33%,#fff 33% 34%,#bb0000 34% 66%,#fff 66% 67%,#00a651 67% 100%);height:4px}
-.hero-bg{position:relative;background:url('https://images.unsplash.com/photo-1611348524140-53c9a25263d6?w=1920&q=80&auto=format') center/cover no-repeat}
-.hero-bg::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,10,10,.92) 0%,rgba(10,10,10,.85) 50%,rgba(0,166,81,.6) 100%)}
-.hero-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px}
-@media(max-width:768px){.hero-bg{background-image:url('https://images.unsplash.com/photo-1694434948850-ed51bd461733?w=1200&q=80&auto=format')}}
-.filter-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23666'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-.badge-high{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
-.badge-med{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
-.badge-low{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
-.badge-doc{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
-.badge-live{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
-.badge-ref{background:#f8fafc;color:#475569;border:1px solid #e2e8f0}
-.toast{position:fixed;bottom:24px;right:24px;z-index:100;background:#0a0a0a;color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 20px 40px rgba(0,0,0,.3);animation:fadeUp .3s ease-out;display:flex;align-items:center;gap:8px;max-width:400px}
-.modal-overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
-.modal-box{background:#fff;border-radius:16px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.3);animation:fadeUp .3s ease-out}
-.typing-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#00a651;margin:0 2px;animation:typingDot 1.4s infinite ease-in-out}
-.typing-dots span:nth-child(2){animation-delay:.2s}.typing-dots span:nth-child(3){animation-delay:.4s}
-.md-content h3{font-size:1rem;font-weight:700;margin:12px 0 6px;color:#1a1a1a}
-.md-content strong{color:#00a651}
-.md-content ul{padding-left:16px;margin:6px 0}
-.md-content li{font-size:13px;margin:3px 0;line-height:1.5}
-.md-content p{font-size:13px;margin:6px 0;line-height:1.6}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>KenyaWatch AI — Public Procurement Intelligence & Anti-Corruption Platform</title>
+  <meta name="description" content="Kenya's national civic auditing platform tracking 154,820+ government contracts across all 47 counties.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇰🇪</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-<div class="flag-bar"></div>
+<body class="kw-glow">
 
-<header class="bg-white sticky top-0 z-50 border-b border-gray-200 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex items-center justify-between h-16">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="showTab('v-overview')">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style="background:linear-gradient(135deg,#bb0000,#00a651)">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-        </div>
+  <!-- Kenyan Flag Tricolor Ribbon -->
+  <div class="kw-ribbon"></div>
+
+  <!-- Live Status Bar -->
+  <div style="background:rgba(7,10,15,0.9);border-bottom:1px solid rgba(30,41,59,0.5);padding:6px 16px;font-size:11px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <div style="display:flex;align-items:center;gap:8px;overflow:hidden">
+      <span class="pulse-dot" style="flex-shrink:0"></span>
+      <span style="color:#10B981;font-family:JetBrains Mono,monospace;font-weight:700">REPUBLIC OF KENYA</span>
+      <span style="color:#64748B;display:none">|</span>
+      <span style="color:#e2e8f0" class="truncate">PPIP & OCDS Gateway: <strong style="color:#10B981;font-family:JetBrains Mono,monospace" id="totalContractsBar">154,820</strong> Contracts Monitored across 47 Counties</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+      <span style="display:none;color:#94A3B8;font-family:JetBrains Mono,monospace;font-size:10px">
+        <span style="color:#f87171">●</span> PPADA 2015 & ACECA 2003
+      </span>
+      <button onclick="openSyncModal()" style="padding:4px 12px;border-radius:20px;font-size:10px;font-weight:600;color:#10B981;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);cursor:pointer;display:flex;align-items:center;gap:4px">
+        <svg class="spin-slow" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Sync Live DB
+      </button>
+    </div>
+  </div>
+
+  <!-- Header / Nav -->
+  <header class="glass-nav" style="position:sticky;top:0;z-index:30">
+    <div style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px">
+      <!-- Brand -->
+      <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="switchTab('overview')">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#bb0000,#000,#00843D);display:flex;align-items:center;justify-content:center;font-size:18px">🛡️</div>
         <div>
-          <h1 class="text-lg font-extrabold tracking-tight leading-none">KenyaWatch <span class="text-[#00a651]">AI</span></h1>
-          <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Procurement Intelligence</p>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-family:JetBrains Mono,monospace;font-weight:900;font-size:16px">Kenya<span style="color:#10B981">Watch</span></span>
+            <span style="padding:2px 6px;border-radius:4px;font-size:9px;font-family:JetBrains Mono,monospace;font-weight:700;background:rgba(187,0,0,0.2);color:#f87171;border:1px solid rgba(187,0,0,0.3)">AI v4.5</span>
+          </div>
+          <p style="font-size:9px;color:#64748B;font-family:JetBrains Mono,monospace;letter-spacing:0.05em;text-transform:uppercase">PPADA Intelligence</p>
         </div>
       </div>
-      <nav class="hidden lg:flex items-center gap-1" id="desktop-nav">
-        <button onclick="showTab('v-overview')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-overview">Overview</button>
-        <button onclick="showTab('v-procurement')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-procurement">Contracts</button>
-        <button onclick="showTab('v-ghost')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-ghost">Ghost Projects</button>
-        <button onclick="showTab('v-report')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-report">Report</button>
-        <button onclick="showTab('v-ai')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-ai">AI Investigator</button>
-        <button onclick="showTab('v-sync')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-sync">Sync Data</button>
-        <button onclick="showTab('v-about')" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-all" data-tab="v-about">Sources</button>
+
+      <!-- Desktop Nav -->
+      <nav class="desktop-nav" style="display:flex;gap:4px;background:rgba(11,15,25,0.8);padding:4px;border-radius:14px;border:1px solid rgba(30,41,59,0.5)">
+        <button class="nav-link active" data-tab="overview" onclick="switchTab('overview')">📊 Overview</button>
+        <button class="nav-link" data-tab="contracts" onclick="switchTab('contracts')">📋 Contracts <span style="padding:2px 6px;border-radius:10px;font-size:9px;background:rgba(16,185,129,0.15);color:#6ee7b7;font-family:JetBrains Mono,monospace">154.8K</span></button>
+        <button class="nav-link" data-tab="satellite" onclick="switchTab('satellite')">🛰️ Satellite</button>
+        <button class="nav-link" data-tab="ai" onclick="switchTab('ai')">⚡ AI Auditor</button>
+        <button class="nav-link" data-tab="calculator" onclick="switchTab('calculator')">🧮 Calculator</button>
       </nav>
-      <div class="flex items-center gap-2">
-        <button onclick="showTab('v-report')" class="hidden sm:flex px-4 py-2 bg-[#bb0000] hover:bg-red-800 text-white text-sm font-bold rounded-lg transition-all shadow-sm items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Report
+
+      <!-- Right Actions -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onclick="switchTab('report')" class="btn-danger" style="display:none;padding:8px 14px;font-size:12px">
+          🔒 Whistleblower
         </button>
-        <button onclick="document.getElementById('mobile-nav').classList.toggle('hidden')" class="lg:hidden p-2 rounded-lg hover:bg-gray-100">
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
       </div>
     </div>
-    <div id="mobile-nav" class="hidden lg:hidden pb-3 border-t border-gray-100 pt-2 space-y-1">
-      <button onclick="showTab('v-overview')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-overview">Overview</button>
-      <button onclick="showTab('v-procurement')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-procurement">Contracts</button>
-      <button onclick="showTab('v-ghost')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-ghost">Ghost Projects</button>
-      <button onclick="showTab('v-report')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-report">Report Fraud</button>
-      <button onclick="showTab('v-ai')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-ai">AI Investigator</button>
-      <button onclick="showTab('v-sync')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-sync">Sync Data</button>
-      <button onclick="showTab('v-about')" class="nav-btn block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-100" data-tab="v-about">Sources</button>
+  </header>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-item active" data-tab="overview" onclick="switchTab('overview')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z"/></svg>
+      <span>Overview</span>
     </div>
-  </div>
-</header>
+    <div class="mobile-nav-item" data-tab="contracts" onclick="switchTab('contracts')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <span>Contracts</span>
+    </div>
+    <div class="mobile-nav-item" data-tab="satellite" onclick="switchTab('satellite')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span>Satellite</span>
+    </div>
+    <div class="mobile-nav-item" data-tab="ai" onclick="switchTab('ai')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      <span>AI</span>
+    </div>
+    <div class="mobile-nav-item" data-tab="report" onclick="switchTab('report')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <span>Report</span>
+    </div>
+  </nav>
 
-<div id="conn-banner" class="hidden bg-red-600 text-white text-sm text-center py-2.5 px-4 shadow-lg"></div>
+  <!-- ================= MAIN CONTENT ================= -->
+  <main style="max-width:1200px;margin:0 auto;padding:24px 16px 80px">
 
-<main class="max-w-7xl mx-auto px-4 sm:px-6">
+    <!-- ═══ OVERVIEW TAB ═══ -->
+    <section id="tab-overview" class="tab-content active">
 
-<!-- ======================== OVERVIEW ======================== -->
-<div id="v-overview" class="tab-content" style="display:block">
-  <section class="hero-bg relative rounded-2xl overflow-hidden my-8" style="min-height:480px">
-    <div class="relative z-10 px-6 py-16 md:px-12 md:py-20 lg:py-24" style="animation:fadeUp .8s ease-out">
-      <div class="max-w-2xl">
-        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-300 mb-5" style="backdrop-filter:blur(8px)">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>Real-Time Intelligence - All 47 Counties
+      <!-- Hero with HD Background -->
+      <div style="position:relative;border-radius:20px;overflow:hidden;margin-bottom:24px">
+        <div style="position:absolute;inset:0;z-index:0">
+          <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1920&q=80" alt="Nairobi Skyline" style="width:100%;height:100%;object-fit:cover">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.88),rgba(0,0,0,0.6),rgba(0,0,0,0.88))"></div>
         </div>
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 leading-tight tracking-tight">Exposing Corruption.<br><span class="gradient-text">Protecting Public Funds.</span></h2>
-        <p class="text-gray-300 text-lg mb-8 leading-relaxed max-w-lg">AI-scored analysis of government procurement, satellite verification of ghost projects, and anonymous citizen reporting.</p>
-        <div class="flex flex-col sm:flex-row gap-3">
-          <button onclick="showTab('v-procurement')" class="px-6 py-3 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg flex items-center gap-2 justify-center text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Explore Contracts
-          </button>
-          <button onclick="showTab('v-report')" class="px-6 py-3 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/30 flex items-center gap-2 justify-center text-sm" style="backdrop-filter:blur(8px)">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Report Fraud
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="hidden lg:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-3 z-10">
-      <div class="glass-dark rounded-xl px-5 py-3 animate-float"><div class="text-xl font-extrabold text-emerald-400" id="hero-flagged">--</div><div class="text-[10px] text-gray-300 uppercase tracking-wider font-semibold">High-Risk Contracts</div></div>
-      <div class="glass-dark rounded-xl px-5 py-3 animate-float" style="animation-delay:1s"><div class="text-xl font-extrabold text-red-400" id="hero-ghost">--</div><div class="text-[10px] text-gray-300 uppercase tracking-wider font-semibold">Ghost Projects</div></div>
-      <div class="glass-dark rounded-xl px-5 py-3 animate-float" style="animation-delay:2s"><div class="text-xl font-extrabold text-amber-400" id="hero-funds">KES --</div><div class="text-[10px] text-gray-300 uppercase tracking-wider font-semibold">Funds at Risk</div></div>
-    </div>
-  </section>
-
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-10">
-    <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift animate-fadeUp"><div class="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center mb-3"><svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div><div class="text-2xl md:text-3xl font-extrabold text-red-600" id="dash-flagged">--</div><div class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mt-1">High-Risk Contracts</div></div>
-    <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift animate-fadeUp delay-100"><div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center mb-3"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></div><div class="text-2xl md:text-3xl font-extrabold text-purple-600" id="dash-ghost">--</div><div class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mt-1">Ghost Projects</div></div>
-    <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift animate-fadeUp delay-200"><div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center mb-3"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg></div><div class="text-2xl md:text-3xl font-extrabold text-blue-600" id="dash-reports">--</div><div class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mt-1">Citizen Reports</div></div>
-    <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift animate-fadeUp delay-300"><div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center mb-3"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><div class="text-2xl md:text-3xl font-extrabold text-emerald-600" id="dash-funds">KES --</div><div class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mt-1">Funds at Risk</div></div>
-  </div>
-
-  <section class="my-10">
-    <div class="text-center mb-8"><p class="text-[#00a651] font-bold text-xs uppercase tracking-widest mb-2">How It Works</p><h3 class="text-2xl md:text-3xl font-extrabold">From Data to Citizen Power</h3></div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift group">
-        <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></div>
-        <h4 class="font-bold text-sm mb-1">1. Ingest</h4>
-        <p class="text-xs text-gray-500 leading-relaxed">Pull records from OCDS feeds and documented public-interest cases across all 47 counties.</p>
-      </div>
-      <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift group">
-        <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
-        <h4 class="font-bold text-sm mb-1">2. Score</h4>
-        <p class="text-xs text-gray-500 leading-relaxed">Transparent rules engine scores every contract for corruption risk indicators.</p>
-      </div>
-      <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift group">
-        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-        <h4 class="font-bold text-sm mb-1">3. Verify</h4>
-        <p class="text-xs text-gray-500 leading-relaxed">Cross-check claimed project completion against satellite imagery to expose ghost projects.</p>
-      </div>
-      <div class="bg-white p-5 rounded-xl border border-gray-200 card-lift group">
-        <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg></div>
-        <h4 class="font-bold text-sm mb-1">4. Act</h4>
-        <p class="text-xs text-gray-500 leading-relaxed">Citizens report anonymously, AI triages cases, and routes them to EACC or PPRA.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="county-explorer" class="my-10">
-    <div class="flex items-end justify-between mb-5"><div><p class="text-[#00a651] font-bold text-xs uppercase tracking-widest mb-1">County Explorer</p><h3 class="text-2xl font-extrabold">Risk Across 47 Counties</h3></div><div class="flex items-center gap-1 text-[10px] text-gray-500"><span>Low</span><span class="w-3 h-3 rounded bg-gray-100"></span><span class="w-3 h-3 rounded bg-emerald-200"></span><span class="w-3 h-3 rounded bg-amber-200"></span><span class="w-3 h-3 rounded bg-red-200"></span><span>High</span></div></div>
-    <div id="county-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2"><div class="col-span-full text-center py-8 text-gray-400 text-sm flex items-center justify-center gap-2"><div class="w-4 h-4 border-2 border-gray-300 border-t-[#00a651] rounded-full animate-spin"></div>Loading counties...</div></div>
-  </section>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-10">
-    <div class="bg-white p-5 rounded-xl border border-gray-200"><h3 class="font-bold text-sm mb-3 flex items-center gap-2"><svg class="w-4 h-4 text-[#00a651]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>Risk Distribution</h3><div class="h-56"><canvas id="risk-chart"></canvas></div></div>
-    <div class="bg-white p-5 rounded-xl border border-gray-200"><div class="flex items-center justify-between mb-3"><h3 class="font-bold text-sm flex items-center gap-2"><svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Top Flagged</h3><button onclick="showTab('v-procurement');document.getElementById('filter-risk').value='HIGH';loadC()" class="text-xs font-bold text-[#00a651] hover:underline">View All</button></div><div id="top-flagged" class="space-y-2"></div></div>
-  </div>
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-10">
-    <div class="bg-white p-5 rounded-xl border border-gray-200"><h3 class="font-bold text-sm mb-3 flex items-center gap-2"><svg class="w-4 h-4 text-[#00a651]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>Sectors</h3><div class="h-56"><canvas id="sector-chart"></canvas></div></div>
-    <div class="bg-white p-5 rounded-xl border border-gray-200"><div class="flex items-center justify-between mb-3"><h3 class="font-bold text-sm flex items-center gap-2"><svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Ghost Projects</h3><button onclick="showTab('v-ghost')" class="text-xs font-bold text-[#00a651] hover:underline">View All</button></div><div id="ghost-preview" class="space-y-2"></div></div>
-  </div>
-
-  <section class="my-10 rounded-2xl overflow-hidden relative" style="min-height:200px;background:url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1920&q=80&auto=format') center/cover no-repeat">
-    <div class="absolute inset-0 bg-gradient-to-r from-red-900/90 via-red-800/80 to-transparent"></div>
-    <div class="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-      <div class="max-w-lg"><h3 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Seen Something? Speak Up.</h3><p class="text-red-200 text-sm leading-relaxed">Your identity is fully protected. Reports are anonymous and AI-triaged to route to the right authority.</p></div>
-      <button onclick="showTab('v-report')" class="px-6 py-3 bg-white text-red-700 font-bold rounded-xl hover:bg-red-50 transition-all shadow-lg text-sm whitespace-nowrap flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>Submit Report</button>
-    </div>
-  </section>
-
-  <div class="bg-white p-6 rounded-xl border border-gray-200 my-10"><div class="flex items-start gap-4"><div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg></div><div><h3 class="font-bold text-sm mb-1">Data Honesty</h3><p class="text-xs text-gray-600 leading-relaxed">Every contract carries a data type: <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border badge-doc">Documented</span> (real cases), <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border badge-live">Live Sync</span> (OCDS feed), or <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border badge-ref">Reference</span> (representative sample).</p></div></div></div>
-</div>
-
-<!-- ======================== CONTRACTS ======================== -->
-<div id="v-procurement" class="tab-content" style="display:none">
-  <div class="py-8">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-      <div><h2 class="text-2xl font-extrabold">Procurement Database</h2><p class="text-gray-500 text-sm mt-1">Browse and filter 154,820+ contracts across all 47 counties.</p></div>
-      <div class="flex gap-2">
-        <button onclick="exportCSV()" class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50 flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>Export CSV</button>
-        <button onclick="openModal('scan-modal')" class="px-4 py-2 bg-[#00a651] hover:bg-[#008c44] text-white rounded-lg text-sm font-bold flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Scan Contract</button>
-      </div>
-    </div>
-    <div class="bg-white p-4 rounded-xl border border-gray-200 flex flex-wrap gap-3 items-center mb-4">
-      <div class="relative flex-1 min-w-[200px]"><svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg><input type="text" id="search-contracts" placeholder="Search ID, supplier, description..." class="bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2 w-full text-sm outline-none focus:ring-2 focus:ring-[#00a651] focus:border-[#00a651]" onkeyup="debounceLoadC()"></div>
-      <select id="filter-county" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none filter-select focus:ring-2 focus:ring-[#00a651]" onchange="loadC()"><option value="All">All Counties</option></select>
-      <select id="filter-sector" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none filter-select focus:ring-2 focus:ring-[#00a651]" onchange="loadC()"><option value="All">All Sectors</option></select>
-      <select id="filter-year" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none filter-select focus:ring-2 focus:ring-[#00a651]" onchange="loadC()"><option value="All">All Years</option></select>
-      <select id="filter-risk" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none filter-select focus:ring-2 focus:ring-[#00a651]" onchange="loadC()"><option value="All">All Risk</option><option value="HIGH">HIGH</option><option value="MEDIUM">MEDIUM</option><option value="LOW">LOW</option></select>
-      <select id="filter-datatype" class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none filter-select focus:ring-2 focus:ring-[#00a651]" onchange="loadC()"><option value="All">All Types</option><option value="documented">Documented</option><option value="live_sync">Live Sync</option><option value="reference">Reference</option><option value="manual_scan">Scanned</option></select>
-      <button onclick="resetFilters()" class="text-xs font-semibold text-gray-500 hover:text-gray-800 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Reset</button>
-    </div>
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-gray-50 text-gray-500 uppercase text-[10px] tracking-wider border-b border-gray-200"><tr><th class="p-3 font-semibold">Contract ID</th><th class="p-3 font-semibold">Description</th><th class="p-3 font-semibold">County</th><th class="p-3 font-semibold hidden md:table-cell">Sector</th><th class="p-3 font-semibold hidden lg:table-cell">Year</th><th class="p-3 font-semibold">Value (KES)</th><th class="p-3 font-semibold hidden lg:table-cell">Supplier</th><th class="p-3 font-semibold">Risk</th><th class="p-3 font-semibold hidden md:table-cell">Source</th></tr></thead><tbody id="contracts-table" class="divide-y divide-gray-100"><tr><td colspan="9" class="p-10 text-center text-gray-400 text-sm"><div class="w-5 h-5 border-2 border-gray-300 border-t-[#00a651] rounded-full animate-spin mx-auto mb-2"></div>Loading database...</td></tr></tbody></table></div>
-      <div class="p-3 border-t border-gray-200 flex flex-wrap justify-between items-center gap-3 bg-gray-50 text-sm">
-        <span class="text-xs text-gray-500" id="pagination-info">Showing 0 results</span>
-        <div class="flex items-center gap-2"><button onclick="prevPage()" class="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-semibold hover:bg-gray-100">Prev</button><span class="text-xs font-semibold" id="page-indicator">Page 1</span><button onclick="nextPage()" class="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-semibold hover:bg-gray-100">Next</button></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ======================== GHOST PROJECTS ======================== -->
-<div id="v-ghost" class="tab-content" style="display:none">
-  <div class="py-8">
-    <div class="text-center mb-8"><h2 class="text-2xl font-extrabold mb-1">Ghost Project Detector</h2><p class="text-gray-500 text-sm">Satellite imagery verification against government-reported completion status.</p></div>
-    <div id="ghost-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="col-span-full text-center py-12 text-gray-400 flex items-center justify-center gap-2"><div class="w-5 h-5 border-2 border-gray-300 border-t-[#00a651] rounded-full animate-spin"></div>Loading ghost projects...</div></div>
-  </div>
-</div>
-
-<!-- ======================== REPORT ======================== -->
-<div id="v-report" class="tab-content" style="display:none">
-  <div class="max-w-2xl mx-auto py-8">
-    <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
-      <div class="flex items-center gap-3 mb-6"><div class="p-3 bg-red-100 rounded-full"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div><div><h2 class="text-2xl font-extrabold">Submit a Report</h2><p class="text-gray-500 text-sm">Anonymous &middot; AI-triaged &middot; Forwarded to EACC</p></div></div>
-      <div id="report-success" class="hidden p-6 bg-emerald-50 border border-emerald-200 rounded-xl mb-6">
-        <h4 class="font-bold text-emerald-800 mb-3 flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Report Submitted</h4>
-        <div class="bg-white p-4 rounded-lg border border-emerald-100 space-y-2 text-sm">
-          <div class="flex justify-between"><span class="text-gray-500">Case Number:</span><span class="font-mono font-bold text-emerald-700" id="report-case-number">--</span></div>
-          <div class="flex justify-between"><span class="text-gray-500">Credibility Score:</span><span class="font-bold text-emerald-700" id="report-credibility">--</span></div>
-          <div class="flex justify-between"><span class="text-gray-500">Routed to:</span><span class="font-bold text-emerald-700" id="report-routing">--</span></div>
-          <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">EACC Hotline: 0800 720 880 (free, 24/7)</div>
-        </div>
-        <button onclick="document.getElementById('report-success').classList.add('hidden');document.getElementById('report-form').style.display='';document.getElementById('report-form').reset()" class="mt-4 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-sm">Submit Another</button>
-      </div>
-      <form id="report-form" onsubmit="submitReport(event)" class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Type *</label><select name="type" required class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500"><option value="">Select type</option><option>Bribery</option><option>Ghost project</option><option>Procurement fraud</option><option>Embezzlement</option><option>Nepotism / favoritism</option><option>Inflated pricing</option><option>Bid rigging</option><option>Other</option></select></div>
-          <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">County *</label><select name="county" required id="report-county" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500"><option value="">Select county</option></select></div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Sector</label><select name="sector" id="report-sector" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500"><option value="">Select sector</option></select></div>
-          <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Amount (KES)</label><input type="number" name="amount" min="0" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500" placeholder="e.g. 50000000"></div>
-        </div>
-        <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Description *</label><textarea name="description" required rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-red-500 resize-none" placeholder="What happened, when, and who was involved..."></textarea></div>
-        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"><input type="checkbox" name="anonymous" checked class="rounded border-gray-300 text-red-600 focus:ring-red-500"> Submit anonymously</label>
-        <button type="submit" class="w-full py-3 bg-[#bb0000] hover:bg-red-800 text-white font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>Submit Securely to EACC</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- ======================== AI INVESTIGATOR ======================== -->
-<div id="v-ai" class="tab-content" style="display:none">
-  <div class="max-w-4xl mx-auto py-8">
-    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
-      <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-        <h3 class="font-bold flex items-center gap-2"><svg class="w-5 h-5 text-[#00a651]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>AI Investigator</h3>
-        <button onclick="clearChat()" class="text-xs font-semibold text-gray-400 hover:text-gray-700">Clear</button>
-      </div>
-      <div id="chat-history" class="flex-1 overflow-y-auto p-6 space-y-4">
-        <div class="flex gap-3"><div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style="background:linear-gradient(135deg,#bb0000,#00a651)">AI</div><div class="bg-gray-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-gray-200"><p class="text-sm text-gray-800">Habari! I have access to <strong>154,820+ contracts</strong> across all 47 counties. Ask me about corruption patterns, ghost projects, or any specific county.</p></div></div>
-        <div id="ai-suggestions" class="flex flex-wrap gap-2 ml-11">
-          <button onclick="askSuggested('Analyze Arror and Kimwarer dam scandal')" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full px-3 py-1.5 font-medium transition-colors">Arror Dam</button>
-          <button onclick="askSuggested('Show high-risk contracts in Nairobi')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-full px-3 py-1.5 font-medium transition-colors">Nairobi Risks</button>
-          <button onclick="askSuggested('What are the ghost projects?')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-full px-3 py-1.5 font-medium transition-colors">Ghost Projects</button>
-          <button onclick="askSuggested('Explain PPADA 2015 violations')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-full px-3 py-1.5 font-medium transition-colors">PPADA Law</button>
+        <div style="position:relative;z-index:1;padding:40px 32px;max-width:700px">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);font-size:11px;color:#6ee7b7;font-family:JetBrains Mono,monospace;font-weight:700;margin-bottom:16px">
+            <span class="pulse-dot"></span>
+            Real-Time Procurement Intelligence Gateway
+          </div>
+          <h1 style="font-size:clamp(28px,5vw,48px);font-weight:900;line-height:1.1;margin-bottom:12px">
+            KenyaWatch <span class="text-gradient">AI Intelligence</span>
+          </h1>
+          <p style="color:#cbd5e1;font-size:clamp(13px,2vw,16px);line-height:1.7;margin-bottom:24px">
+            Kenya's national civic auditing platform tracking <strong style="color:#fff">154,820 government contracts</strong> worth <strong style="color:#10B981">KES 17.66+ Trillion</strong> across all 47 counties. Cross-referenced against PPADA 2015, IFMIS records, and Sentinel-2 satellite observation.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px">
+            <button onclick="switchTab('contracts')" class="btn-primary">📋 Explore 154,820 Contracts</button>
+            <button onclick="switchTab('satellite')" class="btn-ghost">🛰️ Satellite Ghost Radar</button>
+            <button onclick="openSyncModal()" class="btn-ghost" style="color:#10B981;border-color:rgba(16,185,129,0.3)">🔄 Sync Live DB</button>
+          </div>
         </div>
       </div>
-      <div class="p-4 border-t border-gray-200 bg-gray-50">
-        <form onsubmit="sendAI(event)" class="flex gap-2">
-          <input type="text" id="ai-input" placeholder="Ask about contracts, fraud, a county..." class="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#00a651]" required>
-          <button type="submit" class="px-5 py-2.5 bg-[#00a651] hover:bg-[#008c44] text-white font-bold rounded-lg transition-all text-sm">Send</button>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid" style="margin-bottom:24px">
+        <div class="glass" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.05em">Total Indexed Tenders</span>
+            <span style="padding:6px;border-radius:8px;background:rgba(16,185,129,0.1);color:#10B981">📋</span>
+          </div>
+          <div id="statTotalContracts" style="font-size:clamp(22px,3vw,30px);font-weight:900;color:#fff;font-family:JetBrains Mono,monospace">154,820</div>
+          <div style="margin-top:6px;font-size:11px;color:#10B981;display:flex;align-items:center;gap:4px">✓ All 47 Counties Monitored</div>
+        </div>
+        <div class="glass" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.05em">Tracked Public Funds</span>
+            <span style="padding:6px;border-radius:8px;background:rgba(16,185,129,0.1);color:#10B981">💰</span>
+          </div>
+          <div id="statTotalValue" style="font-size:clamp(22px,3vw,30px);font-weight:900;color:#10B981;font-family:JetBrains Mono,monospace">KES 17.66T</div>
+          <div style="margin-top:6px;font-size:11px;color:#94A3B8">2013–2026 Procurement Audits</div>
+        </div>
+        <div class="glass" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.05em">High Risk Flagged</span>
+            <span style="padding:6px;border-radius:8px;background:rgba(187,0,0,0.1);color:#f87171">⚠️</span>
+          </div>
+          <div id="statHighRisk" style="font-size:clamp(22px,3vw,30px);font-weight:900;color:#f87171;font-family:JetBrains Mono,monospace">19,844</div>
+          <div id="statFundsAtRisk" style="margin-top:6px;font-size:11px;color:#fca5a5;font-family:JetBrains Mono,monospace">KES 4.77T at Risk</div>
+        </div>
+        <div class="glass" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.05em">Ghost Radar Flagged</span>
+            <span style="padding:6px;border-radius:8px;background:rgba(245,158,11,0.1);color:#f59e0b">👁️</span>
+          </div>
+          <div id="statGhosts" style="font-size:clamp(22px,3vw,30px);font-weight:900;color:#f59e0b;font-family:JetBrains Mono,monospace">14</div>
+          <div style="margin-top:6px;font-size:11px;color:#fbbf24">Verified by Sentinel-2</div>
+        </div>
+      </div>
+
+      <!-- Map + County Leaderboard -->
+      <div style="display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:24px">
+        <div class="glass" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h2 style="font-size:15px;font-weight:700">🗺️ 47 Counties Risk Geospatial Matrix</h2>
+            <span class="badge badge-low">Sentinel-2 Live</span>
+          </div>
+          <div id="kenyaMap" style="width:100%;height:350px;border-radius:12px;background:#070A0F;border:1px solid rgba(30,41,59,0.5)"></div>
+        </div>
+      </div>
+
+      <!-- County Leaderboard -->
+      <div class="glass" style="padding:20px;margin-bottom:24px">
+        <h2 style="font-size:15px;font-weight:700;margin-bottom:12px">📊 County Risk Leaderboard — Top 10</h2>
+        <div id="countyLeaderboard" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- Sector Grid -->
+      <div class="glass" style="padding:20px;margin-bottom:24px">
+        <h2 style="font-size:15px;font-weight:700;margin-bottom:12px">🏭 14 Economic Sectors</h2>
+        <div id="sectorGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px"></div>
+      </div>
+
+    </section>
+
+    <!-- ═══ CONTRACTS TAB ═══ -->
+    <section id="tab-contracts" class="tab-content">
+
+      <div class="glass" style="padding:20px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+          <div>
+            <h2 style="font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px">
+              📋 Public Contracts Registry
+              <span id="contractsTotalPill" class="badge badge-low">154,820 Records</span>
+            </h2>
+            <p style="font-size:11px;color:#64748B;margin-top:4px">Cross-referenced with PPADA 2015 across all 47 counties</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button onclick="exportCSV()" class="btn-ghost" style="font-size:12px">📥 Export CSV</button>
+            <button onclick="openSyncModal()" class="btn-ghost" style="font-size:12px;color:#10B981">🔄 Sync DB</button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding-top:12px;border-top:1px solid rgba(30,41,59,0.5)">
+          <input type="text" id="contractSearchInput" class="kw-input" placeholder="Search tender, supplier, ID...">
+          <select id="filterCounty" class="kw-select"><option value="All">All 47 Counties</option></select>
+          <select id="filterSector" class="kw-select">
+            <option value="All">All Sectors</option>
+            <option>Roads & Infrastructure</option><option>Health</option><option>Water & Irrigation</option>
+            <option>Education</option><option>Agriculture</option><option>Energy & Petroleum</option>
+            <option>ICT & Digital Economy</option><option>Security & Defense</option><option>Housing & Urban Dev</option>
+            <option>Judiciary & Governance</option><option>Devolution & Planning</option><option>Trade & Industry</option>
+            <option>Environment & Forestry</option><option>Transport & Logistics</option>
+          </select>
+          <select id="filterRisk" class="kw-select">
+            <option value="All">All Risk Tiers</option>
+            <option value="HIGH">High Risk (&gt;70%)</option>
+            <option value="MEDIUM">Medium Risk (40–70%)</option>
+            <option value="LOW">Low Risk (&lt;40%)</option>
+          </select>
+          <select id="filterYear" class="kw-select">
+            <option value="All">All Years (2013–2026)</option>
+            <option>2026</option><option>2025</option><option>2024</option><option>2023</option>
+            <option>2022</option><option>2021</option><option>2020</option><option>2019</option>
+            <option>2018</option><option>2017</option><option>2016</option><option>2015</option>
+            <option>2014</option><option>2013</option>
+          </select>
+          <select id="contractSort" class="kw-select">
+            <option value="risk_desc">Risk Score ↓</option>
+            <option value="risk_asc">Risk Score ↑</option>
+            <option value="value_desc">Value ↓</option>
+            <option value="value_asc">Value ↑</option>
+            <option value="date_desc">Date ↓</option>
+            <option value="date_asc">Date ↑</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="glass" style="overflow:hidden;margin-bottom:16px">
+        <div style="padding:10px 16px;border-bottom:1px solid rgba(30,41,59,0.5);display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#94A3B8">
+          <span id="paginationInfo">Showing 1 – 50 of 154,820</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span>Rows:</span>
+            <select onchange="changePageSize(this.value)" class="kw-select" style="width:auto;padding:4px 8px">
+              <option value="25">25</option><option value="50" selected>50</option><option value="100">100</option>
+            </select>
+          </div>
+        </div>
+        <div class="kw-table-wrap">
+          <table class="kw-table">
+            <thead>
+              <tr>
+                <th>Tender Ref</th><th>Project Scope</th><th>County / Entity</th>
+                <th>Supplier</th><th style="text-align:right">Contract Sum</th>
+                <th style="text-align:center">Risk Score</th><th style="text-align:right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="contractsTableBody"></tbody>
+          </table>
+        </div>
+        <div style="padding:12px 16px;border-top:1px solid rgba(30,41,59,0.5);display:flex;justify-content:center">
+          <div id="paginationControls" class="pagination"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══ SATELLITE TAB ═══ -->
+    <section id="tab-satellite" class="tab-content">
+
+      <div style="position:relative;border-radius:20px;overflow:hidden;margin-bottom:24px;padding:32px">
+        <div style="position:absolute;inset:0">
+          <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80" alt="Earth from Space" style="width:100%;height:100%;object-fit:cover">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.85),rgba(0,0,0,0.5),rgba(0,0,0,0.85))"></div>
+        </div>
+        <div style="position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+          <div>
+            <span class="badge badge-low" style="margin-bottom:12px;display:inline-flex">ESA Sentinel-2 Radar</span>
+            <h2 style="font-size:clamp(20px,4vw,32px);font-weight:900">Satellite Ghost Project Radar</h2>
+            <p style="color:#cbd5e1;font-size:13px;margin-top:8px;max-width:600px">Multi-spectral satellite imagery auditing against IFMIS payment vouchers and completion certificates.</p>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:clamp(24px,4vw,36px);font-weight:900;color:#f87171;font-family:JetBrains Mono,monospace">KES 168.5B+</div>
+            <div style="font-size:12px;color:#94A3B8">Ghost & Stalled Value Identified</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ghostProjectsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px"></div>
+
+    </section>
+
+    <!-- ═══ AI AUDITOR TAB ═══ -->
+    <section id="tab-ai" class="tab-content">
+
+      <div style="display:grid;grid-template-columns:1fr;gap:20px">
+        <!-- Statutory Info -->
+        <div class="glass" style="padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(30,41,59,0.5)">
+            <span style="font-size:20px">📚</span>
+            <div>
+              <h3 style="font-size:14px;font-weight:700">Kenya Statutory Corpus</h3>
+              <p style="font-size:10px;color:#64748B">Anti-Corruption & Procurement Laws</p>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:12px">
+            <div style="padding:12px;background:rgba(0,0,0,0.3);border-radius:10px;border:1px solid rgba(30,41,59,0.5)">
+              <strong style="color:#10B981">PPADA 2015</strong>
+              <p style="color:#94A3B8;margin-top:4px">Sec 103 (Direct Sourcing), Sec 54 (Contract Splitting), Sec 79 (Fair Price Benchmark)</p>
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.3);border-radius:10px;border:1px solid rgba(30,41,59,0.5)">
+              <strong style="color:#f87171">ACECA 2003</strong>
+              <p style="color:#94A3B8;margin-top:4px">Sec 25 (Whistleblower Protection), Sec 45 (Abuse of Office Penalties)</p>
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.3);border-radius:10px;border:1px solid rgba(30,41,59,0.5)">
+              <strong style="color:#f59e0b">Constitution 2010</strong>
+              <p style="color:#94A3B8;margin-top:4px">Art 227 (Fair Procurement) & Art 35 (Access to Public Information)</p>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(30,41,59,0.5)">
+            <h4 style="font-size:12px;font-weight:600;color:#94A3B8;margin-bottom:8px">Sample AI Inquiries:</h4>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button onclick="sendAIChat('Analyze single-sourcing in Arror Dam')" style="width:100%;text-align:left;padding:8px 12px;border-radius:8px;font-size:11px;color:#e2e8f0;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);cursor:pointer">🔍 "Analyze single-sourcing in Arror Dam"</button>
+              <button onclick="sendAIChat('Explain illegal tender splitting under PPADA Section 54')" style="width:100%;text-align:left;padding:8px 12px;border-radius:8px;font-size:11px;color:#e2e8f0;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);cursor:pointer">⚖️ "Explain tender splitting (Sec 54)"</button>
+              <button onclick="sendAIChat('Summarize high-risk tenders in Nairobi County')" style="width:100%;text-align:left;padding:8px 12px;border-radius:8px;font-size:11px;color:#e2e8f0;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);cursor:pointer">📊 "High-risk tenders in Nairobi"</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="glass" style="display:flex;flex-direction:column;height:500px">
+          <div style="padding:14px 20px;border-bottom:1px solid rgba(30,41,59,0.5);display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="pulse-dot"></span>
+              <div>
+                <h3 style="font-size:14px;font-weight:700">Forensic Legal AI Auditor</h3>
+                <p style="font-size:10px;color:#64748B">Contextualized on 154,820 Kenyan Tenders & Statutory Law</p>
+              </div>
+            </div>
+            <button onclick="clearChat()" style="padding:4px 10px;border-radius:6px;font-size:11px;color:#94A3B8;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);cursor:pointer">Clear</button>
+          </div>
+          <div id="chatMessages" class="chat-messages">
+            <div class="chat-bubble chat-ai">
+              Jambo! I am the <strong style="color:#6ee7b7">KenyaWatch AI Forensic Legal Auditor</strong>. I continuously evaluate all 154,820 Kenyan public contracts against <strong style="color:#6ee7b7">PPADA 2015</strong> and <strong style="color:#6ee7b7">ACECA 2003</strong>.<br><br>
+              Ask about tender anomalies, satellite findings, supplier red flags, or request a formal legal complaint brief for the EACC!
+            </div>
+          </div>
+          <div style="padding:12px 16px;border-top:1px solid rgba(30,41,59,0.5)">
+            <form onsubmit="event.preventDefault();submitAIChat()" style="display:flex;gap:8px">
+              <input type="text" id="aiChatInput" class="kw-input" placeholder="Ask about any contract, county, supplier..." style="flex:1">
+              <button type="submit" class="btn-primary" style="flex-shrink:0">Send ➤</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══ CALCULATOR TAB ═══ -->
+    <section id="tab-calculator" class="tab-content">
+
+      <div class="glass" style="padding:24px;max-width:800px;margin:0 auto">
+        <div style="margin-bottom:20px">
+          <span class="badge badge-medium" style="margin-bottom:8px;display:inline-flex">Civic Opportunity Cost Analysis</span>
+          <h2 style="font-size:22px;font-weight:900">Public Funds Leakage Calculator</h2>
+          <p style="color:#cbd5e1;font-size:13px;margin-top:8px">What could Kenya have built with the funds lost in inflated, stalled, or ghost contracts?</p>
+        </div>
+
+        <div style="padding:24px;background:rgba(0,0,0,0.3);border-radius:16px;border:1px solid rgba(30,41,59,0.5);margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:12px;font-weight:600;color:#94A3B8">Misappropriated Amount</span>
+            <span id="calcDisplay" style="font-size:clamp(18px,3vw,24px);font-weight:900;color:#f59e0b;font-family:JetBrains Mono,monospace">KES 10,000,000,000</span>
+          </div>
+          <input type="range" min="50000000" max="100000000000" step="50000000" value="10000000000" oninput="updateCalculator(this.value)" style="width:100%;accent-color:#10B981;cursor:pointer">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:#64748B;font-family:JetBrains Mono,monospace;margin-top:6px">
+            <span>KES 50M</span><span>KES 10B</span><span>KES 100B</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+          <div style="padding:16px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(30,41,59,0.5);text-align:center">
+            <div style="font-size:24px;margin-bottom:4px">🏥</div>
+            <div id="calcICU" style="font-size:22px;font-weight:900;color:#10B981;font-family:JetBrains Mono,monospace">2,857</div>
+            <div style="font-size:12px;font-weight:600;margin-top:4px">ICU Beds</div>
+            <div style="font-size:10px;color:#64748B">@ KES 3.5M each</div>
+          </div>
+          <div style="padding:16px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(30,41,59,0.5);text-align:center">
+            <div style="font-size:24px;margin-bottom:4px">🏫</div>
+            <div id="calcClassrooms" style="font-size:22px;font-weight:900;color:#10B981;font-family:JetBrains Mono,monospace">8,333</div>
+            <div style="font-size:12px;font-weight:600;margin-top:4px">CBC Classrooms</div>
+            <div style="font-size:10px;color:#64748B">@ KES 1.2M each</div>
+          </div>
+          <div style="padding:16px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(30,41,59,0.5);text-align:center">
+            <div style="font-size:24px;margin-bottom:4px">🛣️</div>
+            <div id="calcRoads" style="font-size:22px;font-weight:900;color:#f59e0b;font-family:JetBrains Mono,monospace">222 km</div>
+            <div style="font-size:12px;font-weight:600;margin-top:4px">Tarmac Highway</div>
+            <div style="font-size:10px;color:#64748B">@ KES 45M/km</div>
+          </div>
+          <div style="padding:16px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(30,41,59,0.5);text-align:center">
+            <div style="font-size:24px;margin-bottom:4px">💧</div>
+            <div id="calcBoreholes" style="font-size:22px;font-weight:900;color:#a78bfa;font-family:JetBrains Mono,monospace">3,571</div>
+            <div style="font-size:12px;font-weight:600;margin-top:4px">Boreholes</div>
+            <div style="font-size:10px;color:#64748B">@ KES 2.8M each</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══ REPORT TAB ═══ -->
+    <section id="tab-report" class="tab-content">
+
+      <div class="glass" style="padding:24px;max-width:700px;margin:0 auto">
+        <div style="margin-bottom:20px">
+          <span class="badge badge-high" style="margin-bottom:8px;display:inline-flex">
+            <span class="pulse-dot" style="background:#f87171"></span>
+            ACECA 2003 Sec 25 Protection
+          </span>
+          <h2 style="font-size:22px;font-weight:900">Confidential Whistleblower Portal</h2>
+          <p style="color:#cbd5e1;font-size:13px;margin-top:8px">Report corruption, bid-rigging, or ghost projects. All submissions are SHA-256 fingerprinted.</p>
+        </div>
+
+        <form onsubmit="event.preventDefault();submitReport()" style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="font-size:11px;font-weight:600;color:#94A3B8;display:block;margin-bottom:4px">Violation Category *</label>
+              <select id="reportCategory" class="kw-select" required>
+                <option>Ghost Project / Non-Existent Works</option>
+                <option>Single-Sourcing / Illegal Direct Award</option>
+                <option>Tender Splitting</option>
+                <option>Inflated Pricing / Bribery</option>
+                <option>Conflict of Interest</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:600;color:#94A3B8;display:block;margin-bottom:4px">County *</label>
+              <select id="reportCounty" class="kw-select" required>
+                <option value="National">National Government</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="font-size:11px;font-weight:600;color:#94A3B8;display:block;margin-bottom:4px">Tender Reference</label>
+              <input type="text" id="reportTenderRef" class="kw-input" placeholder="e.g. KHA/2024/0912">
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:600;color:#94A3B8;display:block;margin-bottom:4px">Amount at Risk (KES)</label>
+              <input type="number" id="reportAmount" class="kw-input" placeholder="e.g. 45000000">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:600;color:#94A3B8;display:block;margin-bottom:4px">Detailed Evidence *</label>
+            <textarea id="reportDescription" class="kw-input" rows="4" required placeholder="Describe the procurement anomaly..." style="resize:vertical"></textarea>
+          </div>
+          <button type="submit" class="btn-danger" style="width:100%;justify-content:center;padding:14px">🔒 Submit Confidential EACC Report</button>
         </form>
+
+        <div id="reportSuccess" style="display:none;margin-top:16px;padding:16px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px">
+          <div style="display:flex;align-items:center;gap:8px;color:#10B981;font-weight:700;margin-bottom:8px">✅ Report Securely Fingerprinted & Dispatched</div>
+          <p id="reportCaseNum" style="font-size:12px;color:#e2e8f0;font-family:JetBrains Mono,monospace">Case Reference: KW-2026-XXXX</p>
+          <p style="font-size:10px;color:#64748B;margin-top:4px">Formal complaint prepared for EACC under ACECA 2003 Section 25.</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ═══ CONTRACT MODAL ═══ -->
+  <div id="contractModal" class="kw-modal-overlay" onclick="if(event.target===this)closeContractModal()">
+    <div class="kw-modal">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">
+        <div>
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <span id="modalRiskBadge" class="badge badge-high">HIGH RISK 95/100</span>
+            <span id="modalCounty" class="badge badge-low">County</span>
+          </div>
+          <h3 id="modalTitle" style="font-size:18px;font-weight:700">Contract Title</h3>
+          <p id="modalRef" style="font-size:11px;color:#64748B;font-family:JetBrains Mono,monospace">REF</p>
+        </div>
+        <button onclick="closeContractModal()" style="padding:6px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);color:#94A3B8;cursor:pointer;font-size:14px">✕</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;font-size:12px">
+        <div style="padding:10px;background:rgba(0,0,0,0.3);border-radius:8px"><span style="color:#64748B">Entity:</span><br><strong id="modalEntity">—</strong></div>
+        <div style="padding:10px;background:rgba(0,0,0,0.3);border-radius:8px"><span style="color:#64748B">Supplier:</span><br><strong id="modalSupplier">—</strong></div>
+        <div style="padding:10px;background:rgba(0,0,0,0.3);border-radius:8px"><span style="color:#64748B">Contract Sum:</span><br><strong id="modalValue" style="color:#10B981;font-family:JetBrains Mono,monospace">KES 0</strong></div>
+        <div style="padding:10px;background:rgba(0,0,0,0.3);border-radius:8px"><span style="color:#64748B">Method:</span><br><strong id="modalBidType" style="text-transform:uppercase;font-family:JetBrains Mono,monospace">OPEN</strong></div>
+        <div style="padding:10px;background:rgba(0,0,0,0.3);border-radius:8px"><span style="color:#64748B">Sector:</span><br><strong id="modalSector">—</strong></div>
+        <div style="padding:10px;background:rgba(0,0,0,0.3);border-radius:8px"><span style="color:#64748B">Date:</span><br><strong id="modalDate">—</strong></div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <h4 style="font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;margin-bottom:8px">Statutory Violations (PPADA 2015 / ACECA 2003):</h4>
+        <div id="modalFlags"></div>
+      </div>
+
+      <div style="padding:12px;background:rgba(0,0,0,0.3);border-radius:10px;margin-bottom:16px;font-size:12px">
+        <span style="color:#64748B">Civic Impact:</span>
+        <p id="modalCivic" style="color:#e2e8f0;margin-top:4px">—</p>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:12px;border-top:1px solid rgba(30,41,59,0.5)">
+        <button class="btn-ghost" style="font-size:12px">📄 Download Legal Brief</button>
+        <button onclick="closeContractModal();switchTab('report')" class="btn-danger" style="font-size:12px">🔒 File Whistleblower Report</button>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ======================== SYNC DATA ======================== -->
-<div id="v-sync" class="tab-content" style="display:none">
-  <div class="max-w-3xl mx-auto py-8">
-    <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
-      <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-2"><svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Live Data Sync (OCDS)</h2>
-      <p class="text-gray-500 mb-6 text-sm">Pull latest procurement records from the Open Contracting Partnership's Kenya publication.</p>
-      <div class="flex flex-wrap gap-4 items-end">
-        <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Year</label><select id="sync-year" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none filter-select"><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option></select></div>
-        <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">County</label><select id="sync-county" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none filter-select min-w-[160px]"><option value="All">All Counties</option></select></div>
-        <button onclick="startSync()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm">Start Sync</button>
-        <button onclick="loadSyncStatus()" class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold rounded-lg text-sm">Refresh Status</button>
+  <!-- ═══ SYNC MODAL ═══ -->
+  <div id="syncModal" class="kw-modal-overlay" onclick="if(event.target===this)closeSyncModal()">
+    <div class="kw-modal" style="max-width:500px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <svg class="spin-slow" width="20" height="20" fill="none" stroke="#10B981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <h3 style="font-size:16px;font-weight:700">Live DB Synchronization</h3>
+        </div>
+        <button onclick="closeSyncModal()" style="padding:6px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);color:#94A3B8;cursor:pointer">✕</button>
       </div>
-      <div id="sync-status" class="mt-6 divide-y divide-gray-100 text-sm text-gray-600 min-h-[60px]">Click Refresh Status to load sync history.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ======================== SOURCES ======================== -->
-<div id="v-about" class="tab-content" style="display:none">
-  <div class="max-w-3xl mx-auto py-8 space-y-6">
-    <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-      <h2 class="text-2xl font-extrabold">Data &amp; Methodology</h2>
-      <p class="text-gray-600 text-sm leading-relaxed">Every contract carries a <strong>data type</strong> so you always know what you're looking at:</p>
-      <div class="space-y-3">
-        <div class="p-4 rounded-lg border border-orange-200 bg-orange-50"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold border badge-doc">DOCUMENTED</span><p class="text-sm text-gray-700 mt-2">Real, publicly reported cases from Auditor-General reports, EACC/DPP proceedings, and investigative journalism.</p></div>
-        <div class="p-4 rounded-lg border border-blue-200 bg-blue-50"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold border badge-live">LIVE SYNC</span><p class="text-sm text-gray-700 mt-2">Pulled from the Open Contracting Partnership's machine-readable Kenya feed via the Sync Data tab.</p></div>
-        <div class="p-4 rounded-lg border border-gray-200 bg-gray-50"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold border badge-ref">REFERENCE</span><p class="text-sm text-gray-700 mt-2">Representative samples ensuring all 47 counties have baseline data while official coverage is incomplete.</p></div>
+      <p style="font-size:12px;color:#94A3B8;margin-bottom:16px">Syncing with PPIP, OCDS registry, and treasury feeds across all 47 counties.</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:12px;height:12px;overflow:hidden;border:1px solid rgba(30,41,59,0.5);margin-bottom:12px">
+        <div id="syncBar" style="height:100%;background:linear-gradient(90deg,#bb0000,#fff,#00843D);border-radius:12px;transition:width 0.4s;width:0%"></div>
       </div>
-      <p class="text-gray-600 text-sm leading-relaxed">Risk scores use a transparent rules-based engine (bid type, value, supplier timing, vague scope) applied uniformly to all contracts.</p>
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-family:JetBrains Mono,monospace;margin-bottom:12px">
+        <span id="syncStage" style="color:#10B981">Connecting to PPIP Gateway...</span>
+        <span id="syncPct" style="color:#10B981">0%</span>
+      </div>
+      <div id="syncLog" style="height:100px;background:rgba(0,0,0,0.3);border-radius:10px;padding:10px;font-family:JetBrains Mono,monospace;font-size:10px;color:#64748B;overflow-y:auto;margin-bottom:16px">
+        <div>[00:00.01] Initializing TLS handshake with PPIP & OCDS...</div>
+      </div>
+      <button onclick="runSync()" class="btn-primary" style="width:100%;justify-content:center">Start Full Sync</button>
     </div>
   </div>
-</div>
 
-</main>
+  <!-- Leaflet Map Init -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        var map = L.map('kenyaMap', { center: [0.0236, 37.9062], zoom: 6, zoomControl: false, attributionControl: false });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 18, subdomains: 'abcd' }).addTo(map);
+        var coords = {
+          'Mombasa':[-4.04,39.67],'Kwale':[-4.17,39.45],'Kilifi':[-3.63,39.85],'Garissa':[-0.45,39.65],
+          'Wajir':[1.75,40.06],'Mandera':[3.94,41.86],'Marsabit':[2.33,37.99],'Meru':[0.05,37.66],
+          'Machakos':[-1.52,37.26],'Kiambu':[-1.17,36.84],'Turkana':[3.12,35.60],'Uasin Gishu':[0.51,35.27],
+          'Elgeyo-Marakwet':[0.80,35.50],'Nakuru':[-0.30,36.08],'Kisumu':[-0.09,34.77],'Nairobi':[-1.29,36.82],
+          'Kakamega':[0.28,34.75],'Nyeri':[-0.42,36.95],'Kwale':[-4.17,39.45],'Nyandarua':[-0.34,36.41],
+          'Nyeri':[-0.42,36.95],'Kirinyaga':[-0.49,37.28],"Murang'a":[-0.72,37.15],'Kiambu':[-1.17,36.84],
+          'Trans Nzoia':[1.02,35.00],'Nandi':[0.32,35.17],'Baringo':[0.49,35.97],'Laikipia':[0.31,36.78],
+          'Narok':[-1.08,35.87],'Kajiado':[-1.85,36.78],'Kericho':[-0.37,35.28],'Bomet':[-0.78,35.34],
+          'Vihiga':[0.07,34.60],'Bungoma':[0.57,34.56],'Busia':[0.46,34.11],'Siaya':[-0.06,34.48],
+          'Homa Bay':[-0.52,34.46],'Migori':[-1.06,34.47],'Kisii':[-0.68,34.77],'Nyamira':[-0.56,34.93],
+          'Isiolo':[0.35,37.59],'Tharaka-Nithi':[-0.31,37.80],'Embu':[-0.54,37.45],'Kitui':[-1.37,38.01],
+          'Makueni':[-1.80,37.63],'Tana River':[-1.50,40.14],'Lamu':[-2.27,40.25],'Taita Taveta':[-3.50,38.33],
+          'Samburu':[1.22,36.73],'West Pokot':[1.54,35.12]
+        };
+        Object.entries(coords).forEach(function(e) {
+          var isHigh = ['Elgeyo-Marakwet','Nairobi','Nakuru'].includes(e[0]);
+          L.circleMarker(e[1], { radius: isHigh?8:5, fillColor: isHigh?'#bb0000':'#10B981', color:'#fff', weight:1.5, fillOpacity:0.9 }).addTo(map)
+            .bindPopup('<div style="font-size:12px"><strong style="color:'+(isHigh?'#bb0000':'#10B981')+'">'+e[0]+' County</strong></div>');
+        });
+      } catch(err) { console.warn('Map init:', err.message); }
+    });
+  </script>
 
-<!-- ======================== FOOTER ======================== -->
-<footer class="bg-[#0a0a0a] text-gray-400 mt-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div><div class="flex items-center gap-2 mb-3"><div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#bb0000,#00a651)"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4"></path></svg></div><span class="font-extrabold text-white text-lg">KenyaWatch <span class="text-[#00a651]">AI</span></span></div><p class="text-sm leading-relaxed">Independent civic-tech platform for procurement transparency. Not affiliated with the Government of Kenya.</p></div>
-      <div><h4 class="font-bold text-white text-sm mb-3">Quick Links</h4><ul class="space-y-2 text-sm"><li><button onclick="showTab('v-procurement')" class="hover:text-[#00a651] transition-colors">Contracts</button></li><li><button onclick="showTab('v-ghost')" class="hover:text-[#00a651] transition-colors">Ghost Projects</button></li><li><button onclick="showTab('v-ai')" class="hover:text-[#00a651] transition-colors">AI Investigator</button></li><li><button onclick="showTab('v-report')" class="hover:text-[#00a651] transition-colors">Report Fraud</button></li></ul></div>
-      <div><h4 class="font-bold text-white text-sm mb-3">Get Help</h4><ul class="space-y-2 text-sm"><li>EACC Hotline: <strong class="text-white">0800 720 880</strong></li><li>Free, 24/7</li><li><a href="https://www.eacc.go.ke" target="_blank" class="hover:text-[#00a651] transition-colors">eacc.go.ke</a></li></ul></div>
-    </div>
-    <div class="border-t border-gray-800 mt-8 pt-6 text-xs text-gray-500"><p>&copy; 2026 KenyaWatch AI &middot; Data: Auditor-General, EACC, Open Contracting Partnership</p></div>
-  </div>
-</footer>
-
-<!-- ======================== MODALS ======================== -->
-<div id="scan-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('scan-modal')">
-  <div class="modal-box">
-    <div class="p-5 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white rounded-t-2xl z-10"><h3 class="text-lg font-bold flex items-center gap-2">Scan Contract</h3><button onclick="closeModal('scan-modal')" class="p-1 hover:bg-gray-100 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
-    <div class="p-5 space-y-4">
-      <div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Contract ID *</label><input type="text" id="scan-id" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#00a651]"></div><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Supplier *</label><input type="text" id="scan-supplier" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#00a651]"></div></div>
-      <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Description</label><textarea id="scan-desc" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#00a651]"></textarea></div>
-      <div class="grid grid-cols-3 gap-3"><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">County</label><select id="scan-county" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm filter-select"></select></div><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Sector</label><select id="scan-sector" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm filter-select"></select></div><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Value *</label><input type="number" id="scan-value" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#00a651]"></div></div>
-      <div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Bid Type</label><select id="scan-bid" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm filter-select"><option value="open">Open</option><option value="restricted">Restricted</option><option value="single_source">Single Source</option></select></div><div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Award Date</label><input type="date" id="scan-date" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none"></div></div>
-      <button onclick="runScan()" class="w-full py-3 bg-[#00a651] hover:bg-[#008c44] text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">Run AI Corruption Scan</button>
-      <div id="scan-result" class="hidden mt-3 p-4 rounded-lg border text-sm"></div>
-    </div>
-  </div>
-</div>
-<div id="detail-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('detail-modal')">
-  <div class="modal-box">
-    <div class="p-5 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white rounded-t-2xl z-10"><h3 class="text-lg font-bold flex items-center gap-2">Contract Detail</h3><button onclick="closeModal('detail-modal')" class="p-1 hover:bg-gray-100 rounded-lg"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
-    <div id="detail-body" class="p-5 space-y-3 text-sm text-gray-700"></div>
-  </div>
-</div>
-
-<div id="toast" class="toast hidden"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span id="toast-msg"></span></div>
-
-<script>
-const API_BASE=(()=>{const q=new URLSearchParams(location.search).get('api');if(q)return q.replace(/\/$/,'');const m=document.querySelector('meta[name="kenyawatch-api-base"]');if(m&&m.content)return m.content.replace(/\/$/,'');return location.origin})();
-let META={counties:[],sectors:[],years:[]};let currentPage=1;const PAGE_SIZE=25;let lastTotal=0;let riskChart=null,sectorChart=null;
-
-function formatMoney(n){if(!n)return'0';const num=parseInt(n,10);if(num>=1e9)return(num/1e9).toFixed(1)+'B';if(num>=1e6)return(num/1e6).toFixed(1)+'M';return num.toLocaleString()}
-function dataTypeBadge(t){if(t==='documented')return'<span class="px-1.5 py-0.5 rounded text-[9px] font-bold border badge-doc">DOC</span>';if(t==='live_sync')return'<span class="px-1.5 py-0.5 rounded text-[9px] font-bold border badge-live">LIVE</span>';if(t==='manual_scan')return'<span class="px-1.5 py-0.5 rounded text-[9px] font-bold border badge-live">SCAN</span>';return'<span class="px-1.5 py-0.5 rounded text-[9px] font-bold border badge-ref">REF</span>'}
-function escapeHtml(s){return(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function renderMarkdown(t){if(!t)return'';let h=t.replace(/###\s*(.+)/g,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^- (.+)/gm,'<li>$1</li>').replace(/(<li>[\s\S]*<\/li>)/g,m=>'<ul>'+m+'</ul>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');h=h.replace(/<\/ul><br><br><ul>/g,'').replace(/<\/ul><br><ul>/g,'');return'<div class="md-content">'+h+'</div>'}
-function showConnError(s){document.getElementById('conn-banner').classList.toggle('hidden',!s)}
-function showToast(msg){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.classList.remove('hidden');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add('hidden'),3500)}
-async function apiFetch(path,opts){try{const res=await fetch(API_BASE+path,opts);showConnError(false);return res}catch(e){showConnError(true);throw e}}
-
-let debounceTimer;
-function debounceLoadC(){clearTimeout(debounceTimer);debounceTimer=setTimeout(()=>{currentPage=1;loadC()},400)}
-
-function showTab(id){document.querySelectorAll('.tab-content').forEach(el=>el.style.display='none');const tab=document.getElementById(id);if(tab)tab.style.display='block';document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('bg-gray-100','text-[#00a651]');if(b.dataset.tab===id){b.classList.add('bg-gray-100','text-[#00a651]')}});document.getElementById('mobile-nav').classList.add('hidden');if(id==='v-overview')loadDash();if(id==='v-procurement')loadC();if(id==='v-ghost')loadGhost();window.scrollTo({top:0,behavior:'smooth'})}
-function openModal(id){document.getElementById(id).classList.remove('hidden');document.body.style.overflow='hidden'}
-function closeModal(id){document.getElementById(id).classList.add('hidden');document.body.style.overflow=''}
-
-async function loadMeta(){try{const res=await apiFetch('/api/contracts/meta');const data=await res.json();if(!data.success)return;META=data.data;const cOpts=META.counties.map(c=>'<option value="'+c.name+'">'+c.name+' ('+c.contracts+')</option>').join('');const cPlain=META.counties.map(c=>'<option value="'+c.name+'">'+c.name+'</option>').join('');document.getElementById('filter-county').innerHTML='<option value="All">All Counties (47)</option>'+cOpts;if(document.getElementById('report-county'))document.getElementById('report-county').innerHTML='<option value="">Select county</option>'+cPlain;if(document.getElementById('scan-county'))document.getElementById('scan-county').innerHTML=cPlain;if(document.getElementById('sync-county'))document.getElementById('sync-county').innerHTML='<option value="All">All Counties</option>'+cPlain;const sOpts=META.sectors.map(s=>'<option>'+s+'</option>').join('');document.getElementById('filter-sector').innerHTML='<option value="All">All Sectors</option>'+sOpts;if(document.getElementById('scan-sector'))document.getElementById('scan-sector').innerHTML=sOpts;if(document.getElementById('report-sector'))document.getElementById('report-sector').innerHTML='<option value="">Select sector</option>'+sOpts;const yrs=META.years.length?META.years:[2026,2025,2024,2023,2022,2021];document.getElementById('filter-year').innerHTML='<option value="All">All Years</option>'+yrs.map(y=>'<option>'+y+'</option>').join('')}catch(e){console.error('loadMeta:',e)}}
-
-function animateCount(el,target,prefix,suffix){if(!el)return;prefix=prefix||'';suffix=suffix||'';const dur=1200,start=performance.now();function step(now){const p=Math.min((now-start)/dur,1);const eased=1-Math.pow(1-p,4);el.textContent=prefix+Math.round(target*eased).toLocaleString()+suffix;if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
-
-async function loadDash(){try{const res=await apiFetch('/api/stats');const data=await res.json();if(data.success){const d=data.data;animateCount(document.getElementById('dash-flagged'),d.contracts_flagged);animateCount(document.getElementById('dash-ghost'),d.ghost_projects);animateCount(document.getElementById('dash-reports'),d.reports_30d);animateCount(document.getElementById('dash-funds'),d.funds_at_risk,'KES ');animateCount(document.getElementById('hero-flagged'),d.contracts_flagged);animateCount(document.getElementById('hero-ghost'),d.ghost_projects);animateCount(document.getElementById('hero-funds'),d.funds_at_risk,'KES ')}}catch(e){console.error('loadDash:',e)}loadCountyExplorer();loadCharts();loadTopFlagged();loadGhostPreview()}
-
-async function loadCountyExplorer(){const grid=document.getElementById('county-grid');try{const res=await apiFetch('/api/stats/by-county');const data=await res.json();const map={};(data.success?data.data:[]).forEach(c=>{map[c.county]=c});const maxHigh=Math.max(1,...Object.values(map).map(c=>c.high_risk||0));const counties=META.counties.length?META.counties:[];if(!counties.length)Object.keys(map).forEach(n=>counties.push({name:n}));grid.innerHTML='';counties.forEach(c=>{const row=map[c.name]||{contracts:0,high_risk:0,funds_at_risk:0};const heat=row.high_risk===0?0:Math.min(4,1+Math.round((row.high_risk/maxHigh)*3));const colors=['bg-gray-100 text-gray-600','bg-emerald-50 text-emerald-700','bg-emerald-100 text-emerald-800','bg-amber-100 text-amber-800','bg-red-100 text-red-800'];const el=document.createElement('button');el.className=colors[heat]+' rounded-lg px-3 py-2.5 text-left border border-gray-200/60 card-lift w-full';el.innerHTML='<div class="font-bold text-xs truncate">'+c.name+'</div><div class="text-[10px] opacity-75">'+row.contracts+' ctms '+row.high_risk+' hi-rsk</div>';el.onclick=()=>{document.getElementById('filter-county').value=c.name;showTab('v-procurement');loadC()};grid.appendChild(el)})}catch(e){grid.innerHTML='<div class="col-span-full text-center py-8 text-red-500 text-sm">Failed to load counties.</div>'}}
-
-async function loadCharts(){try{const res=await apiFetch('/api/contracts?limit=500');const data=await res.json();if(!data.success)return;const rows=data.data;const riskCounts={HIGH:0,MEDIUM:0,LOW:0};const sectorCounts={};rows.forEach(c=>{if(riskCounts[c.risk_level]!==undefined)riskCounts[c.risk_level]++;sectorCounts[c.sector||'Other']=(sectorCounts[c.sector||'Other']||0)+1});const riskCtx=document.getElementById('risk-chart');if(riskCtx&&riskCtx.getContext){if(riskChart)riskChart.destroy();riskChart=new Chart(riskCtx,{type:'doughnut',data:{labels:['HIGH','MEDIUM','LOW'],datasets:[{data:[riskCounts.HIGH,riskCounts.MEDIUM,riskCounts.LOW],backgroundColor:['#dc2626','#f59e0b','#10b981'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,font:{size:11}}}}}})}const secCtx=document.getElementById('sector-chart');if(secCtx&&secCtx.getContext){const sorted=Object.entries(sectorCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);if(sectorChart)sectorChart.destroy();sectorChart=new Chart(secCtx,{type:'bar',data:{labels:sorted.map(s=>s[0]),datasets:[{label:'Contracts',data:sorted.map(s=>s[1]),backgroundColor:'#00a651',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0,font:{size:10}}},x:{ticks:{font:{size:9},maxRotation:45}}}}})}}catch(e){console.error('loadCharts:',e)}}
-
-async function loadTopFlagged(){const box=document.getElementById('top-flagged');try{const res=await apiFetch('/api/contracts?risk_level=HIGH&limit=5');const data=await res.json();if(!data.success||!data.data.length){box.innerHTML='<p class="text-gray-400 text-sm">No high-risk contracts found.</p>';return}box.innerHTML=data.data.map(c=>'<div class="flex items-center justify-between gap-3 p-2.5 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-all" onclick="showDetail(\''+c.contract_id+'\')"><div class="min-w-0"><div class="font-mono text-[10px] text-gray-400 truncate">'+c.contract_id+'</div><div class="text-sm font-semibold text-gray-800 truncate">'+escapeHtml(c.description)+'</div><div class="text-[11px] text-gray-500">'+(c.county||'')+' | '+(c.sector||'')+'</div></div><div class="text-right flex-shrink-0"><div class="text-sm font-extrabold text-red-600">'+c.risk_score+'</div><div class="text-[9px] text-gray-400 uppercase">risk</div></div></div>').join('')}catch(e){box.innerHTML='<div class="text-red-500 text-sm">Failed to load.</div>'}}
-
-async function loadGhostPreview(){const box=document.getElementById('ghost-preview');try{const res=await apiFetch('/api/ghost-projects');const data=await res.json();if(!data.success||!data.data.length){box.innerHTML='<div class="text-gray-400 text-sm">No ghost projects detected.</div>';return}box.innerHTML=data.data.slice(0,4).map(g=>'<div class="flex items-center gap-3 p-2.5 rounded-lg border border-gray-100 hover:bg-gray-50 transition-all"><div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200"><img src="'+(g.satellite_image_url||'https://placehold.co/100x100?text=Sat')+'" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display=\'none\'"></div><div class="min-w-0 flex-1"><div class="text-sm font-semibold text-gray-800 truncate">'+escapeHtml(g.project_name)+'</div><div class="text-[11px] text-gray-500">'+g.county+' | KES '+formatMoney(g.amount_at_risk)+'</div></div><span class="px-1.5 py-0.5 rounded text-[9px] font-bold '+(g.detection_status==='ghost'?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700')+'">'+g.detection_status.toUpperCase()+'</span></div>').join('')}catch(e){box.innerHTML='<div class="text-red-500 text-sm">Failed to load.</div>'}}
-
-function scrollToCounty(){document.getElementById('county-explorer')?.scrollIntoView({behavior:'smooth',block:'center'})}
-function resetFilters(){document.getElementById('search-contracts').value='';document.getElementById('filter-county').value='All';document.getElementById('filter-sector').value='All';document.getElementById('filter-year').value='All';document.getElementById('filter-risk').value='All';document.getElementById('filter-datatype').value='All';currentPage=1;loadC()}
-function prevPage(){if(currentPage>1){currentPage--;loadC()}}
-function nextPage(){if(currentPage*PAGE_SIZE<lastTotal){currentPage++;loadC()}}
-
-async function loadC(){const search=document.getElementById('search-contracts').value;const county=document.getElementById('filter-county').value;const sector=document.getElementById('filter-sector').value;const year=document.getElementById('filter-year').value;const risk=document.getElementById('filter-risk').value;const dataType=document.getElementById('filter-datatype').value;const params=new URLSearchParams({search,county,sector,year,risk_level:risk,data_type:dataType,limit:PAGE_SIZE,page:currentPage});const tbody=document.getElementById('contracts-table');tbody.innerHTML='<tr><td colspan="9" class="p-10 text-center text-gray-400 text-sm"><div class="w-5 h-5 border-2 border-gray-300 border-t-[#00a651] rounded-full animate-spin mx-auto mb-2"></div>Loading contracts...</td></tr>';try{const res=await apiFetch('/api/contracts?'+params.toString());const data=await res.json();tbody.innerHTML='';if(data.success&&data.data.length>0){lastTotal=data.total||data.data.length;const tp=Math.ceil(lastTotal/PAGE_SIZE);document.getElementById('pagination-info').textContent='Showing '+((currentPage-1)*PAGE_SIZE+1)+'-'+Math.min(currentPage*PAGE_SIZE,lastTotal)+' of '+lastTotal.toLocaleString();document.getElementById('page-indicator').textContent='Page '+currentPage+'/'+tp;data.data.forEach(c=>{const rc=c.risk_level==='HIGH'?'badge-high':(c.risk_level==='MEDIUM'?'badge-med':'badge-low');const tr=document.createElement('tr');tr.className='hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-50';tr.onclick=()=>showDetail(c.contract_id);tr.innerHTML='<td class="p-3 font-mono text-xs text-gray-600 whitespace-nowrap">'+c.contract_id+'</td><td class="p-3 text-gray-900 font-medium max-w-[200px] truncate" title="'+escapeHtml(c.description)+'">'+escapeHtml(c.description)+'</td><td class="p-3 text-gray-700 whitespace-nowrap">'+(c.county||'')+'</td><td class="p-3 text-gray-700 whitespace-nowrap hidden md:table-cell">'+(c.sector||'')+'</td><td class="p-3 text-gray-700 hidden lg:table-cell">'+(c.year||'')+'</td><td class="p-3 font-semibold text-gray-900 whitespace-nowrap">KES '+formatMoney(c.value)+'</td><td class="p-3 text-gray-700 max-w-[120px] truncate hidden lg:table-cell" title="'+escapeHtml(c.supplier)+'">'+escapeHtml(c.supplier||'')+'</td><td class="p-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold border '+rc+'">'+c.risk_score+'/100 '+c.risk_level+'</span></td><td class="p-3 hidden md:table-cell">'+dataTypeBadge(c.data_type)+'</td>';tbody.appendChild(tr)})}else{tbody.innerHTML='<tr><td colspan="9" class="p-10 text-center text-gray-400 text-sm">No contracts match your filters.</td></tr>'}}catch(e){tbody.innerHTML='<tr><td colspan="9" class="p-10 text-center text-red-500 text-sm">Failed to load. <button onclick="loadC()" class="font-bold underline">Retry</button></td></tr>'}}
-
-async function showDetail(contractId){const body=document.getElementById('detail-body');body.innerHTML='<div class="w-5 h-5 border-2 border-gray-300 border-t-[#00a651] rounded-full animate-spin mx-auto my-8"></div>';openModal('detail-modal');try{const res=await apiFetch('/api/contracts/'+encodeURIComponent(contractId));const data=await res.json();if(!data.success){body.innerHTML='<p class="text-red-600">Contract not found.</p>';return}const c=data.data;let flags=[];try{flags=typeof c.flags==='string'?JSON.parse(c.flags):(c.flags||[])}catch(e){}body.innerHTML='<div class="flex justify-between items-start"><div><p class="font-mono text-[10px] text-gray-400">'+c.contract_id+'</p><h4 class="text-lg font-bold text-gray-900 mt-1">'+escapeHtml(c.description)+'</h4></div>'+dataTypeBadge(c.data_type)+'</div><div class="grid grid-cols-2 gap-3 pt-3"><div><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">County</p><p class="font-medium text-sm">'+(c.county||'')+'</p></div><div><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Sector</p><p class="font-medium text-sm">'+(c.sector||'')+'</p></div><div><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Value</p><p class="font-medium text-sm">KES '+Number(c.value).toLocaleString()+'</p></div><div><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Awarded</p><p class="font-medium text-sm">'+(c.awarded_date||'')+'</p></div><div><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Bid Type</p><p class="font-medium text-sm capitalize">'+(c.bid_type||'')+'</p></div><div><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Status</p><p class="font-medium text-sm capitalize">'+(c.status||'active')+'</p></div><div class="col-span-2"><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Supplier</p><p class="font-medium text-sm">'+escapeHtml(c.supplier||'')+'</p></div><div class="col-span-2"><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Procuring Entity</p><p class="font-medium text-sm">'+escapeHtml(c.procuring_entity||'')+'</p></div></div>'+(flags.length?'<div class="pt-3 border-t border-gray-100"><p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider mb-2">Risk Flags ('+flags.length+')</p><div class="space-y-1">'+flags.map(f=>'<div class="flex items-start gap-2 text-sm"><svg class="w-3 h-3 mt-0.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'+escapeHtml(f)+'</div>').join('')+'</div></div>':'')}catch(e){body.innerHTML='<p class="text-red-600">Failed to load contract details.</p>'}}
-
-function exportCSV(){const params=new URLSearchParams({search:document.getElementById('search-contracts').value,county:document.getElementById('filter-county').value,sector:document.getElementById('filter-sector').value,year:document.getElementById('filter-year').value,risk_level:document.getElementById('filter-risk').value,data_type:document.getElementById('filter-datatype').value});window.open(API_BASE+'/api/contracts/export?'+params.toString(),'_blank');showToast('Downloading CSV...')}
-
-async function loadGhost(){const grid=document.getElementById('ghost-grid');try{const res=await apiFetch('/api/ghost-projects');const data=await res.json();grid.innerHTML='';if(data.success&&data.data.length>0){data.data.forEach(g=>{const el=document.createElement('div');el.className='bg-white rounded-xl border border-gray-200 overflow-hidden card-lift group';el.innerHTML='<div class="h-48 bg-gray-200 relative overflow-hidden"><img src="'+(g.satellite_image_url||'https://placehold.co/600x400?text=Satellite')+'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src=\'https://placehold.co/600x400?text=No+Satellite\'"><div class="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-bold '+(g.detection_status==='ghost'?'bg-red-100/90 text-red-700 border border-red-200':'bg-amber-100/90 text-amber-700 border border-amber-200')+'">'+g.detection_status.toUpperCase()+'</div><div class="absolute top-3 left-3">'+dataTypeBadge(g.data_type)+'</div></div><div class="p-4"><h3 class="font-bold text-sm mb-1">'+escapeHtml(g.project_name)+'</h3><p class="text-[11px] text-gray-500 mb-2">'+g.county+' County</p><p class="text-[11px] text-gray-500 mb-2">Claimed: '+escapeHtml(g.claimed_status||'')+'<br>Satellite: '+escapeHtml(g.satellite_status||'')+'</p><div class="flex justify-between items-center pt-2 border-t border-gray-100"><span class="text-red-600 font-bold text-sm">KES '+formatMoney(g.amount_at_risk)+'</span><span class="text-[11px] text-gray-500">'+g.confidence_score+'% confidence</span></div>'+(g.source_url?'<a href="'+g.source_url+'" target="_blank" rel="noopener" class="block mt-2 text-[11px] text-[#00a651] hover:underline font-semibold">'+escapeHtml(g.source_name||'Source')+' &rarr;</a>':'')+'</div>';grid.appendChild(el)})}else{grid.innerHTML='<div class="col-span-full text-center py-12 text-gray-400">No ghost projects detected.</div>'}}catch(e){grid.innerHTML='<div class="col-span-full text-center py-12 text-red-500">Failed to load ghost projects.</div>'}}
-
-async function submitReport(e){e.preventDefault();const form=e.target;const btn=form.querySelector('button[type="submit"]');const origHTML=btn.innerHTML;btn.innerHTML='Submitting...';btn.disabled=true;try{const res=await apiFetch('/api/reports',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:form.type.value,county:form.county.value,sector:form.sector.value||null,description:form.description.value,amount:form.amount.value?parseInt(form.amount.value,10):0,anonymous:form.anonymous.checked})});const data=await res.json();if(data.success){const d=data.data;document.getElementById('report-case-number').textContent=d.case_number||'KW-UNKNOWN';document.getElementById('report-credibility').textContent=(d.ai_credibility_score||0)+'%';document.getElementById('report-routing').textContent=d.routing||'EACC';document.getElementById('report-success').classList.remove('hidden');form.style.display='none';showToast('Report submitted. Case: '+d.case_number)}else{showToast('Error: '+data.error)}}catch(err){showToast('Network error.')}btn.innerHTML=origHTML;btn.disabled=false}
-
-function clearChat(){document.getElementById('chat-history').innerHTML='<div class="flex gap-3"><div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style="background:linear-gradient(135deg,#bb0000,#00a651)">AI</div><div class="bg-gray-100 p-4 rounded-2xl rounded-tl-none max-w-[85%] border border-gray-200"><p class="text-sm text-gray-800">Habari! I have access to <strong>154,820+ contracts</strong> across all 47 counties. Ask me about corruption, ghost projects, or any county.</p></div></div>';const sg=document.getElementById('ai-suggestions');if(sg)sg.style.display='flex'}
-
-async function sendAI(e){e.preventDefault();const input=document.getElementById('ai-input');const msg=input.value.trim();if(!msg)return;const history=document.getElementById('chat-history');const sg=document.getElementById('ai-suggestions');if(sg)sg.style.display='none';const userDiv=document.createElement('div');userDiv.className='flex gap-3 flex-row-reverse';userDiv.innerHTML='<div class="w-8 h-8 rounded-full bg-[#00a651] flex items-center justify-center text-xs font-bold text-white flex-shrink-0">You</div><div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm text-gray-800">'+escapeHtml(msg)+'</div>';history.appendChild(userDiv);input.value='';const loadDiv=document.createElement('div');loadDiv.id='ai-loading';loadDiv.className='flex gap-3';loadDiv.innerHTML='<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style="background:linear-gradient(135deg,#bb0000,#00a651)">AI</div><div class="bg-gray-100 p-4 rounded-2xl rounded-tl-none border border-gray-200 text-sm text-gray-500 flex items-center gap-2"><div class="typing-dots flex gap-1"><span></span><span></span><span></span></div>Analyzing...</div>';history.appendChild(loadDiv);history.scrollTop=history.scrollHeight;try{const ctrl=new AbortController();const tm=setTimeout(()=>ctrl.abort(),30000);const res=await fetch(API_BASE+'/api/ai/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg}),signal:ctrl.signal});clearTimeout(tm);showConnError(false);const data=await res.json();document.getElementById('ai-loading')?.remove();const aiDiv=document.createElement('div');aiDiv.className='flex gap-3';const src=data.source==='gemini'?'<span class="text-[9px] text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200">Gemini</span>':'<span class="text-[9px] text-blue-600 bg-blue-50 px-1 py-0.5 rounded border border-blue-200">Local AI</span>';aiDiv.innerHTML='<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style="background:linear-gradient(135deg,#bb0000,#00a651)">AI</div><div class="bg-gray-100 p-4 rounded-2xl rounded-tl-none border border-gray-200 max-w-[85%]">'+renderMarkdown(data.reply||data.error||'No response')+'<div class="mt-2 flex items-center gap-1">'+src+'</div></div>';history.appendChild(aiDiv);history.scrollTop=history.scrollHeight}catch(err){document.getElementById('ai-loading')?.remove();if(err.name==='AbortError')showToast('AI request timed out.');else showToast('Failed to get AI response.')}}
-
-function askSuggested(q){document.getElementById('ai-input').value=q;sendAI(new Event('submit'))}
-
-async function runScan(){const id=document.getElementById('scan-id').value;const supplier=document.getElementById('scan-supplier').value;const value=document.getElementById('scan-value').value;if(!id||!supplier||!value){showToast('Fill required fields');return}const rd=document.getElementById('scan-result');rd.classList.remove('hidden');rd.className='mt-3 p-4 rounded-lg border text-sm bg-blue-50 border-blue-200';rd.innerHTML='<span class="text-blue-600 flex items-center gap-2"><div class="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>Running AI corruption analysis...</span>';try{const res=await apiFetch('/api/contracts/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contract_id:id,supplier,description:document.getElementById('scan-desc').value,county:document.getElementById('scan-county').value,sector:document.getElementById('scan-sector').value,value:parseInt(value,10),bid_type:document.getElementById('scan-bid').value,awarded_date:document.getElementById('scan-date').value||null})});const data=await res.json();if(data.success){const c=data.data;let flags=[];try{flags=typeof c.flags==='string'?JSON.parse(c.flags):c.flags}catch(e){}const rc=c.risk_level==='HIGH'?'red':(c.risk_level==='MEDIUM'?'amber':'emerald');const hr=c.risk_level==='HIGH';rd.className='mt-3 p-4 rounded-lg border text-sm bg-'+rc+'-50 border-'+rc+'-200';rd.innerHTML='<div class="flex items-center gap-2 mb-2"><div class="font-bold text-'+rc+'-700">Risk Score: '+c.risk_score+'/100 ('+c.risk_level+')</div></div>'+flags.map(f=>'<div class="text-sm text-gray-700 flex items-start gap-1.5 mt-1"><svg class="w-3 h-3 mt-0.5 text-'+rc+'-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'+escapeHtml(f)+'</div>').join('')+(hr?'<div class="mt-3 p-2 bg-red-100 rounded-lg text-xs font-bold text-red-800">CORRUPTION ALERT: This contract is flagged for EACC review.</div>':'');if(hr)showToast('Contract flagged as HIGH RISK - queued for EACC review')}else{rd.className='mt-3 p-4 rounded-lg border text-sm bg-red-50 border-red-200';rd.textContent='Error: '+data.error}}catch(e){rd.className='mt-3 p-4 rounded-lg border text-sm bg-red-50 border-red-200';rd.textContent='Network error.'}}
-
-async function startSync(){const year=document.getElementById('sync-year').value;const county=document.getElementById('sync-county').value;const sd=document.getElementById('sync-status');sd.innerHTML='<span class="text-blue-600 flex items-center gap-2"><div class="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>Starting sync...</span>';try{const res=await apiFetch('/api/sync/ocds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({year:parseInt(year,10),county})});const data=await res.json();if(data.success){sd.innerHTML='<div class="text-emerald-700 font-bold py-2">'+data.message+'</div>';setTimeout(loadSyncStatus,4000)}else{sd.innerHTML='<span class="text-red-600">'+escapeHtml(data.error)+'</span>'}}catch(e){sd.innerHTML='<span class="text-red-600">Network error.</span>'}}
-
-async function loadSyncStatus(){const sd=document.getElementById('sync-status');try{const res=await apiFetch('/api/sync/status');const data=await res.json();if(data.success&&data.data.length>0){sd.innerHTML=data.data.map(log=>'<div class="flex flex-wrap justify-between items-center py-3 gap-2"><span class="font-medium text-gray-900 text-sm">'+log.year+(log.county?' | '+log.county:'')+' - <span class="'+(log.status==='complete'?'text-emerald-600':(log.status==='failed'?'text-red-600':'text-blue-600'))+' font-bold uppercase">'+log.status+'</span></span><span class="text-sm text-gray-600">'+(log.records||0)+' records'+(log.error_msg?' | '+escapeHtml(log.error_msg):'')+'</span></div>').join('')}else{sd.innerHTML='<span class="text-gray-500">No sync history yet.</span>'}}catch(e){sd.innerHTML='<span class="text-red-600">Failed to load status.</span>'}}
-
-(async function init(){try{await loadMeta()}catch(e){console.error('init loadMeta:',e)}showTab('v-overview')})();
-</script>
+  <script src="js/app.js"></script>
 </body>
 </html>
