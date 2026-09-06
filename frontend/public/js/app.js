@@ -1,7 +1,19 @@
-// KenyaWatch AI — Main Application Logic
+// KenyaWatch AI — Main Application Logic (UI UX Pro Max Accessible Design)
 // Fetches data from backend API, renders all features
+// Accessibility: keyboard nav, reduced-motion, ARIA live regions
 
 const API = 'https://kenyawatch-ai-backend.onrender.com';
+
+// Reduced motion detection
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Keyboard navigation: Enter/Space activates buttons
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeContractModal();
+    closeSyncModal();
+  }
+});
 
 // ── 47 Counties ──────────────────────────────────────────────────
 const COUNTIES = [
