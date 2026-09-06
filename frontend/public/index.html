@@ -652,7 +652,11 @@ function scrollToCounty(){document.getElementById('county-explorer')?.scrollInto
 
 function initReveal(){const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:0.1});document.querySelectorAll('.reveal').forEach(el=>io.observe(el))}
 
-function initParticles(){const c=document.getElementById('particles');if(!c)return;for(let i=0;i<25;i++){const p=document.createElement('span');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(12+Math.random()*18)+'s';p.style.animationDelay=Math.random()*10+'s';c.appendChild(p)}}
+function initParticles(){const c=document.getElementById('particles-container');if(!c)return;for(let i=0;i<25;i++){const p=document.createElement('span');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(12+Math.random()*18)+'s';p.style.animationDelay=Math.random()*10+'s';c.appendChild(p)}}
+
+function toggleDark(){document.documentElement.classList.toggle('dark');const isDark=document.documentElement.classList.contains('dark');if(isDark){document.body.style.backgroundColor='#0f172a';document.body.style.color='#e2e8f0'}else{document.body.style.backgroundColor='';document.body.style.color=''}}
+
+function toggleReports(){showTab('v-report')}
 
 function resetFilters(){document.getElementById('search-contracts').value='';document.getElementById('filter-county').value='All';document.getElementById('filter-sector').value='All';document.getElementById('filter-year').value='All';document.getElementById('filter-risk').value='All';document.getElementById('filter-datatype').value='All';currentPage=1;loadC()}
 function prevPage(){if(currentPage>1){currentPage--;loadC()}}
