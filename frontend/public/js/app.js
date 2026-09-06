@@ -1,4 +1,4 @@
-// KenyaWatch AI — Main Application Logic (UI UX Pro Max Accessible Design)
+// KenyaWatch AI — Main Application Logic (shadcn Design System)
 // Fetches data from backend API, renders all features
 // Accessibility: keyboard nav, reduced-motion, ARIA live regions
 
@@ -7,11 +7,12 @@ const API = 'https://kenyawatch-ai-backend.onrender.com';
 // Reduced motion detection
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Keyboard navigation: Enter/Space activates buttons
+// Keyboard navigation
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     closeContractModal();
     closeSyncModal();
+    closeMobileDrawer();
   }
 });
 
@@ -105,7 +106,6 @@ async function loadAll() {
   if (statsRes?.success) stats = statsRes.data;
   if (metaRes?.success) {
     contractsMeta = metaRes.data;
-    // Update county dropdown from API
     updateCountyDropdown(metaRes.data.counties);
   }
   if (contractsRes?.success) {
@@ -120,7 +120,6 @@ async function loadAll() {
   renderGhostProjects();
   renderSectors();
   renderCountyLeaderboard();
-  renderReports();
 }
 
 // ── Dropdown Population ──────────────────────────────────────────
@@ -150,7 +149,6 @@ function updateCountyDropdown(apiCounties) {
   if (!apiCounties || !apiCounties.length) return;
   const filterCounty = document.getElementById('filterCounty');
   if (!filterCounty) return;
-  // Only add if not already populated
   if (filterCounty.options.length > 1) return;
   apiCounties.forEach(c => {
     const opt = document.createElement('option');
@@ -162,7 +160,6 @@ function updateCountyDropdown(apiCounties) {
 
 // ── Event Listeners ──────────────────────────────────────────────
 function setupEventListeners() {
-  // Filter change handlers
   ['filterCounty','filterSector','filterRisk','filterYear','contractSort'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', applyFilters);
@@ -185,16 +182,42 @@ function switchTab(tabId) {
   const panel = document.getElementById('tab-' + tabId);
   if (panel) panel.classList.add('active');
 
-  // Update nav
+  // Update desktop nav
   document.querySelectorAll('.nav-link').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
+    if (btn.dataset.tab === tabId) btn.setAttribute('aria-current', 'page');
+    else btn.removeAttribute('aria-current');
   });
-  document.querySelectorAll('.mobile-nav-item').forEach(btn => {
+
+  // Update mobile bottom nav
+  document.querySelectorAll('.mobile-bottom-nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabId);
+  });
+
+  // Update mobile drawer
+  document.querySelectorAll('.mobile-drawer-link').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
   });
 
   if (tabId === 'overview') loadStats();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+}
+
+// ── Mobile Drawer ────────────────────────────────────────────────
+function openMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  if (drawer) {
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  if (drawer) {
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
 }
 
 // ── Render Stats ─────────────────────────────────────────────────
@@ -204,7 +227,6 @@ function renderStats() {
   setText('statHighRisk', (stats.contracts_flagged || 18450).toLocaleString());
   setText('statFundsAtRisk', 'KES ' + formatMoney(stats.funds_at_risk || 1240000000000) + ' at Risk');
   setText('statGhosts', (stats.ghost_projects || 14).toString());
-  setText('statCounties', '47');
 }
 
 async function loadStats() {
@@ -247,34 +269,35 @@ function renderContracts() {
   tbody.innerHTML = '';
 
   if (!contractsPage || contractsPage.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#64748B;">No contracts found. Try adjusting filters.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted-foreground)">No contracts found. Try adjusting filters.</td></tr>';
     return;
   }
 
   contractsPage.forEach(c => {
     const tr = document.createElement('tr');
     tr.onclick = () => openContractModal(c);
+    tr.setAttribute('role', 'button');
+    tr.setAttribute('tabindex', '0');
+    tr.setAttribute('aria-label', 'View contract ' + (c.contract_id || c.id));
 
-    let badgeClass = 'badge-low';
-    if (c.risk_level === 'HIGH') badgeClass = 'badge-high';
-    else if (c.risk_level === 'MEDIUM') badgeClass = 'badge-medium';
+    let badgeClass = 'badge-success';
+    if (c.risk_level === 'HIGH') badgeClass = 'badge-danger';
+    else if (c.risk_level === 'MEDIUM') badgeClass = 'badge-warning';
 
     tr.innerHTML = `
-      <td style="color:#10B981;font-family:JetBrains Mono,monospace;font-weight:700">${c.contract_id || c.id}</td>
+      <td style="color:var(--success);font-family:'JetBrains Mono',monospace;font-weight:600">${c.contract_id || c.id}</td>
       <td style="max-width:200px"><span class="truncate" title="${esc(c.description)}">${esc(c.description)}</span></td>
-      <td><span style="font-weight:600">${esc(c.county)}</span><br><span style="font-size:10px;color:#64748B">${esc(c.procuring_entity || '')}</span></td>
+      <td><span style="font-weight:600">${esc(c.county)}</span><br><span style="font-size:10px;color:var(--muted-foreground)">${esc(c.procuring_entity || '')}</span></td>
       <td><span class="truncate" style="max-width:140px;display:inline-block">${esc(c.supplier)}</span></td>
-      <td style="text-align:right;color:#10B981;font-family:JetBrains Mono,monospace;font-weight:700">KES ${(c.value || 0).toLocaleString()}</td>
+      <td style="text-align:right;color:var(--success);font-family:'JetBrains Mono',monospace;font-weight:600">KES ${(c.value || 0).toLocaleString()}</td>
       <td style="text-align:center"><span class="badge ${badgeClass}">${c.risk_score || 0}/100</span></td>
-      <td style="text-align:right"><button class="btn-ghost" style="padding:4px 10px;font-size:11px">Audit</button></td>
+      <td style="text-align:right"><button class="btn btn-ghost btn-xs">Audit</button></td>
     `;
     tbody.appendChild(tr);
   });
 
-  // Update pagination
   setText('paginationInfo', `Showing ${((currentPage-1)*pageSize+1).toLocaleString()} – ${Math.min(currentPage*pageSize, totalCount).toLocaleString()} of ${totalCount.toLocaleString()} contracts`);
   setText('contractsTotalPill', totalCount.toLocaleString() + ' Records');
-
   renderPagination();
 }
 
@@ -292,9 +315,9 @@ function renderPagination() {
   };
 
   if (currentPage > 1) {
-    addBtn('◀', currentPage - 1);
+    addBtn('\u25C0', currentPage - 1);
     if (currentPage > 3) addBtn('1', 1);
-    if (currentPage > 4) { const s = document.createElement('span'); s.textContent='...'; s.style.color='#64748B'; container.appendChild(s); }
+    if (currentPage > 4) { const s = document.createElement('span'); s.textContent='...'; s.style.color='var(--muted-foreground)'; container.appendChild(s); }
   }
 
   for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
@@ -302,9 +325,9 @@ function renderPagination() {
   }
 
   if (currentPage < totalPages) {
-    if (currentPage < totalPages - 3) { const s = document.createElement('span'); s.textContent='...'; s.style.color='#64748B'; container.appendChild(s); }
+    if (currentPage < totalPages - 3) { const s = document.createElement('span'); s.textContent='...'; s.style.color='var(--muted-foreground)'; container.appendChild(s); }
     if (currentPage < totalPages - 2) addBtn(totalPages, totalPages);
-    addBtn('▶', currentPage + 1);
+    addBtn('\u25B6', currentPage + 1);
   }
 }
 
@@ -324,7 +347,7 @@ async function openContractModal(c) {
   const badge = document.getElementById('modalRiskBadge');
   if (badge) {
     badge.textContent = (c.risk_level || 'LOW') + ' RISK ' + (c.risk_score || 0) + '/100';
-    badge.className = 'badge ' + (c.risk_level === 'HIGH' ? 'badge-high' : c.risk_level === 'MEDIUM' ? 'badge-medium' : 'badge-low');
+    badge.className = 'badge ' + (c.risk_level === 'HIGH' ? 'badge-danger' : c.risk_level === 'MEDIUM' ? 'badge-warning' : 'badge-success');
   }
 
   const flagsList = document.getElementById('modalFlags');
@@ -333,16 +356,16 @@ async function openContractModal(c) {
     if (c.flags && c.flags.length > 0) {
       c.flags.forEach(f => {
         const div = document.createElement('div');
-        div.style.cssText = 'padding:8px 12px;background:rgba(187,0,0,0.1);border:1px solid rgba(187,0,0,0.3);border-radius:8px;color:#fca5a5;font-size:12px;margin-bottom:6px;';
-        div.textContent = '⚠️ ' + f;
+        div.className = 'alert alert-destructive';
+        div.style.cssText = 'margin-bottom:6px;font-size:12px;padding:10px';
+        div.textContent = f;
         flagsList.appendChild(div);
       });
     } else {
-      flagsList.innerHTML = '<div style="color:#64748B;font-size:12px">Standard open tender within statutory thresholds.</div>';
+      flagsList.innerHTML = '<div style="color:var(--muted-foreground);font-size:12px">Standard open tender within statutory thresholds.</div>';
     }
   }
 
-  // Civic impact
   const classrooms = Math.floor((c.value || 0) / 1200000);
   const kmRoad = ((c.value || 0) / 45000000).toFixed(1);
   setText('modalCivic', `This contract could fund ${classrooms.toLocaleString()} CBC classrooms or ${kmRoad} km of paved road.`);
@@ -362,7 +385,7 @@ function renderGhostProjects() {
   grid.innerHTML = '';
 
   if (!ghostProjects || ghostProjects.length === 0) {
-    grid.innerHTML = '<div style="text-align:center;padding:32px;color:#64748B;">No ghost projects detected.</div>';
+    grid.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted-foreground)">No ghost projects detected.</div>';
     return;
   }
 
@@ -374,25 +397,25 @@ function renderGhostProjects() {
       <div style="padding:16px">
         <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
           <div>
-            <span class="badge badge-ghost">GHOST PROJECT</span>
-            <span style="font-size:11px;color:#94A3B8;margin-left:8px">${esc(p.county)}</span>
+            <span class="badge badge-danger">GHOST PROJECT</span>
+            <span style="font-size:11px;color:var(--muted-foreground);margin-left:8px">${esc(p.county)}</span>
           </div>
-          <span style="color:#f87171;font-family:JetBrains Mono,monospace;font-weight:700">KES ${((p.amount_at_risk || 0)/1e9).toFixed(1)}B</span>
+          <span style="color:#f87171;font-family:'JetBrains Mono',monospace;font-weight:700">KES ${((p.amount_at_risk || 0)/1e9).toFixed(1)}B</span>
         </div>
-        <h3 style="font-size:14px;font-weight:700;margin-bottom:6px">${esc(p.project_name)}</h3>
-        <p style="font-size:11px;color:#94A3B8;margin-bottom:8px">${esc(p.audit_notes || '')}</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px">
-          <div style="padding:8px;background:rgba(0,0,0,0.3);border-radius:8px">
-            <span style="color:#64748B;display:block">Claimed:</span>
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:6px">${esc(p.project_name)}</h3>
+        <p style="font-size:11px;color:var(--muted-foreground);margin-bottom:8px">${esc(p.audit_notes || '')}</p>
+        <div class="grid-2" style="gap:8px;font-size:11px">
+          <div style="padding:8px;background:var(--muted);border-radius:var(--radius)">
+            <span style="color:var(--muted-foreground);display:block">Claimed:</span>
             <strong style="color:#34d399">${esc(p.claimed_status || '')}</strong>
           </div>
-          <div style="padding:8px;background:rgba(0,0,0,0.3);border-radius:8px">
-            <span style="color:#64748B;display:block">Satellite:</span>
+          <div style="padding:8px;background:var(--muted);border-radius:var(--radius)">
+            <span style="color:var(--muted-foreground);display:block">Satellite:</span>
             <strong style="color:#f87171">${esc(p.satellite_status || '')}</strong>
           </div>
         </div>
-        <div style="margin-top:8px;font-size:11px;color:#64748B">
-          Confidence: <strong style="color:#f59e0b">${p.confidence_score || 0}%</strong>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted-foreground)">
+          Confidence: <strong style="color:var(--warning)">${p.confidence_score || 0}%</strong>
         </div>
       </div>
     `;
@@ -417,7 +440,7 @@ function renderSectors() {
     card.innerHTML = `
       <img src="${s.img}" alt="${s.name}">
       <div style="position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,0.9))">
-        <div style="font-size:11px;font-weight:700;color:#fff">${s.name}</div>
+        <div style="font-size:11px;font-weight:600;color:#fff">${s.name}</div>
       </div>
     `;
     grid.appendChild(card);
@@ -430,61 +453,34 @@ function renderCountyLeaderboard() {
   if (!list) return;
   list.innerHTML = '';
 
-  // Build from stats by-county if available, otherwise use static
   api('/api/stats/by-county').then(res => {
     if (!res?.success) return;
     const sorted = res.data.sort((a, b) => (b.high_risk || 0) - (a.high_risk || 0));
 
     sorted.slice(0, 10).forEach((item, idx) => {
       const div = document.createElement('div');
-      div.style.cssText = 'padding:10px 12px;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.15s';
-      div.onmouseenter = () => div.style.borderColor = 'rgba(16,185,129,0.3)';
-      div.onmouseleave = () => div.style.borderColor = 'rgba(30,41,59,0.5)';
+      div.className = 'card';
+      div.style.cssText = 'padding:12px 16px;cursor:pointer;transition:border-color 0.15s';
+      div.onmouseenter = () => div.style.borderColor = 'var(--primary)';
+      div.onmouseleave = () => div.style.borderColor = 'var(--border)';
       div.onclick = () => {
         document.getElementById('filterCounty').value = item.county;
         applyFilters();
         switchTab('contracts');
       };
       div.innerHTML = `
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="width:24px;height:24px;border-radius:6px;background:rgba(30,41,59,0.6);color:#94A3B8;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700">${idx+1}</span>
-          <div>
-            <div style="font-weight:700;font-size:13px">${item.county}</div>
-            <div style="font-size:10px;color:#64748B;font-family:JetBrains Mono,monospace">${(item.contracts || 0).toLocaleString()} tenders</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:28px;height:28px;border-radius:var(--radius-sm);background:var(--muted);color:var(--muted-foreground);font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:600">${idx+1}</span>
+            <div>
+              <div style="font-weight:600;font-size:13px">${item.county}</div>
+              <div style="font-size:10px;color:var(--muted-foreground)" class="font-mono">${(item.contracts || 0).toLocaleString()} tenders</div>
+            </div>
           </div>
-        </div>
-        <div style="text-align:right">
-          <div style="color:#f87171;font-weight:700;font-size:12px;font-family:JetBrains Mono,monospace">${(item.high_risk || 0).toLocaleString()} flagged</div>
-          <div style="font-size:10px;color:#64748B">KES ${((item.funds_at_risk || 0)/1e9).toFixed(1)}B</div>
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  });
-}
-
-// ── Reports ──────────────────────────────────────────────────────
-function renderReports() {
-  api('/api/reports').then(res => {
-    if (!res?.success) return;
-    reports = res.data;
-    const list = document.getElementById('reportsList');
-    if (!list) return;
-    list.innerHTML = '';
-    reports.forEach(r => {
-      const div = document.createElement('div');
-      div.style.cssText = 'padding:12px;background:rgba(0,0,0,0.3);border:1px solid rgba(30,41,59,0.5);border-radius:10px;margin-bottom:8px';
-      div.innerHTML = `
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span class="badge badge-high">${r.type || 'Report'}</span>
-          <span style="font-size:10px;color:#64748B;font-family:JetBrains Mono,monospace">${r.case_number || ''}</span>
-        </div>
-        <div style="font-size:12px;font-weight:600">${esc(r.county)} — ${esc(r.sector || '')}</div>
-        <p style="font-size:11px;color:#94A3B8;margin-top:4px">${esc(r.description || '')}</p>
-        <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:#64748B">
-          <span>Status: <strong style="color:#f59e0b">${r.status || 'pending'}</strong></span>
-          <span>Credibility: <strong style="color:#10B981">${r.ai_credibility_score || 0}%</strong></span>
-          <span>Route: <strong style="color:#f87171">${r.routing || 'EACC'}</strong></span>
+          <div style="text-align:right">
+            <div style="color:#f87171;font-weight:600;font-size:12px" class="font-mono">${(item.high_risk || 0).toLocaleString()} flagged</div>
+            <div style="font-size:10px;color:var(--muted-foreground)">KES ${((item.funds_at_risk || 0)/1e9).toFixed(1)}B</div>
+          </div>
         </div>
       `;
       list.appendChild(div);
@@ -507,13 +503,11 @@ async function submitAIChat() {
   const container = document.getElementById('chatMessages');
   if (!container) return;
 
-  // User bubble
   const userDiv = document.createElement('div');
   userDiv.className = 'chat-bubble chat-user';
   userDiv.textContent = text;
   container.appendChild(userDiv);
 
-  // Loading
   const loading = document.createElement('div');
   loading.id = 'chatLoading';
   loading.className = 'chat-bubble chat-ai';
@@ -541,8 +535,8 @@ function addAIReply(md) {
   if (!container) return;
   const div = document.createElement('div');
   div.className = 'chat-bubble chat-ai';
-  div.innerHTML = md.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#6ee7b7">$1</strong>')
-                     .replace(/### (.*)/g, '<h4 style="font-weight:700;margin-bottom:8px">$1</h4>')
+  div.innerHTML = md.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#34d399">$1</strong>')
+                     .replace(/### (.*)/g, '<h4 style="font-weight:600;margin-bottom:8px">$1</h4>')
                      .replace(/• (.*)/g, '<div style="margin-left:12px">• $1</div>');
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
@@ -626,7 +620,7 @@ async function runSync() {
 
   setTimeout(() => {
     bar.style.width = '100%'; pct.textContent = '100%'; stage.textContent = 'Sync Complete';
-    addLog('[00:02.40] ✅ Synchronization complete: 154,820 records live.');
+    addLog('[00:02.40] Synchronization complete: 154,820 records live.');
   }, 1800);
 }
 
@@ -669,7 +663,7 @@ function formatMoney(n) {
   return n.toLocaleString();
 }
 
-// Make functions globally accessible
+// Global access
 window.switchTab = switchTab;
 window.applyFilters = applyFilters;
 window.openContractModal = openContractModal;
@@ -684,7 +678,6 @@ window.runSync = runSync;
 window.updateCalculator = updateCalculator;
 window.exportCSV = exportCSV;
 window.loadContracts = loadContracts;
-window.goToPage = (p) => { currentPage = p; loadContracts(); };
-window.prevPage = () => { if (currentPage > 1) { currentPage--; loadContracts(); } };
-window.nextPage = () => { if (currentPage < totalPages) { currentPage++; loadContracts(); } };
+window.openMobileDrawer = openMobileDrawer;
+window.closeMobileDrawer = closeMobileDrawer;
 window.changePageSize = (s) => { pageSize = parseInt(s) || 50; currentPage = 1; loadContracts(); };
